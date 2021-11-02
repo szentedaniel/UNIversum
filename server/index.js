@@ -16,7 +16,7 @@ const server = http.createServer(app)
 // Websocket server
 const io = new Server(server, {
     cors:{
-        origin: process.env.CLIENT_URL,
+        origin: '*',//process.env.CLIENT_URL
         methods: ['GET', 'POST'],
     }
 })
@@ -29,7 +29,7 @@ server.listen(PORT, () => {
 })
 
 // Connected clients via websocket
-let allClients = [];
+let allClients = new Map()
 
 // Rooms
 let rooms = new Map()
@@ -38,46 +38,47 @@ let rooms = new Map()
 // Websocket events
 io.on('connection', socket => {
     console.log('Client connected', socket.id)
-    allClients.push(socket);
-    console.log('Current clients connected: ', allClients.length)
+    allClients.set(socket.id, {room: null});
+    console.log('Current clients connected: ', allClients.size)
 
     socket.on('create_room', () => {
         const roomId = generateRoomCode(rooms)
         socket.emit('get_room', {room: roomId})
         console.log(roomId)
-        rooms.push({[roomId]: {users: []}})
+        rooms.set(roomId, {users: []})
         console.log(rooms)
     })
 
     socket.on('join_room', data => {
         if(data.create){
             socket.join(data.room)
-            const room = rooms.find(room => room[data.room])
+            allClients.set(socket.id, {room: data.room})
+            const room = rooms.get(data.room)
             console.log('room:',room)
-            console.log('roomusers:',room[data.room]['users'])
-            room[data.room]['users'].push({userId: socket.id})
+            console.log('roomusers:',room['users'])
+            room['users'].push({userId: socket.id})
             //rooms.push({[data.room]: {userId: socket.id}})
             console.log(`User with ID: ${socket.id} joined room: ${data.room}`)
             console.log(rooms)
-            socket.emit('joined_room', {status: 200,room: data.room, rooms: rooms, socketdata: JSON.stringify(socket.data)})
-            console.log(socket['adapter']['rooms'])
-            console.log(Object.values(socket['adapter']['rooms']))
+            socket.emit('joined_room', {status: 200,room: data.room, rooms: Object.fromEntries(rooms)})
+            console.log(socket['rooms'])
+            //console.log(Object.values(socket['adapter']['rooms']))
             
-            console.log(Object.keys(Object.fromEntries(socket['adapter']['rooms'])).map(it => console.log(it)))
+            //console.log(Object.keys(Object.fromEntries(socket['adapter']['rooms'])).map(it => console.log(it)))
                 
         }else{
             
-            if (rooms.find(room => room[data.room])) {
+            if (rooms.has(data.room)) {
                 socket.join(data.room)
+                allClients.set(socket.id, {room: data.room})
                 //rooms[data.room].users.push({userId: socket.id})
                 //rooms.push({[data.room]: {userId: socket.id}})
-                const room = rooms.find(room => room[data.room])
-                room[data.room]['users'].push({userId: socket.id})
+                const room = rooms.get(data.room)
+                room['users'].push({userId: socket.id})
                 console.log(`User with ID: ${socket.id} joined room: ${data.room}`)
                 console.log(rooms)  
-                socket.emit('joined_room', {status: 200,room: data.room, rooms: rooms})
-                console.log(socket)
-                io.emit('joined_room', {status: 200,room: data.room, rooms: rooms, socketdata: socket.data})
+                socket.emit('joined_room', {status: 200,room: data.room, rooms: Object.fromEntries(rooms)})
+                //io.emit('joined_room', {status: 200,room: data.room, rooms: Object.fromEntries(rooms)})
             }else{
                 socket.emit('joined_room', {status: 404,room: null})
             }
@@ -87,7 +88,9 @@ io.on('connection', socket => {
 
     socket.on('disconnect', () => {
         console.log('1 user disconnected', socket.id)
-        allClients.splice(allClients.indexOf(socket), 1)
+        
+        allClients.delete(socket.id)
+        //allClients.splice(allClients.indexOf(socket), 1)
 
     })
 })
