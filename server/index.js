@@ -87,6 +87,22 @@ io.on('connection', socket => {
 
 
     socket.on('disconnect', () => {
+        const socketId = socket.id
+        const roomID = allClients.get(socketId).room
+        if (roomID) {
+            
+            console.log(roomID)
+            const user = rooms.get(roomID)['users'].filter(it => it.userId === socketId)
+            console.log(user)
+            rooms.get(roomID)['users'].splice(rooms.get(roomID)['users'].indexOf(user), 1)
+
+            if (rooms.get(roomID)['users'].length === 0) {
+                rooms.delete(roomID)
+            }
+            console.log(rooms)
+        }
+        
+        
         console.log('1 user disconnected', socket.id)
         
         allClients.delete(socket.id)
