@@ -15,7 +15,7 @@ function App() {
     const name = generateName()
     setUsername(name)
     console.log(name)
-    socket.emit('set_username', {username: username})
+    socket.emit('set_username', {username: name})
   }
   
   useEffect(() => {
@@ -92,7 +92,7 @@ function App() {
       <button onClick={() => joinRoom(roomCode, false)}> Join Room</button></>
       : <><button onClick={() =>leaveRoom()}> Leave Room</button>
       {(team !== null && room !== null) &&
-      team['users'].map(member => <p key={member.userId}>{member.userId}</p>)}
+      team['users'].map(member => <p key={member.userId}>{member.username}</p>)}
       </>}
     </div>
   );

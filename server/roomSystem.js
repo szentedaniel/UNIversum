@@ -101,28 +101,36 @@ const joinRoom = (socket_, rooms_, allClients_, data_, ) => {
 const leaveRoom = (socket_, rooms_, allClients_, serverLeave_ = false) => {
     try {
         const socketId = socket_.id
-        const roomID = allClients_.get(socketId).room
-        if (roomID) {
+        if (allClients_.has(socketId)) {
 
-            const user = rooms_.get(roomID)['users'].filter(it => it.userId === socketId)[0]
-            rooms_.get(roomID)['users'].splice(rooms_.get(roomID)['users'].indexOf(user), 1)
 
-            if (rooms_.get(roomID)['users'].length === 0) {
-                rooms_.delete(roomID)
+            const roomID = allClients_.get(socketId).room
+            if (roomID) {
+
+                const user = rooms_.get(roomID)['users'].filter(it => it.userId === socketId)[0]
+                rooms_.get(roomID)['users'].splice(rooms_.get(roomID)['users'].indexOf(user), 1)
+
+                if (rooms_.get(roomID)['users'].length === 0) {
+                    rooms_.delete(roomID)
+                }
+                console.log(rooms_)
+                socket_.emit('leaved_room')
+                socket_.to(roomID).emit('user_left', {
+                    user: socketId,
+                    team: (rooms_.get(roomID))
+                })
+                console.log(`User with ID: ${socket_.id} left room: ${roomID}`)
+                
             }
-            console.log(rooms_)
-            socket_.emit('leaved_room')
-            socket_.to(roomID).emit('user_left', {
-                user: socketId,
-                team: (rooms_.get(roomID))
-            })
-            console.log(`User with ID: ${socket_.id} left room: ${roomID}`)
-            socket_.le
+
+            console.log('1 user disconnected', socketId)
+
+            if (serverLeave_) {
+                allClients_.delete(socketId)
+            } else {
+                allClients_.get(socketId).room  = null
+            }
         }
-
-        console.log('1 user disconnected', socketId)
-
-        allClients_.delete(socketId)
     } catch (error) {
         console.log(error)
     }
