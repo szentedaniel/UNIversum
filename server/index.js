@@ -15,17 +15,17 @@ const server = http.createServer(app)
 
 // Websocket server
 const io = new Server(server, {
-    cors: {
-        origin: '*', //process.env.CLIENT_URL
-        methods: ['GET', 'POST'],
-    }
+  cors: {
+    origin: '*', //process.env.CLIENT_URL
+    methods: ['GET', 'POST'],
+  }
 })
 
 // Define PORT
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000
 
 server.listen(PORT, () => {
-    console.log(`Listening at http://localhost:${PORT}`)
+  console.log(`Listening at http://localhost:${PORT}`)
 })
 
 // Connected clients via websocket
@@ -37,33 +37,33 @@ let rooms = new Map()
 
 // Websocket events
 io.on('connection', socket => {
-    console.log('Client connected', socket.id)
-    allClients.set(socket.id, {
-        room: null,
-        username: null
-    });
-    console.log('Current clients connected: ', allClients.size)
+  console.log('Client connected', socket.id)
+  allClients.set(socket.id, {
+    room: null,
+    username: null
+  })
+  console.log('Current clients connected: ', allClients.size)
 
-    socket.on('set_username', data => {
-        console.log(data.username)  
-        allClients.get(socket.id).username = data.username
-        console.log(allClients.get(socket.id))
-    })
+  socket.on('set_username', data => {
+    console.log(data.username)  
+    allClients.get(socket.id).username = data.username
+    console.log(allClients.get(socket.id))
+  })
 
-    socket.on('create_room', () => {
-        createRoom(socket, rooms)
-    })
+  socket.on('create_room', () => {
+    createRoom(socket, rooms)
+  })
 
-    socket.on('join_room', data => {
-        joinRoom(socket, rooms, allClients, data)
-    })
+  socket.on('join_room', data => {
+    joinRoom(socket, rooms, allClients, data)
+  })
 
-    socket.on('leave_room', () => {
-        leaveRoom(socket, rooms, allClients)
-    })
+  socket.on('leave_room', () => {
+    leaveRoom(socket, rooms, allClients)
+  })
 
 
-    socket.on('disconnecting', () => {
-        leaveRoom(socket, rooms, allClients, true)
-    })
+  socket.on('disconnecting', () => {
+    leaveRoom(socket, rooms, allClients, true)
+  })
 })
