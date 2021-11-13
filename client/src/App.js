@@ -1,5 +1,6 @@
 import './App.css';
 import { generateName } from './randomName';
+import toast, { Toaster } from 'react-hot-toast';
 import io from 'socket.io-client'
 import { useState, useEffect } from "react";
 
@@ -14,7 +15,6 @@ function App() {
   if (username === '') {
     const name = generateName()
     setUsername(name)
-    console.log(name)
     socket.emit('set_username', {username: name})
   }
   
@@ -26,7 +26,7 @@ function App() {
     socket.on('joined_room', data => {
       if (data.status === 200) {
         setRoom(data.room)
-        console.log(`Joined to room: ${room}`)
+        console.log(`Joined to room: ${data.room}`)
         console.log(data.team)
         setTeam(data.team)
       }else{
@@ -80,20 +80,52 @@ function App() {
     
   }
 
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text)
+    toast.success('Code copied!!', 
+    {
+      style: {
+        backgroundColor: '#d4896a',
+        color: '#503c52'
+      },
+      iconTheme: {
+        primary: '#503c52',
+        secondary: '#d4896a',
+      },
+    })
+  } 
+
 
   return (
     <div className="App">
-      <h1>Username: {username}</h1>
-      <h2>{room ? 'Room: ' + room : 'Not in room'}</h2>
+      <h1 >Username:</h1>
+      <h2 className="text_shadows">{username}</h2>
+      <h2>{room ? <><div> Room: <span className="code" onClick={() => {copyToClipboard(room)}}> {room} </span></div></>: 'Not in room'}</h2>
       {!room
-      ?<><button onClick={createRoom}> Create Room</button>
+      ?<><button className="pushable" onClick={createRoom}> <span className="front">Create Room</span></button>
       <p>OR</p>
-      <input type="text" onChange={e => setRoomCode(e.target.value)} />
-      <button onClick={() => joinRoom(roomCode, false)}> Join Room</button></>
-      : <><button onClick={() =>leaveRoom()}> Leave Room</button>
+
+      <input onKeyPress={(e) => {
+        if (!/[0-9]/.test(e.key) || e.target.value.length > 5) {
+          e.preventDefault();
+        }
+      }} type="text" onChange={e => setRoomCode(e.target.value)} />
+
+      <button className="pushable" onClick={() => joinRoom(roomCode, false)}>
+        <span className="front"> Join Room</span>
+        </button></>
+      : <><button className="pushable" onClick={() =>leaveRoom()}> 
+      <span className="front"> Leave Room</span>
+      </button>
       {(team !== null && room !== null) &&
       team['users'].map(member => <p key={member.userId}>{member.username}</p>)}
       </>}
+
+
+      <Toaster
+        position="bottom-left"
+        reverseOrder={false}
+      />
     </div>
   );
 }
