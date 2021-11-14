@@ -8,7 +8,7 @@ import { LobbyElement } from "./LobbyElement";
 export function LobbiesList ({rooms, joinRoom}) {
   const socket = useSocket()
   const [Rooms, setRooms] = useState(rooms)
-    if (Rooms !== null) console.log(Object.keys(Rooms['rooms']))
+    if (Rooms !== null) console.log(Rooms['rooms'])
 
     useEffect(() => {
       socket.on('get_rooms_res', data => {
@@ -22,6 +22,7 @@ export function LobbiesList ({rooms, joinRoom}) {
     
 return(
     <>
+    <h3>Room counter: {(Rooms !== null) ? Object.keys(Rooms['rooms']).length.toString() : 0}</h3>
     {(Rooms !== null) &&
       Object.keys(Rooms['rooms']).map((roomCode,index) => 
         <LobbyElement
