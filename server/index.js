@@ -3,7 +3,7 @@ const http = require('http')
 const cors = require('cors')
 const dotenv = require('dotenv')
 const {Server} = require('socket.io')
-const {createRoom, joinRoom, leaveRoom} = require('./roomSystem')
+const {createRoom, joinRoom, leaveRoom, sendRoomsToClient, setIo} = require('./roomSystem')
 
 // Load config (.env)
 dotenv.config()
@@ -34,7 +34,7 @@ let allClients = new Map()
 // Rooms
 let rooms = new Map()
 
-
+setIo(io)
 // Websocket events
 io.on('connection', socket => {
   console.log('Client connected', socket.id)
@@ -62,6 +62,9 @@ io.on('connection', socket => {
     leaveRoom(socket, rooms, allClients)
   })
 
+  socket.on('get_rooms_req', () => {
+    sendRoomsToClient(rooms)
+  })
 
   socket.on('disconnecting', () => {
     leaveRoom(socket, rooms, allClients, true)

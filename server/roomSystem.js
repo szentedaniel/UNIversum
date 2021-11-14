@@ -1,6 +1,11 @@
 const generateRoomCode = require('./functions')
 const MESSAGES = require('./config/messages')
 
+let io = null
+const setIo = (io_) => {
+  io = io_
+}
+
 const createRoom = (socket_, rooms_) => {
 
   const roomId = generateRoomCode(rooms_)
@@ -9,8 +14,10 @@ const createRoom = (socket_, rooms_) => {
       room: roomId
     })
     rooms_.set(roomId, {
-      users: []
+      users: [],
+      code: roomId
     })
+    sendRoomsToClient(rooms_)
   } catch (error) {
     console.log(error)
   }
@@ -40,6 +47,7 @@ const joinRoom = (socket_, rooms_, allClients_, data_, ) => {
         user: socket_.id,
         team: rooms_.get(data_.room.toString())
       })
+      
 
     } else {
 
@@ -83,6 +91,7 @@ const joinRoom = (socket_, rooms_, allClients_, data_, ) => {
         })
       }
     }
+    sendRoomsToClient(rooms_)
   } catch (error) {
     try {
       console.log(error)
@@ -131,14 +140,21 @@ const leaveRoom = (socket_, rooms_, allClients_, serverLeave_ = false) => {
         allClients_.get(socketId).room  = null
       }
     }
+    sendRoomsToClient(rooms_)
   } catch (error) {
     console.log(error)
   }
 
 }
 
+const sendRoomsToClient = (rooms_) =>{
+  io.emit('get_rooms_res', {rooms: Object.fromEntries(rooms_)})
+}
+
 module.exports = {
   createRoom,
   joinRoom,
-  leaveRoom
+  leaveRoom,
+  sendRoomsToClient,
+  setIo
 }

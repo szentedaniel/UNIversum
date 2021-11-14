@@ -47,6 +47,22 @@ input {
     width: 10rem;
 }
 
+.LobbyElement {
+    margin: 10px;
+    background: var(--lessdark);
+    border-radius: 12px;
+    border: 2px;
+    border-color: var(--light);
+    padding: 5px;
+}
+
+button:disabled,
+button[disabled],
+button:disabled.pushable:disabled .front {
+    transform: translateY(-0px);    
+    background: var(--mid);
+}
+
 .pushable {
     margin: 10px;
     background: var(--mid);
