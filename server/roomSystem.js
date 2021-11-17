@@ -6,16 +6,24 @@ const setIo = (io_) => {
   io = io_
 }
 
-const createRoom = (socket_, rooms_) => {
+const createRoom = (socket_, rooms_, roomData) => {
 
   const roomId = generateRoomCode(rooms_)
   try {
     socket_.emit('get_room', {
-      room: roomId
+      room: roomId,
+      lobbyName: (roomData.lobbyName === null) ? ('Lobby '+roomId) : roomData.lobbyName,
+      maxPlayerNumber: roomData.maxPlayerNumber, 
+      hasPassword: roomData.hasPassword, 
+      password: roomData.password
     })
     rooms_.set(roomId, {
       users: [],
-      code: roomId
+      code: roomId,
+      lobbyName: (roomData.lobbyName === null) ? ('Lobby '+roomId) : roomData.lobbyName,
+      maxPlayerNumber: roomData.maxPlayerNumber, 
+      hasPassword: roomData.hasPassword, 
+      password: roomData.password
     })
     sendRoomsToClient(rooms_)
   } catch (error) {
@@ -23,7 +31,7 @@ const createRoom = (socket_, rooms_) => {
   }
 }
 
-const joinRoom = (socket_, rooms_, allClients_, data_, ) => {
+const joinRoom = (socket_, rooms_, allClients_, data_ ) => {
   try {
     if (data_.create) {
 
@@ -52,28 +60,60 @@ const joinRoom = (socket_, rooms_, allClients_, data_, ) => {
     } else {
 
       if (rooms_.has(data_.room)) {
-        if (rooms_.get(data_.room)['users'].length < 4) {
-          socket_.join(data_.room)
-          allClients_.get(socket_.id).room = data_.room
-          //rooms[data.room].users.push({userId: socket.id})
-          //rooms.push({[data.room]: {userId: socket.id}})
-          const room = rooms_.get(data_.room.toString())
-          room['users'].push({
-            userId: socket_.id,
-            username: allClients_.get(socket_.id).username
-          })
-          console.log(room['users'])
-          console.log(`User with ID: ${socket_.id} joined room: ${data_.room}`)
-          console.log(rooms_)
-          socket_.emit('joined_room', {
-            status: 200,
-            room: data_.room,
-            team: rooms_.get(data_.room.toString())
-          })
-          socket_.to(data_.room).emit('user_joined', {
-            user: socket_.id,
-            team: rooms_.get(data_.room.toString())
-          })
+        if (rooms_.get(data_.room)['users'].length < rooms_.get(data_.room)['maxPlayerNumber']) {
+          if (rooms_.get(data_.room)['hasPassword']) {
+            if (rooms_.get(data_.room)['password'] === data_.password) {
+              socket_.join(data_.room)
+              allClients_.get(socket_.id).room = data_.room
+              //rooms[data.room].users.push({userId: socket.id})
+              //rooms.push({[data.room]: {userId: socket.id}})
+              const room = rooms_.get(data_.room.toString())
+              room['users'].push({
+                userId: socket_.id,
+                username: allClients_.get(socket_.id).username
+              })
+              console.log(room['users'])
+              console.log(`User with ID: ${socket_.id} joined room: ${data_.room}`)
+              console.log(rooms_)
+              socket_.emit('joined_room', {
+                status: 200,
+                room: data_.room,
+                team: rooms_.get(data_.room.toString())
+              })
+              socket_.to(data_.room).emit('user_joined', {
+                user: socket_.id,
+                team: rooms_.get(data_.room.toString())
+              })
+            }else{
+              socket_.emit('joined_room', {
+                status: 402,
+                room: null,
+                message: MESSAGES[402]
+              })
+            }
+          } else {
+            socket_.join(data_.room)
+            allClients_.get(socket_.id).room = data_.room
+            //rooms[data.room].users.push({userId: socket.id})
+            //rooms.push({[data.room]: {userId: socket.id}})
+            const room = rooms_.get(data_.room.toString())
+            room['users'].push({
+              userId: socket_.id,
+              username: allClients_.get(socket_.id).username
+            })
+            console.log(room['users'])
+            console.log(`User with ID: ${socket_.id} joined room: ${data_.room}`)
+            console.log(rooms_)
+            socket_.emit('joined_room', {
+              status: 200,
+              room: data_.room,
+              team: rooms_.get(data_.room.toString())
+            })
+            socket_.to(data_.room).emit('user_joined', {
+              user: socket_.id,
+              team: rooms_.get(data_.room.toString())
+            })
+          }
           //io.emit('joined_room', {status: 200,room: data.room, rooms: Object.fromEntries(rooms)})
         } else {
           socket_.emit('joined_room', {

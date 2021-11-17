@@ -1,4 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300&display=swap');
+@font-face {
+    font-family: 'password';
+    font-style: normal;
+    font-weight: 400;
+    src: url(https://jsbin-user-assets.s3.amazonaws.com/rafaelcastrocouto/password.ttf);
+}
 
 :root {
     --dark: #262335;
@@ -45,6 +51,10 @@ input {
     text-align: center;
     color: var(--lighter);
     width: 10rem;
+}
+
+input.key {
+    font-family: 'password';
 }
 
 .LobbyElement {

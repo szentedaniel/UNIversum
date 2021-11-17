@@ -6,9 +6,9 @@ import Lobby from './Lobby'
 function App() {
   return (
     <SocketProvider>
-    <div className="App">
-      <Lobby/>
-    </div>
+      <div className="App">
+        <Lobby/>
+      </div>
     </SocketProvider>
   );
 }

@@ -50,8 +50,8 @@ io.on('connection', socket => {
     console.log(allClients.get(socket.id))
   })
 
-  socket.on('create_room', () => {
-    createRoom(socket, rooms)
+  socket.on('create_room', (roomData) => {
+    createRoom(socket, rooms, roomData)
   })
 
   socket.on('join_room', data => {

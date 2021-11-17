@@ -5,6 +5,8 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useState, useEffect } from "react";
 import { useSocket } from '../Contexts/SocketContext'
 import { LobbiesList } from './LobbiesList'
+import { CreateLobby} from './CreateLobby'
+import { InLobby} from './InLobby'
 
 
 function Lobby () {
@@ -16,6 +18,10 @@ function Lobby () {
   const [rooms, setRooms] = useState(null);
   const [roomCode, setRoomCode] = useState(null);
   const [showLobbies, setShowLobbies] = useState(false)
+  const [creatingLobby, setCreatingLobby] = useState(false)
+  const [reqStatus, setReqStatus] = useState(null)
+  const [joinedLobbyHasPassword, setJoinedLobbyHasPassword] = useState(false)
+  const [pwd, setPwd] = useState(null)
 
   if (username === '') {
     const name = generateName()
@@ -25,7 +31,7 @@ function Lobby () {
   
   useEffect(() => {
     socket.on('get_room', data => {
-      joinRoom(data.room)
+      joinRoom(data.room, true, data.password)
     })
 
     socket.on('joined_room', data => {
@@ -36,7 +42,10 @@ function Lobby () {
         setTeam(data.team)
       }else{
         console.log(`Status: ${data.status}, ${data.message}`)
+        setJoinedLobbyHasPassword(false)
+        if (data.status === 402) setJoinedLobbyHasPassword(true)
       }
+      setReqStatus(data.status)
     })
 
     socket.on('leaved_room', () => {
@@ -68,15 +77,15 @@ function Lobby () {
 
 
 
-  const createRoom = () => {
+  const createRoom = (roomData) => {
     if(room === null){
-      
-        socket.emit('create_room')
+        
+        socket.emit('create_room', roomData)
     }
   }
 
-  const joinRoom = (room, create = true) => {
-    socket.emit('join_room', {room: room, create: create})
+  const joinRoom = (room, create = true, password = null) => {
+    socket.emit('join_room', {room: room, create: create, password: password})
     
   }
 
@@ -88,20 +97,6 @@ function Lobby () {
     socket.emit('get_rooms_req')
   }
 
-  const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text)
-    toast.success('Code copied!!', 
-    {
-      style: {
-        backgroundColor: '#d4896a',
-        color: '#503c52'
-      },
-      iconTheme: {
-        primary: '#503c52',
-        secondary: '#d4896a',
-      },
-    })
-  } 
 
   const inputCodeHandler = (e) => {
     if (!/[0-9]/.test(e.key) || e.target.value.length > 5) {
@@ -123,43 +118,37 @@ return(
     <div>
       <h1>Username:</h1>
       <h2 className="text_shadows">{username}</h2>
-      <h2>{room ? <>
-      <div> Room: <span className="code" onClick={() => {copyToClipboard(room)}}> {room} </span></div></>: 'Not in lobby'}</h2>
-      {
-        !room
-          ?
-          <>
-            {
-              !showLobbies ? <>
-              <button className="pushable" onClick={createRoom}> <span className="front">Create lobby</span></button>
-            <p>OR</p>
+      {!room?
+        <>
+        <h2>Not in lobby</h2>
+          {
+            !showLobbies ? 
+              <>
+              {!creatingLobby ?
+                <>
+                <CreateLobby createRoom={createRoom} creatingLobby={creatingLobby} setCreatingLobby={setCreatingLobby}/>
+                <p>OR</p>
 
-            <input onKeyPress={(e) => inputCodeHandler(e)} type="text" onChange={e => setRoomCode(e.target.value)} />
-            <button className="pushable" onClick={() => joinRoom(roomCode, false)}>
-              <span className="front"> Join lobby</span>
-            </button>
-            <p>OR</p>
-            <button className="pushable" onClick={() => showLobbyHandler()}>
-              <span className="front"> Show lobbies</span>
-            </button>
-               </>
-               : <>
-               <button className="pushable" onClick={() => showLobbyHandler()}>
-              <span className="front"> Back</span>
-            </button>
-            <LobbiesList rooms={rooms} joinRoom={joinRoom}/>
-               </>
-            }
-            
-          </>
-          : 
-          <>
-            <button className="pushable" onClick={() =>leaveRoom()}> 
-              <span className="front"> Leave Room</span>
-            </button>
-            {(team !== null && room !== null) &&
-            team['users'].map(member => <p key={member.userId}>{member.username}</p>)}
-          </>
+                <input onKeyPress={(e) => inputCodeHandler(e)} type="text" onChange={e => setRoomCode(e.target.value)} />
+                {joinedLobbyHasPassword && <p>Password: <input className="key" type="text" autoComplete="off" onChange={e => setPwd(e.target.value)}/></p>}
+                <button className="pushable" onClick={() => joinRoom(roomCode, false, pwd)}>
+                  <span className="front"> Join lobby</span>
+                </button>
+                <p>OR</p>
+                <button className="pushable" onClick={() => showLobbyHandler()}>
+                  <span className="front"> Show lobbies</span>
+                </button>
+                </>
+                :
+                <CreateLobby createRoom={createRoom} creatingLobby={creatingLobby} setCreatingLobby={setCreatingLobby}/>
+              }
+              </>
+            : 
+              <LobbiesList rooms={rooms} joinRoom={joinRoom} showLobbyHandler={showLobbyHandler}/>
+          }
+        </>
+      :
+        <InLobby team={team} room={room} leaveRoom={leaveRoom} toast={toast}/>
       }
       <Toaster
           position="bottom-left"
