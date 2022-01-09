@@ -1,8 +1,11 @@
 import React from "react";
 import { useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 export function CreateLobby ({createRoom, creatingLobby, setCreatingLobby}){
 //onClick={createRoom}
+
+const { t } = useTranslation();
 
 const [lobbyName, setLobbyName] = useState(null)
 const [maxPlayerNumber, setMaxPlayerNumber] = useState(4)
@@ -54,7 +57,7 @@ const handleCreatingLobby = () => {
 
         
 
-        <button className="pushable" onClick={() => handleCreatingLobby()}>  <span className="front">Create lobby</span></button>
+        <button className="pushable" onClick={() => handleCreatingLobby()}>  <span className="front">{t('create_lobby')}</span></button>
         </>
     )
 }

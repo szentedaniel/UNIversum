@@ -20,8 +20,6 @@ const generateName = (lang = 'en') =>{
 		name = capFirst(hu_name1[getRandomInt(0, hu_name1.length + 1)]) + ' ' + capFirst(hu_name2[getRandomInt(0, hu_name2.length + 1)]);
 	} else {
 		name = capFirst(en_name1[getRandomInt(0, en_name1.length + 1)]) + ' ' + capFirst(en_name2[getRandomInt(0, en_name2.length + 1)]);
-	}{
-		
 	}
 	return name;
 

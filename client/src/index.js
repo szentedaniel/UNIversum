@@ -1,4 +1,5 @@
 import './index.css'
+import './global.css'
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import App from './Components/App';

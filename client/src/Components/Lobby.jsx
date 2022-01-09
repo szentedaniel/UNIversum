@@ -59,6 +59,7 @@ function Lobby () {
         if (data.status === 402) setJoinedLobbyHasPassword(true)
       }
       setReqStatus(data.status)
+      console.log(reqStatus)
     })
 
     socket.on('leaved_room', () => {
@@ -133,23 +134,23 @@ return(
       <h2 className="text_shadows">{username}</h2>
       {!room?
         <>
-        <h2>Not in lobby</h2>
+        <h2>{t('not_in_lobby')}</h2>
           {
             !showLobbies ? 
               <>
               {!creatingLobby ?
                 <>
                 <CreateLobby createRoom={createRoom} creatingLobby={creatingLobby} setCreatingLobby={setCreatingLobby}/>
-                <p>OR</p>
-
+                <p>{t('or')}</p>
+ 
                 <input onKeyPress={(e) => inputCodeHandler(e)} type="text" onChange={e => setRoomCode(e.target.value)} />
                 {joinedLobbyHasPassword && <p>Password: <input className="key" type="text" autoComplete="off" onChange={e => setPwd(e.target.value)}/></p>}
                 <button className="pushable" onClick={() => joinRoom(roomCode, false, pwd)}>
-                  <span className="front"> Join lobby</span>
+                  <span className="front">{t('join_lobby')}</span>
                 </button>
-                <p>OR</p>
+                <p>{t('or')}</p>
                 <button className="pushable" onClick={() => showLobbyHandler()}>
-                  <span className="front"> Show lobbies</span>
+                  <span className="front">{t('show_lobbies')}</span>
                 </button>
                 </>
                 :
