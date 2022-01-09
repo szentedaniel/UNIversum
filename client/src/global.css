@@ -27,6 +27,7 @@
     box-sizing: border-box;
     /* font-family: 'Roboto',
     sans-serif; */
+    
 }
 
 body {
@@ -35,11 +36,15 @@ body {
     color: var(--lighter);
     font-family: canada-type-gibson,
     sans-serif;
+    user-select:none;
+   -ms-user-selec:none;
+   -moz-user-select:none;
+   -webkit-user-select:none;
 }
 
 
 
-input {
+input[type=text] {
     height: 53px;
     border-radius: 5px;
     padding: 10 px;

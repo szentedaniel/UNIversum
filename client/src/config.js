@@ -18,3 +18,19 @@ export const LANGUAGES = [
       "countryCode": "de"
     }
   ]
+
+  export const COLOR_THEMES = {
+    '1': {
+      'dark': '#262335',
+      'lessdark': '#503c52',
+      'mid': '#9f6c66',
+      'light': '#d4896a',
+      'lighter': '#ffbb6c',
+    },
+    '2':{
+      
+    },
+    '3':{
+      
+    }
+  }
