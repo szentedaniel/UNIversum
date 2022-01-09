@@ -48,7 +48,7 @@ i18n
         // optional set cookie options, reference:[MDN Set-Cookie docs](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie)
         cookieOptions: { path: '/', sameSite: 'strict' }
     },
-    debug: true,
+    debug: false,
     /* can have multiple namespace, in case you want to divide a huge translation into smaller pieces and load them on demand */
     ns: ['translations'],
     defaultNS: 'translations',

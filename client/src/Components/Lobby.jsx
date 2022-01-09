@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 
 function Lobby () {
   const socket = useSocket()
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [username, setUsername] = useState('')
   const [team, setTeam] = useState(null);
@@ -27,11 +27,20 @@ function Lobby () {
   const [joinedLobbyHasPassword, setJoinedLobbyHasPassword] = useState(false)
   const [pwd, setPwd] = useState(null)
 
-  if (username === '') {
-    const name = generateName()
+  //if (username === '') {
+  //  const name = generateName(i18n.language)
+  //  setUsername(name)
+  //  socket.emit('set_username', {username: name})
+  //}
+
+  useEffect(() => {
+    const name = generateName(i18n.language)
     setUsername(name)
     socket.emit('set_username', {username: name})
-  }
+    return () => {
+      return
+    }
+  }, [i18n.language])
   
   useEffect(() => {
     socket.on('get_room', data => {
