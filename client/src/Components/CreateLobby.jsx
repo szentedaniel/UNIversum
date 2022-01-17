@@ -1,10 +1,12 @@
 import React from "react";
+import { useSocket } from '../Contexts/SocketContext'
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
+import { Link } from "react-router-dom";
 
-export function CreateLobby ({createRoom, creatingLobby, setCreatingLobby}){
+export function CreateLobby ({}){
 //onClick={createRoom}
-
+const socket = useSocket()
 const { t } = useTranslation();
 
 const [lobbyName, setLobbyName] = useState(null)
@@ -13,12 +15,16 @@ const [hasPassword, setHasPassword] = useState(false)
 const [password, setPassword] = useState(null)
 
 
+const createRoom = (roomData) => {
+        socket.emit('create_room', roomData)
+  }
+
 const checkValidDatas = () =>{
     return true
 }
 
 const handleCreatingLobby = () => {
-    if (creatingLobby) {
+    
         if(checkValidDatas()){
             const roomData = {
                 lobbyName: (lobbyName === '') ? null :lobbyName,
@@ -28,14 +34,14 @@ const handleCreatingLobby = () => {
             }
             console.log(roomData)
             createRoom(roomData)
-            setCreatingLobby(!creatingLobby)
+            
         }
-    }else setCreatingLobby(!creatingLobby)
+    
 }
     return(
         <>
-        {creatingLobby &&        
-            (<><button className="pushable" onClick={() => setCreatingLobby(!creatingLobby)}>  <span className="front">Back</span></button><>
+                
+            <Link to='/'><button className="pushable">  <span className="front">Back</span></button></Link>
                 <div> <span>Room's name: </span><input type="text" onChange={e => setLobbyName(e.target.value)} /></div>
 
                 <div>
@@ -51,9 +57,9 @@ const handleCreatingLobby = () => {
                 <div>
                     <p>Password: <input className="key" type="text" autoComplete="off" onChange={e => setPassword(e.target.value)}/></p></div>
                 }
-            </></>
-            )
-        }
+            
+            
+        
 
         
 

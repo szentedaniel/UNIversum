@@ -77,7 +77,7 @@ const LangSelector = () => {
       className='min-w-[70px] p-2 top-5 left-5 flex flex-row uppercase items-center absolute cursor-pointer bg-[#2e2e2e67] border-2 border-solid border-white rounded-lg'>
       <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 icon icon-tabler icon-tabler-world" width="24" height="24"
         viewBox="0 0 24 24" strokeWidth="1.5" stroke="#ffbb6c" fill="none" strokeLinecap="round"
-        stroke-linejoin="round">
+        strokeLinejoin="round">
         <path stroke="none" d="M0 0h24v24H0z" fill="none" />
         <circle cx="12" cy="12" r="9" />
         <line x1="3.6" y1="9" x2="20.4" y2="9" />

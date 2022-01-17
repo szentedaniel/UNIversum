@@ -1,7 +1,11 @@
 import React from "react";
+import { useLocation } from "react-router-dom";
 
 
-export function InLobby ({team, room, leaveRoom, toast}){
+export function InLobby (){
+
+  const location = useLocation();
+    const {team, room, leaveRoom, toast} = location.state;
 
     const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text)

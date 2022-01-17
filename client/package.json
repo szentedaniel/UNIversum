@@ -16,6 +16,7 @@
     "react-hot-toast": "^2.1.1",
     "react-i18next": "^11.15.3",
     "react-modal": "^3.14.4",
+    "react-router-dom": "^6.2.1",
     "react-scripts": "^5.0.0",
     "socket.io-client": "^4.3.2",
     "universal-cookie": "^4.0.4",

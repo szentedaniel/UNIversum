@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export function LobbyElement ({lobbyName, roomCode, usersCount, usersMax, hasPassword, password, joinFun}){
 
@@ -14,9 +15,9 @@ export function LobbyElement ({lobbyName, roomCode, usersCount, usersMax, hasPas
                 <div>
                     <p>Password: <input className="key" type="text" autoComplete="off" onChange={e => setPw(e.target.value)}/></p></div>
                 }
-          <button disabled={(usersCount === usersMax)} className="pushable" onClick={() => joinFun(roomCode, false, pw)}>
-              <span className="front"> Join lobby</span>
-          </button>
+            <button disabled={(usersCount === usersMax)} className="pushable" onClick={() => joinFun(roomCode, false, pw)}>
+                <span className="front"> Join lobby</span>
+            </button>
         </div>
     )
 }

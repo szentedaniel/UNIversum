@@ -9,6 +9,7 @@ import { CreateLobby} from './CreateLobby'
 import { InLobby} from './InLobby'
 
 import { useTranslation } from 'react-i18next';
+import { Link } from "react-router-dom";
 
 
 
@@ -138,9 +139,13 @@ return(
           {
             !showLobbies ? 
               <>
-              {!creatingLobby ?
-                <>
-                <CreateLobby createRoom={createRoom} creatingLobby={creatingLobby} setCreatingLobby={setCreatingLobby}/>
+              
+                <Link to='/create'>
+                  <button className="pushable" >  
+                    <span className="front">{t('create_lobby')}</span>
+                  </button>
+                </Link>
+                
                 <p>{t('or')}</p>
  
                 <input onKeyPress={(e) => inputCodeHandler(e)} type="text" onChange={e => setRoomCode(e.target.value)} />
@@ -148,21 +153,24 @@ return(
                 <button className="pushable" onClick={() => joinRoom(roomCode, false, pwd)}>
                   <span className="front">{t('join_lobby')}</span>
                 </button>
+
                 <p>{t('or')}</p>
-                <button className="pushable" onClick={() => showLobbyHandler()}>
-                  <span className="front">{t('show_lobbies')}</span>
-                </button>
-                </>
-                :
-                <CreateLobby createRoom={createRoom} creatingLobby={creatingLobby} setCreatingLobby={setCreatingLobby}/>
-              }
+
+                <Link to='/rooms' state={{rooms: rooms}}>
+                  <button className="pushable" onClick={() => showLobbyHandler()}>
+                    <span className="front">{t('show_lobbies')}</span>
+                  </button>
+                </Link>
+              
               </>
             : 
               <LobbiesList rooms={rooms} joinRoom={joinRoom} showLobbyHandler={showLobbyHandler}/>
           }
         </>
       :
-        <InLobby team={team} room={room} leaveRoom={leaveRoom} toast={toast}/>
+        <Link state={{team : team, room : room, leaveRoom: leaveRoom, toast: toast}}>
+          <InLobby team={team} room={room} leaveRoom={leaveRoom} toast={toast}/>
+        </Link>
       }
       <Toaster
           position="bottom-left"
