@@ -13,6 +13,7 @@ import Room from '../Pages/Room'
 import Lobby from './Lobby'
 import LangSelector from './LangSelector';
 import Home from '../Pages/Home';
+import Loading from './Loading';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <div className="App">
       <LangSelector />
         {/* <Lobby/> */}
+        <Loading />
         <BrowserRouter>
             <Routes>
               <Route path="/" element={<Home />} />
