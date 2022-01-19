@@ -48,35 +48,6 @@ function Lobby () {
       joinRoom(data.room, true, data.password)
     })
 
-    socket.on('joined_room', data => {
-      if (data.status === 200) {
-        setRoom(data.room)
-        console.log(`Joined to room: ${data.room}`)
-        console.log(data.team)
-        setTeam(data.team)
-      }else{
-        console.log(`Status: ${data.status}, ${data.message}`)
-        setJoinedLobbyHasPassword(false)
-        if (data.status === 402) setJoinedLobbyHasPassword(true)
-      }
-      setReqStatus(data.status)
-      console.log(reqStatus)
-    })
-
-    socket.on('leaved_room', () => {
-      setRoom(null)
-      setTeam(null)
-    })
-
-    socket.on('user_joined', data => {
-      console.log(data)
-      setTeam(data.team)
-    })
-
-    socket.on('user_left', data => {
-      console.log(data)
-      setTeam(data.team)
-    })
 
 
     return () => {
@@ -89,28 +60,13 @@ function Lobby () {
   }, [room])
 
 
-
-
-
-  const createRoom = (roomData) => {
-    if(room === null){
-        
-        socket.emit('create_room', roomData)
-    }
-  }
-
   const joinRoom = (room, create = true, password = null) => {
     socket.emit('join_room', {room: room, create: create, password: password})
     
   }
 
-  const leaveRoom = () => {
-    socket.emit('leave_room')
-  }
 
-  const getRooms = () => {
-    socket.emit('get_rooms_req')
-  }
+
 
 
   const inputCodeHandler = (e) => {
@@ -118,27 +74,15 @@ function Lobby () {
       e.preventDefault();
     }
   }
-
-  const showLobbyHandler = () => {
-    console.log(socket.connected)
-    setShowLobbies(!showLobbies)
-    if (!showLobbies) getRooms()
-    socket.off('get_rooms_res').on('get_rooms_res', data => {
-      setRooms(data)
-    })
-  }
-
     
 return(
     <div>
       <h1>{t('username')}:</h1>
       <h2 className="text_shadows">{username}</h2>
-      {!room?
+      
         <>
         <h2>{t('not_in_lobby')}</h2>
-          {
-            !showLobbies ? 
-              <>
+          {<>
               
                 <Link to='/create'>
                   <button className="pushable" >  
@@ -157,25 +101,17 @@ return(
                 <p>{t('or')}</p>
 
                 <Link to='/rooms' state={{rooms: rooms}}>
-                  <button className="pushable" onClick={() => showLobbyHandler()}>
+                  <button className="pushable">
                     <span className="front">{t('show_lobbies')}</span>
                   </button>
                 </Link>
               
               </>
-            : 
-              <LobbiesList rooms={rooms} joinRoom={joinRoom} showLobbyHandler={showLobbyHandler}/>
+            
           }
         </>
-      :
-        <Link state={{team : team, room : room, leaveRoom: leaveRoom, toast: toast}}>
-          <InLobby team={team} room={room} leaveRoom={leaveRoom} toast={toast}/>
-        </Link>
-      }
-      <Toaster
-          position="bottom-left"
-          reverseOrder={false}
-        />
+      
+    
     </div>
     
 )

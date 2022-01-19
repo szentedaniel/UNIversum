@@ -58,7 +58,7 @@ i18n
       formatSeparator: ','
     },
     react: {
-      wait: true
+      useSuspense: true,
     }
   });
  

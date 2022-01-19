@@ -1,37 +1,72 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate , useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useSelector, useDispatch } from 'react-redux'
+import { setLoading } from '../Store/slices/loadingSlice'
 import { useSocket } from '../Contexts/SocketContext'
 import { LobbyElement } from "./LobbyElement";
 import { Link } from "react-router-dom";
 
 
-export function LobbiesList () {
+export function LobbiesList() {
+  // socket
   const socket = useSocket()
-  const location = useLocation();
-  const { rooms } = location.state;
-  const [Rooms, setRooms] = useState(rooms)
-    if (Rooms !== null) console.log(Rooms['rooms'])
 
-    useEffect(() => {
-      socket.on('get_rooms_res', data => {
-        console.log(Object.keys(data['rooms']))
-        if (data !== null) setRooms(data)
-      })
-      return () => {
-        socket.off('get_rooms_res')
+  //redux store
+  const { isLoading } = useSelector((state) => state.loading)
+  const dispatch = useDispatch()
+
+  // navigate
+  const navigate = useNavigate()
+
+
+  const [Rooms, setRooms] = useState(null)
+
+  useEffect(() => {
+
+    dispatch(setLoading(true))
+
+    socket.off('get_rooms_res').on('get_rooms_res', data => {
+
+      console.log(data['rooms'])
+      if (data !== null) setRooms(data)
+
+      dispatch(setLoading(false))
+
+    })
+
+    socket.off('joined_room').on('joined_room', data => {
+
+      console.log(data)
+      if (data.status === 200) {
+        navigate(`/room/${data.room}`, {state: {room: data.room}})
       }
-    }, [Rooms])
+      socket.off('get_rooms_res')
+      dispatch(setLoading(false))
 
-    const joinRoom = (room, create = true, password = null) => {
-      socket.emit('join_room', {room: room, create: create, password: password})
-      
+    })
+
+    socket.emit('get_rooms_req')
+    return () => {
+      socket.off('get_rooms_res')
+      socket.off('joined_room')
     }
-    
+  }, [0])
+
+
+
+  const joinRoom = (room, create = true, password = null) => {
+    socket.emit('join_room', {
+      room: room,
+      create: create,
+      password: password
+    })
+
+  }
 return(
     <>
-    <Link to='/'>
+    <Link to='/' onClick={() => socket.off('get_rooms_res')}>
       <button className="pushable">
         <span className="front">Back</span>
       </button>

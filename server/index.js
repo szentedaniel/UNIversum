@@ -3,7 +3,7 @@ const http = require('http')
 const cors = require('cors')
 const dotenv = require('dotenv')
 const {Server} = require('socket.io')
-const {createRoom, joinRoom, leaveRoom, sendRoomsToClient, setIo} = require('./roomSystem')
+const {createRoom, joinRoom, leaveRoom, sendRoomsToClient, setIo, getRoomById} = require('./roomSystem')
 
 // Load config (.env)
 dotenv.config()
@@ -64,6 +64,10 @@ io.on('connection', socket => {
 
   socket.on('get_rooms_req', () => {
     sendRoomsToClient(rooms)
+  })
+
+  socket.on('get_room_by_id_req', (id) => {
+    getRoomById(socket, id, rooms)
   })
 
   socket.on('disconnecting', () => {

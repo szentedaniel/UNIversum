@@ -1,9 +1,8 @@
-import { createStore, applyMiddleware } from "redux"
-import reducers from './reducers'
-import thunk from 'redux-thunk'
+import { configureStore } from '@reduxjs/toolkit'
+import loadingReducer from './slices/loadingSlice'
 
-export const store = createStore(
-    reducers,
-    {},
-    applyMiddleware(thunk)
-)
+export default configureStore({
+  reducer: {
+      loading: loadingReducer,
+  },
+})

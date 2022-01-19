@@ -1,23 +1,19 @@
 import React from 'react'
 import App from '../Components/App'
 import Lobby from '../Components/Lobby'
+import Loading from '../Components/Loading'
 
 import { useSelector, useDispatch } from 'react-redux'
-import { bindActionCreators } from 'redux'
-import { userActions } from '../Store/actions'
+
+
 
 function Home() {
-    const isLoading = useSelector(state => state.isLoading)
+    const { isLoading }  = useSelector((state) => state.loading)
     const dispatch = useDispatch()
-
-    const AC = bindActionCreators(userActions, dispatch)
-
-    console.log(AC)
-    console.log(isLoading);
 
 
     return (
-        <><div onClick={() => AC.setLoading(!isLoading)}>várás be/ki</div><Lobby /></>
+        <><Lobby /></>
     )
 }
 
