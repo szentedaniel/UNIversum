@@ -10,12 +10,15 @@ import { InLobby} from './InLobby'
 
 import { useTranslation } from 'react-i18next';
 import { Link } from "react-router-dom";
+import { useSelector } from 'react-redux'
 
 
 
 function Lobby () {
   const socket = useSocket()
   const { t, i18n } = useTranslation();
+
+  const user = useSelector((state) => state.user)
 
   const [username, setUsername] = useState('')
   const [team, setTeam] = useState(null);
@@ -33,11 +36,13 @@ function Lobby () {
   //  setUsername(name)
   //  socket.emit('set_username', {username: name})
   //}
+  let firstLoad = true
 
   useEffect(() => {
-    const name = generateName(i18n.language)
+    const name = user.username
     setUsername(name)
-    socket.emit('set_username', {username: name})
+    if ( firstLoad ) socket.emit('set_username', {username: name})
+    firstLoad = false
     return () => {
       return
     }

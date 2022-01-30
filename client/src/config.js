@@ -1,4 +1,3 @@
-
 export const SOCKET_URL = process.env.SOCKET || 'localhost:3001'
 
 export const LANGUAGES = [
