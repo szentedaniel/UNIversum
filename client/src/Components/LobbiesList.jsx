@@ -39,9 +39,9 @@ export function LobbiesList() {
     socket.off('joined_room').on('joined_room', data => {
 
       console.log(data)
-      if (data.status === 200) {
-        navigate(`/room/${data.room}`, {state: {room: data.room}})
-      }
+      // if (data.status === 200) {
+      //   navigate(`/room/${data.room}`, {state: {room: data.room}})
+      // }
       socket.off('get_rooms_res')
       dispatch(setLoading(false))
 
@@ -50,18 +50,20 @@ export function LobbiesList() {
     socket.emit('get_rooms_req')
     return () => {
       socket.off('get_rooms_res')
-      socket.off('joined_room')
+      // socket.off('joined_room')
     }
   }, [0])
 
 
 
-  const joinRoom = (room, create = true, password = null) => {
-    socket.emit('join_room', {
-      room: room,
-      create: create,
-      password: password
-    })
+  const joinRoom = (room) => {
+    // socket.emit('join_room', {
+    //   room: room,
+    //   create: create,
+    //   password: password
+    // })
+
+    navigate(`/room/${room}`)
 
   }
 return(

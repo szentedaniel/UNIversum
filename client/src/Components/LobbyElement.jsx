@@ -15,7 +15,7 @@ export function LobbyElement ({lobbyName, roomCode, usersCount, usersMax, hasPas
                 <div>
                     <p>Password: <input className="key" type="text" autoComplete="off" onChange={e => setPw(e.target.value)}/></p></div>
                 }
-            <button disabled={(usersCount === usersMax)} className="pushable" onClick={() => joinFun(roomCode, false, pw)}>
+            <button disabled={(usersCount === usersMax)} className="pushable" onClick={() => joinFun(roomCode)}>
                 <span className="front"> Join lobby</span>
             </button>
         </div>

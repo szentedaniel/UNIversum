@@ -46,7 +46,7 @@ export function InLobby ({room, setRoom, code}){
   const leaveRoom = () => {
     socket.emit('leave_room')
     navigate('/')
-}
+  }
 
     return(
         <>

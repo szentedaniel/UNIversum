@@ -67,7 +67,6 @@ function Lobby () {
 
   const joinRoom = (room, create = true, password = null) => {
     socket.emit('join_room', {room: room, create: create, password: password})
-    
   }
 
 

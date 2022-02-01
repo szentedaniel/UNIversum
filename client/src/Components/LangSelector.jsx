@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux'
 import Modal from 'react-modal';
 import Cookies from 'universal-cookie';
 import { LANGUAGES, COLOR_THEMES } from '../config'
@@ -39,8 +40,16 @@ Modal.setAppElement(document.getElementById('root'));
 
 const LangSelector = () => {
   const { t, i18n } = useTranslation();
-  const [selectedLang, setSelectedLang] = useState(cookies.get('i18next'));
+  const { language } = useSelector(state => state.user)
+  const [selectedLang, setSelectedLang] = useState(cookies.get('i18next') || language);
   const [modalIsOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    setSelectedLang(language)
+  }, []);
+  
+
+
 
   const changeLanguage = (lang) => {
     //console.log(LANGUAGES)
@@ -54,6 +63,7 @@ const LangSelector = () => {
   }
 
   const openModal = () => {
+    setSelectedLang(cookies.get('i18next'))
     setIsOpen(true);
   }
 

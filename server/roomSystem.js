@@ -14,7 +14,9 @@ const createRoom = (socket_, rooms_, roomData) => {
 
   const roomId = generateRoomCode(rooms_)
   try {
-    const pwd = bcrypt.hashSync(roomData.password, salt)
+    let pwd
+    if (roomData.hasPassword) pwd = bcrypt.hashSync(roomData.password, salt)
+      
 
     socket_.emit('get_room', {
       room: roomId,
