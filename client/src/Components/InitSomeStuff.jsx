@@ -3,14 +3,19 @@ import axios from 'axios'
 import { getIpInform } from '../Store/slices/userSlice'
 import { useDispatch } from 'react-redux'
 import Cookies from 'universal-cookie';
+import { useSocket } from '../Contexts/SocketContext'
+import { useSelector } from 'react-redux'
 import { useTranslation } from 'react-i18next';
 
 export default function InitSomeStuff() {
 
-    const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const { i18n } = useTranslation()
+  const socket = useSocket()
   const cookies = new Cookies();
+  let firstLoad = true
 
+  const User = useSelector((state) => state.user)
 
   const getIpInfo = () => {
     axios.get('https://ipinfo.io/json', 
@@ -30,9 +35,18 @@ export default function InitSomeStuff() {
       .catch(err => console.log(err)) //https://api.db-ip.com/v2/free/self
   }
 
+
+
+  const sendUsernameToServer = () => {
+    console.log('betöltöttem,', firstLoad)
+    if (firstLoad) socket.emit('set_username', {username: User.username})
+    firstLoad = false
+  }
+
   useEffect(() => {
+    sendUsernameToServer()
     getIpInfo()
-  }, []);
+  },);
   
 
 

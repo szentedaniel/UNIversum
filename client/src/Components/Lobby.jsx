@@ -41,7 +41,7 @@ function Lobby () {
   useEffect(() => {
     const name = user.username
     setUsername(name)
-    if ( firstLoad ) socket.emit('set_username', {username: name})
+    
     firstLoad = false
     return () => {
       return

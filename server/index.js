@@ -47,7 +47,7 @@ io.on('connection', socket => {
   socket.on('set_username', data => {
     console.log(data.username)  
     allClients.get(socket.id).username = data.username
-    console.log(allClients.get(socket.id))
+    
   })
 
   socket.on('create_room', (roomData) => {

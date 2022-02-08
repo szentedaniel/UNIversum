@@ -33,18 +33,15 @@ const customStyles = {
 }
 Modal.setAppElement(document.getElementById('root'));
 
-export default function PasswordPopup( { showPasswordPopup = false, setPw }) {
+export default function PasswordPopup( { showPasswordPopup = false, setPw, setShowPasswordPopup }) {
 
     const [modalIsOpen, setIsOpen] = useState(false);
     const [password, setPassword] = useState(null);
     const { t } = useTranslation();
 
     useEffect(() => {
-        setIsOpen(showPasswordPopup)
-    
-      return () => {
-        setIsOpen(false)
-      };
+        if (showPasswordPopup) openModal()
+        //console.log('inside popup show: ', showPasswordPopup);
     }, [showPasswordPopup]);
     
 
@@ -56,17 +53,20 @@ export default function PasswordPopup( { showPasswordPopup = false, setPw }) {
       const afterOpenModal = () => {
         // references are now sync'd and can be accessed.
         //subtitle.style.color = '#f00';
+        console.log('OPEN_: ', {showPasswordPopup: {kulso: showPasswordPopup, belso: modalIsOpen}})
       }
     
       const closeModal = () => {
           setPw(password)
-          setIsOpen(false);
+          setIsOpen(false)
+          setShowPasswordPopup(false);
+          console.log('CLOSE_: ', {pw: password, showPasswordPopup: {kulso: false, belso: false}})
       }
 
   return (
     <>{showPasswordPopup &&
 <>
-        <Modal isOpen={modalIsOpen} onAfterOpen={afterOpenModal} onRequestClose={closeModal} style={customStyles}
+        <Modal isOpen={showPasswordPopup} onAfterOpen={afterOpenModal} onRequestClose={closeModal} style={customStyles}
       contentLabel="Example Modal">
 
       <div className="relative bg-sajat-500 rounded-lg shadow dark:bg-gray-700">

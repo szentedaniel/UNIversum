@@ -3,11 +3,22 @@ import { useSocket } from '../Contexts/SocketContext'
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from 'react-redux'
+import { setLoading } from '../Store/slices/loadingSlice'
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
-export function CreateLobby ({}){
+
+
+
+export function CreateLobby (){
 //onClick={createRoom}
 const socket = useSocket()
 const { t } = useTranslation();
+const { isLoading } = useSelector((state) => state.loading)
+const dispatch = useDispatch()
+const navigate = useNavigate()
+
 
 const [lobbyName, setLobbyName] = useState(null)
 const [maxPlayerNumber, setMaxPlayerNumber] = useState(4)
@@ -24,8 +35,8 @@ const checkValidDatas = () =>{
 }
 
 const handleCreatingLobby = () => {
-    
-        if(checkValidDatas()){
+    dispatch(setLoading(true))
+    if(checkValidDatas()){
             const roomData = {
                 lobbyName: (lobbyName === '') ? null :lobbyName,
                 maxPlayerNumber: maxPlayerNumber, 
@@ -36,8 +47,27 @@ const handleCreatingLobby = () => {
             createRoom(roomData)
             
         }
-    
+
+        dispatch(setLoading(false))
 }
+
+
+// ha létrejött a szoba, átirányít
+useEffect(() => {
+    socket.on('get_room', data => {
+        console.log(data)
+        navigate(`/room/${data.room}`, {
+            state: {
+                created: true,
+                hasPassword: hasPassword,
+                secret: password
+            }
+      })
+    })
+    return () => {
+        socket.off('get_room')
+    }
+  },)
     return(
         <>
                 
