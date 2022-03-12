@@ -16,22 +16,22 @@ const createRoom = (socket_, rooms_, roomData) => {
   try {
     let pwd
     if (roomData.hasPassword) pwd = bcrypt.hashSync(roomData.password, salt)
-      
+
 
     socket_.emit('get_room', {
       room: roomId,
-      lobbyName: (roomData.lobbyName === null) ? ('Lobby '+roomId) : roomData.lobbyName,
-      maxPlayerNumber: roomData.maxPlayerNumber, 
-      hasPassword: roomData.hasPassword, 
+      lobbyName: (roomData.lobbyName === null) ? ('Lobby ' + roomId) : roomData.lobbyName,
+      maxPlayerNumber: roomData.maxPlayerNumber,
+      hasPassword: roomData.hasPassword,
       password: pwd
     })
 
     rooms_.set(roomId, {
       users: [],
       code: roomId,
-      lobbyName: (roomData.lobbyName === null) ? ('Lobby '+roomId) : roomData.lobbyName,
-      maxPlayerNumber: roomData.maxPlayerNumber, 
-      hasPassword: roomData.hasPassword, 
+      lobbyName: (roomData.lobbyName === null) ? ('Lobby ' + roomId) : roomData.lobbyName,
+      maxPlayerNumber: roomData.maxPlayerNumber,
+      hasPassword: roomData.hasPassword,
       password: pwd
     })
     sendRoomsToClient(rooms_)
@@ -40,7 +40,7 @@ const createRoom = (socket_, rooms_, roomData) => {
   }
 }
 
-const joinRoom = (socket_, rooms_, allClients_, data_ ) => {
+const joinRoom = (socket_, rooms_, allClients_, data_) => {
   try {
     if (data_.create) {
 
@@ -64,7 +64,7 @@ const joinRoom = (socket_, rooms_, allClients_, data_ ) => {
         user: socket_.id,
         team: rooms_.get(data_.room.toString())
       })
-      
+
 
     } else {
 
@@ -95,15 +95,15 @@ const joinRoom = (socket_, rooms_, allClients_, data_ ) => {
                 user: socket_.id,
                 team: rooms_.get(data_.room.toString())
               })
-            }else{
+            } else {
               socket_.emit('joined_room', {
                 status: 402,
                 room: null,
                 message: MESSAGES[402]
               })
             }
-            
-            
+
+
           } else {
             socket_.join(data_.room)
             allClients_.get(socket_.id).room = data_.room
@@ -182,7 +182,7 @@ const leaveRoom = (socket_, rooms_, allClients_, serverLeave_ = false) => {
           team: (rooms_.get(roomID))
         })
         console.log(`User with ID: ${socket_.id} left room: ${roomID}`)
-                
+
       }
 
       console.log('1 user disconnected', socketId)
@@ -190,7 +190,7 @@ const leaveRoom = (socket_, rooms_, allClients_, serverLeave_ = false) => {
       if (serverLeave_) {
         allClients_.delete(socketId)
       } else {
-        allClients_.get(socketId).room  = null
+        allClients_.get(socketId).room = null
       }
     }
     sendRoomsToClient(rooms_)
@@ -200,16 +200,19 @@ const leaveRoom = (socket_, rooms_, allClients_, serverLeave_ = false) => {
 
 }
 
-const sendRoomsToClient = (rooms_) =>{
-  
-  io.emit('get_rooms_res', {rooms: Object.fromEntries(rooms_)})
-  
+const sendRoomsToClient = (rooms_) => {
+
+  io.emit('get_rooms_res', { rooms: Object.fromEntries(rooms_) })
+
 }
 
 
 const getRoomById = (socket, id, rooms) => {
-  if (rooms.has(id)) socket.emit('get_room_by_id_res', {status: 200, room: rooms.get(id), message: MESSAGES[200]})
-  else socket.emit('get_room_by_id_res', {status: 404, room: null, message: MESSAGES[404]})
+  setTimeout(() => {
+    if (rooms.has(id)) socket.emit('get_room_by_id_res', { status: 200, room: rooms.get(id), message: MESSAGES[200] })
+    else socket.emit('get_room_by_id_res', { status: 404, room: null, message: MESSAGES[404] })
+
+  }, 3000)
 }
 
 

@@ -2,8 +2,8 @@ const express = require('express')
 const http = require('http')
 const cors = require('cors')
 const dotenv = require('dotenv')
-const {Server} = require('socket.io')
-const {createRoom, joinRoom, leaveRoom, sendRoomsToClient, setIo, getRoomById} = require('./roomSystem')
+const { Server } = require('socket.io')
+const { createRoom, joinRoom, leaveRoom, sendRoomsToClient, setIo, getRoomById } = require('./roomSystem')
 
 // Load config (.env)
 dotenv.config()
@@ -45,9 +45,9 @@ io.on('connection', socket => {
   console.log('Current clients connected: ', allClients.size)
 
   socket.on('set_username', data => {
-    console.log(data.username)  
+    console.log(data.username)
     allClients.get(socket.id).username = data.username
-    
+
   })
 
   socket.on('create_room', (roomData) => {
