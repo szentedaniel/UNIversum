@@ -79,7 +79,7 @@ export default function PasswordPopup({ showPasswordPopup = false, setPw, setSho
         <Modal isOpen={showPasswordPopup} onAfterOpen={afterOpenModal} onRequestClose={closeModal} style={customStyles}
           contentLabel="Example Modal">
 
-          <div className="relative bg-sajat-500 rounded-lg shadow dark:bg-gray-700">
+          <div className="relative bg-proba-500 rounded-lg shadow dark:bg-gray-700">
 
             <div className="flex justify-between items-center p-5 rounded-t border-b dark:border-gray-600">
               <h3 className="text-xl font-medium text-white">

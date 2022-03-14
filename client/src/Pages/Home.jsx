@@ -1,6 +1,6 @@
 import React from 'react'
 import App from '../Components/App'
-import Lobby from '../Components/Lobby'
+import Lobby from '../Components/LobbyComponent/Lobby'
 import Loading from '../Components/Loading'
 
 import { useSelector, useDispatch } from 'react-redux'
@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 
 function Home() {
-    const { isLoading }  = useSelector((state) => state.loading)
+    const { isLoading } = useSelector((state) => state.loading)
     const dispatch = useDispatch()
 
 

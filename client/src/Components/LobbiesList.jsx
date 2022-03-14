@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
-import { useNavigate , useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux'
 import { setLoading } from '../Store/slices/loadingSlice'
@@ -66,28 +66,28 @@ export function LobbiesList() {
     navigate(`/room/${room}`)
 
   }
-return(
+  return (
     <>
-    <Link to='/' onClick={() => socket.off('get_rooms_res')}>
-      <button className="pushable">
-        <span className="front">Back</span>
-      </button>
-    </Link>
-    <h3>Room counter: {(Rooms !== null) ? Object.keys(Rooms['rooms']).length.toString() : 0}</h3>
-    {(Rooms !== null) &&
-      Object.keys(Rooms['rooms']).map((roomCode,index) => 
-        <LobbyElement
-          key={index}
-          lobbyName = {Rooms['rooms'][roomCode].lobbyName}
-          roomCode = {Rooms['rooms'][roomCode].code}
-          usersCount = {Rooms['rooms'][roomCode].users.length}
-          usersMax = {Rooms['rooms'][roomCode].maxPlayerNumber}
-          hasPassword = {Rooms['rooms'][roomCode].hasPassword}
-          password = {Rooms['rooms'][roomCode].password}
-          joinFun = {joinRoom}
-        />)
-    }
+      <Link to='/' onClick={() => socket.off('get_rooms_res')}>
+        <button className="pushable">
+          <span className="front">Back</span>
+        </button>
+      </Link>
+      <h3>Room counter: {(Rooms !== null) ? Object.keys(Rooms['rooms']).length.toString() : 0}</h3>
+      {(Rooms !== null) &&
+        Object.keys(Rooms['rooms']).map((roomCode, index) =>
+          <LobbyElement
+            key={index}
+            lobbyName={Rooms['rooms'][roomCode].lobbyName}
+            roomCode={Rooms['rooms'][roomCode].code}
+            usersCount={Rooms['rooms'][roomCode].users.length}
+            usersMax={Rooms['rooms'][roomCode].maxPlayerNumber}
+            hasPassword={Rooms['rooms'][roomCode].hasPassword}
+            password={Rooms['rooms'][roomCode].password}
+            joinFun={joinRoom}
+          />)
+      }
     </>
-    
-)
+
+  )
 }

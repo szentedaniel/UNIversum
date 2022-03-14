@@ -9,11 +9,12 @@ import '@themesberg/flowbite';
 
 
 import './i18n';
+import Loading from './Components/Loading';
 
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <Suspense fallback={<span>Loading...</span>}>
+      <Suspense fallback={<Loading loading={true} />}>
         <App />
       </Suspense>
     </Provider>

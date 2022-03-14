@@ -24,3 +24,17 @@
       background: #333333;
     }
   }
+
+  @layer components {
+
+    /* This won't be included in your compiled CSS unless you actually use it */
+    button {
+      @apply bg-proba-800 hover:bg-proba-700 focus:bg-proba-700 rounded-lg px-5 py-4 focus:ring focus:ring-proba-800 flex flex-row items-center space-x-1
+    }
+    a {
+      @apply m-3 w-fit h-fit
+    }
+    input[type=text] {
+      @apply appearance-none ease-in-out text-base focus:ring focus:ring-proba-400 block w-full bg-proba-400 text-proba-200 border-proba-200 border-2 rounded-lg py-3 px-4 m-3 leading-tight focus:outline-none focus:bg-proba-300
+    }
+  }

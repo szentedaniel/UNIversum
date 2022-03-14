@@ -3,13 +3,13 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setLoading } from '../Store/slices/loadingSlice'
 
 
-function Loading() {
+function Loading(loading) {
   const { isLoading } = useSelector((state) => state.loading)
 
   return (
     <>
-      {isLoading &&
-        <div className='w-full h-full fixed block top-0 left-0 bg-black opacity-25 z-50'>
+      {(isLoading) &&
+        <div className='w-full h-full fixed block top-0 left-0 bg-[#01162ead] opacity-25 z-50'>
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
             <div className="relative">
               <svg width="100" height="100" viewBox="0 0 44 44" xmlns="http://www.w3.org/2000/svg"

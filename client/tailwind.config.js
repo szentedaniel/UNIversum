@@ -12,21 +12,34 @@ module.exports = {
         400: '#503c52',
         500: '#262335',
       },
+
+      proba: {
+        100: "#d1d6d4",
+        200: "#a4aea9",
+        300: "#76857d",
+        400: "#495d52",
+        500: "#1b3427",
+        600: "#162a1f",
+        700: "#101f17",
+        800: "#0b1510",
+        900: "#050a08"
+      },
     },
     screens: {
-      'sm': {'min': '180', 'max': '767px'},
+      'xs': { 'min': '0px', 'max': '599px' },
+      'sm': { 'min': '600px', 'max': '899px' },
       // => @media (min-width: 180px and max-width: 767px) { ... }
 
-      'md': {'min': '768px', 'max': '1023px'},
+      'md': { 'min': '900px', 'max': '1199px' },
       // => @media (min-width: 768px and max-width: 1023px) { ... }
 
-      'lg': {'min': '1024px', 'max': '1279px'},
+      'lg': { 'min': '1200px', 'max': '1535px' },
       // => @media (min-width: 1024px and max-width: 1279px) { ... }
 
-      'xl': {'min': '1280px', 'max': '1535px'},
+      'xl': { 'min': '1536px', 'max': '90000px' },
       // => @media (min-width: 1280px and max-width: 1535px) { ... }
 
-      '2xl': {'min': '1536px'},
+      // '2xl': { 'min': '1536px' },
       // => @media (min-width: 1536px) { ... }
     },
   },
