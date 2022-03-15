@@ -1,32 +1,27 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { useState, useEffect } from "react";
-
 import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from 'react-redux'
 import Icon from '@mui/material/Icon';
 import { Divider } from '@mui/material'
-import { SvgIcon } from '@mui/material';
-import { motion } from 'framer-motion';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Checkbox from '@mui/material/Checkbox';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormHelperText from '@mui/material/FormHelperText';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import * as yup from 'yup';
 import _ from 'lodash';
-import { LobbiesList } from "../LobbiesList";
+import i18n from './../../i18n.js';
+import hu from './i18n/hu'
+import en from './i18n/en'
+import de from './i18n/de'
+
+i18n.addResourceBundle('hu', 'Lobby', hu);
+i18n.addResourceBundle('en', 'Lobby', en);
+i18n.addResourceBundle('de', 'Lobby', de);
 
 
 function Lobby() {
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('Lobby');
 
   const user = useSelector((state) => state.user)
 
@@ -100,7 +95,7 @@ function Lobby() {
     <>
       <div className='flex flex-col p-5'>
         <div className="flex flex-row justify-center items-center space-x-1 mb-2"><Icon>account_circle</Icon><h1>{t('username')}</h1></div>
-        <h2 className="text-3xl self-center mb-20">{username}</h2>
+        <h2 className="text-3xl self-center mb-10">{username}</h2>
 
         <>
 
@@ -108,7 +103,7 @@ function Lobby() {
             <Link to='/create' className="self-center">
               <button className="button" >
                 <Icon>play_circle</Icon>
-                <span className="front">{t('create_lobby')}</span>
+                <span className="front">{t('PLAY_NOW')}</span>
               </button>
             </Link>
             <div>
@@ -132,7 +127,7 @@ function Lobby() {
             {/* <input onKeyPress={(e) => inputCodeHandler(e)} type="text" onChange={e => setRoomCode(e.target.value)} /> */}
 
             <Link to='/rooms' className="self-center" state={{ rooms: rooms }}>
-              <button className="pushable">
+              <button className="button">
                 <Icon>meeting_room</Icon>
                 <span className="front">{t('show_lobbies')}</span>
               </button>
@@ -154,7 +149,7 @@ function Lobby() {
                 <input onKeyPress={(e) => inputCodeHandler(e)} type="text" autoComplete="off" onChange={e => setRoomCode(e.target.value)} className="" id="grid-first-name" />
                 {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
               </div>
-              <button className="pushable" onClick={() => joinRoom(roomCode)}>
+              <button className="button" onClick={() => joinRoom(roomCode)}>
                 <Icon>sports_esports</Icon>
                 <span className="front">{t('join_lobby')}</span>
               </button>

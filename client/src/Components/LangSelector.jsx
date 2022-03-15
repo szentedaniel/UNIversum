@@ -5,6 +5,8 @@ import Modal from 'react-modal';
 import Cookies from 'universal-cookie';
 import { LANGUAGES, COLOR_THEMES } from '../config'
 import 'flag-icons/css/flag-icons.min.css'
+import resolveConfig from 'tailwindcss/resolveConfig'
+
 
 const cookies = new Cookies();
 
@@ -25,7 +27,7 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     border: `4px solid black`,
-    background: COLOR_THEMES[1].dark,
+    background: '#162a1f',//fullConfig.theme.colors.proba[100], //COLOR_THEMES[1].dark,
 
     overflow: 'auto',
 
@@ -104,7 +106,7 @@ const LangSelector = () => {
       border-proba-100 
       rounded-lg'>
         <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 icon icon-tabler icon-tabler-world" width="24" height="24"
-          viewBox="0 0 24 24" strokeWidth="1.5" stroke="#d1d6d4" fill="none" strokeLinecap="round"
+          viewBox="0 0 24 24" strokeWidth="1.5" stroke='#d1d6d4' fill="none" strokeLinecap="round"
           strokeLinejoin="round">
           <path stroke="none" d="M0 0h24v24H0z" fill="none" />
           <circle cx="12" cy="12" r="9" />
@@ -121,7 +123,7 @@ const LangSelector = () => {
 
         <div className="relative bg-proba-500 rounded-lg shadow dark:bg-gray-700">
 
-          <div className="flex justify-between items-center p-5 rounded-t border-b dark:border-gray-600">
+          <div className="flex justify-between items-center p-5 rounded-t dark:border-gray-600">
             <h3 className="text-xl font-medium text-white">
               {t('language_selector')}
             </h3>
@@ -140,12 +142,12 @@ const LangSelector = () => {
             className="rounded-lg bg-proba-400 w-full mx-auto py-5 xs:grid sm:grid md:grid lg:grid xl:grid 2xl:grid 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 xs:grid-cols-1 sm:grid-cols-1 xl:grid-cols-3 px-10 overflow-y-auto max-h-96 scrollbar">
             {(LANGUAGES.map(lang => {
               if (lang.code === selectedLang) {
-                return (<div key={lang.code} className="bg-proba-100 p-3 shadow-md rounded-md m-3 max-h-[4rem] flex flex-col" onClick={() => { handleLangSelect(lang.code) }}>
+                return (<div key={lang.code} className="bg-proba-200 hover:bg-proba-200 ring ring-proba-800 p-3 shadow-md rounded-md m-3 max-h-[4rem] flex flex-col" onClick={() => { handleLangSelect(lang.code) }}>
                   <h3 className="text-center text-xl text-gray-800 font-semibold pr-3"><span className={`rounded-sm fi
                 fi-${lang.countryCode} m-2`}></span> {lang.name}</h3>
                 </div>)
               } else {
-                return (<div key={lang.code} className="bg-white p-3 shadow-md rounded-md m-3 max-h-[4rem]" onClick={() => { handleLangSelect(lang.code) }}>
+                return (<div key={lang.code} className="bg-proba-100 hover:bg-proba-200 p-3 shadow-md rounded-md m-3 max-h-[4rem]" onClick={() => { handleLangSelect(lang.code) }}>
                   <h3 className="text-center text-xl text-gray-800 font-semibold pr-3"><span className={`rounded-sm fi
                 fi-${lang.countryCode} m-2`}></span> {lang.name}</h3>
                 </div>)
@@ -154,10 +156,10 @@ const LangSelector = () => {
 
           </div>
 
-          <div className="flex items-center p-6 space-x-2 rounded-b border-t border-gray-200 dark:border-gray-600">
+          <div className="flex items-center justify-center p-6 space-x-2 rounded-b border-gray-200 dark:border-gray-600">
             <button onClick={() => { changeLanguage(selectedLang) }} type="button"
-              className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg
-            text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">I
+              className="text-white bg-proba-700 hover:bg-proba-800 focus:ring-4 focus:ring-proba-300 font-medium rounded-lg
+            text-sm px-5 py-2.5 text-center dark:bg-proba-600 dark:hover:bg-proba-700 dark:focus:ring-proba-800">I
               accept</button>
           </div>
         </div>

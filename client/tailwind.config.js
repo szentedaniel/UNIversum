@@ -5,7 +5,7 @@ module.exports = {
   theme: {
     extend: {},
     colors: {
-      'sajat': {
+      sajat: {
         100: '#ffbb6c',
         200: '#d4896a',
         300: '#9f6c66',

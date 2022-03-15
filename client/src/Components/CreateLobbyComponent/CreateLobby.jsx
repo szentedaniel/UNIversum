@@ -1,20 +1,27 @@
 import React from "react";
-import { useSocket } from '../Contexts/SocketContext'
+import { useSocket } from '../../Contexts/SocketContext'
 import { useState } from "react";
 import { useTranslation } from 'react-i18next';
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
-import { setLoading } from '../Store/slices/loadingSlice'
+import { setLoading } from '../../Store/slices/loadingSlice'
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import { Icon } from "@mui/material";
+import i18n from "../../i18n";
+import hu from './i18n/hu'
+import en from './i18n/en'
+import de from './i18n/de'
 
-
+i18n.addResourceBundle('hu', 'CreateLobby', hu);
+i18n.addResourceBundle('en', 'CreateLobby', en);
+i18n.addResourceBundle('de', 'CreateLobby', de);
 
 
 export function CreateLobby() {
   //onClick={createRoom}
   const socket = useSocket()
-  const { t } = useTranslation();
+  const { t } = useTranslation('CreateLobby');
   const { isLoading } = useSelector((state) => state.loading)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -71,14 +78,30 @@ export function CreateLobby() {
   return (
     <>
 
-      <Link to='/'><button className="pushable">  <span className="front">Back</span></button></Link>
-      <form autoComplete="off" className="w-full max-w-lg items-center center content-center justify-center m-auto">
+      <Link to='/'><button className="back_button"> <Icon>arrow_back_ios</Icon></button></Link>
+      <form autoComplete="off" className="w-full max-w-2xl items-center content-center justify-center m-auto">
         <div className="flex flex-wrap -mx-3 mb-2">
           <div className="w-full px-3 ">
             <label className="block uppercase tracking-wide text-proba-200 text-xs font-bold mb-2" for="grid-first-name">
-              Room's name
+              {t('ROOM_NAME')}
             </label>
-            <input onChange={e => setLobbyName(e.target.value)} className="appearance-none focus:ring-indigo-500 block w-full bg-proba-400 text-proba-200 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-proba-400" id="grid-first-name" type="text" placeholder="Something" />
+            <input onChange={e => setLobbyName(e.target.value)} className='
+              form-control
+              block
+              w-full
+              px-3
+              py-1.5
+              text-base
+              text-proba-200
+              bg-clip-padding
+              border border-solid border-gray-300
+              rounded
+              transition
+              ease-in-out
+              m-0
+              focus:text-proba-200 focus:bg-proba-600 focus:border-proba-600 focus:outline-none
+              bg-proba-700 hover:bg-proba-600 focus:ring-4 focus:ring-proba-300
+              font-bold' id="grid-first-name" type="text" placeholder={t('PLACEHOLDER_ROOM')} />
             {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
           </div>
         </div>
@@ -91,10 +114,13 @@ export function CreateLobby() {
           </div> */}
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label className="block uppercase tracking-wide text-proba-200 text-xs font-bold mb-2" for="grid-state">
-              Number of max player
+              {t('PLAYERS')}
+
             </label>
             <div className="relative">
-              <select onChange={e => setMaxPlayerNumber(e.target.value)} className="block appearance-none w-full bg-proba-400 border border-gray-200 text-proba-200 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-proba-400 focus:border-gray-500" id="grid-state">
+              <select onChange={e => setMaxPlayerNumber(e.target.value)} className="appearance-none ease-in-out focus:text-proba-200 focus:bg-proba-600 focus:border-proba-600 focus:outline-none
+              hover:bg-proba-600 focus:ring-4 focus:ring-proba-300
+              font-bold block appearance-none w-full bg-proba-400 border border-gray-200 text-proba-200 py-3 px-4 pr-8 rounded leading-tight  " id="grid-state">
                 <option value="4">4</option>
                 <option value="3">3</option>
                 <option value="2">2</option>
@@ -106,13 +132,16 @@ export function CreateLobby() {
           </div>
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label className="block uppercase tracking-wide text-proba-200 text-xs font-bold mb-2" for="grid-state">
-              Time
+              {t('TIME')}
+
             </label>
             <div className="relative">
-              <select onChange={e => setMaxPlayerNumber(e.target.value)} className="block appearance-none w-full bg-proba-400 border border-gray-200 text-proba-200 py-3 px-4 pr-8 rounded leading-tight focus:ring-indigo-500 focus:outline-none focus:bg-proba-400 focus:border-gray-500" id="grid-state">
-                <option value="60">60 min</option>
-                <option value="30">30 min</option>
-                <option value="15">15 min</option>
+              <select onChange={e => setMaxPlayerNumber(e.target.value)} className="appearance-none ease-in-out focus:text-proba-200 focus:bg-proba-400 focus:border-proba-600 focus:outline-none
+              hover:bg-proba-600 focus:ring-4 focus:ring-proba-300
+              font-bold block appearance-none w-full bg-proba-400 border border-gray-200 text-proba-200 py-3 px-4 pr-8 rounded leading-tight " id="grid-state">
+                <option value="60">60 {t('MIN')}</option>
+                <option value="30">30 {t('MIN')}</option>
+                <option value="15">15 {t('MIN')}</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-proba-200">
                 {/* <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg> */}
@@ -124,7 +153,8 @@ export function CreateLobby() {
         <div className="flex flex-wrap -mx-3 mb-6">
           <div className="w-full px-3">
             <label className="block uppercase tracking-wide text-proba-200 text-xs font-bold mb-2 " for="grid-password">
-              Password
+              {t('PASSWORD')}
+
             </label>
             <input className={`form-control
                   block
@@ -141,7 +171,8 @@ export function CreateLobby() {
                   transition
                   ease-in-out
                   m-0
-                  focus:text-proba-200 focus:bg-proba-400 focus:border-blue-600 focus:outline-none`}
+                  focus:text-proba-200 focus:bg-proba-600 focus:border-proba-600 focus:outline-none
+                  hover:bg-proba-600 focus:ring-4 focus:ring-proba-300`}
               id="grid-password"
               type="password"
               placeholder="******************"
@@ -152,18 +183,15 @@ export function CreateLobby() {
           </div>
 
         </div>
-        <div class="flex items-center center content-center self-center">
-          <input onChange={e => setHasPassword(e.target.checked)} id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 bg-proba-400 focus:bg-proba-400 rounded" />
-          <label for="remember-me" class="ml-2 block text-sm text-proba-200"> Password </label>
+        <div class="flex items-center center content-center self-center  mb-10">
+          <input onChange={e => setHasPassword(e.target.checked)} id="remember-me" name="remember-me" type="checkbox" class="h-4 w-4 text-proba-600 focus:ring-proba-500 border-gray-300 bg-proba-400 focus:bg-proba-400 rounded" />
+          <label for="remember-me" class="ml-2 block text-sm text-proba-200">{t('PASSWORD')} </label>
         </div>
       </form>
 
-
-
-
-
-
-      <button className="pushable" onClick={() => handleCreatingLobby()}>  <span className="front">{t('create_lobby')}</span></button>
+      <div className='flex flex-col items-center'>
+        <button className="button " onClick={() => handleCreatingLobby()}> {t('CREATE_LOBBY')}</button>
+      </div>
     </>
   )
 }

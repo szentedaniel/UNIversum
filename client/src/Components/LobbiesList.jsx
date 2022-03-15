@@ -7,6 +7,7 @@ import { setLoading } from '../Store/slices/loadingSlice'
 import { useSocket } from '../Contexts/SocketContext'
 import { LobbyElement } from "./LobbyElement";
 import { Link } from "react-router-dom";
+import { Icon } from "@mui/material";
 
 
 export function LobbiesList() {
@@ -69,8 +70,8 @@ export function LobbiesList() {
   return (
     <>
       <Link to='/' onClick={() => socket.off('get_rooms_res')}>
-        <button className="pushable">
-          <span className="front">Back</span>
+        <button className="back_button">
+          <Icon>arrow_back_ios</Icon>
         </button>
       </Link>
       <h3>Room counter: {(Rooms !== null) ? Object.keys(Rooms['rooms']).length.toString() : 0}</h3>
