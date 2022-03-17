@@ -774,7 +774,6 @@ function App() {
                 position="bottom-left"
                 reverseOrder={false}
               />
-              <div className='flex flex-1 flex-row sm:flex-col xs:flex-col self-center m-5 justify-center items-center w-full'>
                 <BrowserRouter>
                   <Routes>
                     <Route path="/" element={<Home />} />
@@ -783,7 +782,7 @@ function App() {
                     <Route path="/room/:code" element={<Room />} />
                   </Routes>
                 </BrowserRouter>
-              </div>
+
             </div>
           </div>
         </div>

@@ -7,8 +7,29 @@ import { setLoading } from '../Store/slices/loadingSlice'
 import { useSocket } from '../Contexts/SocketContext'
 import { LobbyElement } from "./LobbyElement";
 import { Link } from "react-router-dom";
-import { Icon } from "@mui/material";
+import { Icon, Avatar } from "@mui/material";
+import { RadioGroup } from '@headlessui/react'
+import { Divider } from '@mui/material'
 
+function stringToColor(string) {
+  let hash = 0;
+  let i;
+
+  /* eslint-disable no-bitwise */
+  for (i = 0; i < string.length; i += 1) {
+    hash = string.charCodeAt(i) + ((hash << 5) - hash);
+  }
+
+  let color = '#';
+
+  for (i = 0; i < 3; i += 1) {
+    const value = (hash >> (i * 8)) & 0xff;
+    color += `00${value.toString(16)}`.substr(-2);
+  }
+  /* eslint-enable no-bitwise */
+
+  return color;
+}
 
 export function LobbiesList() {
   // socket
@@ -21,8 +42,15 @@ export function LobbiesList() {
   // navigate
   const navigate = useNavigate()
 
+  const [selected, setSelected] = useState(null)
+
 
   const [Rooms, setRooms] = useState(null)
+
+  useEffect(() => {
+    console.log(selected)
+  }, [selected])
+
 
   useEffect(() => {
 
@@ -69,26 +97,131 @@ export function LobbiesList() {
   }
   return (
     <>
-      <Link to='/' onClick={() => socket.off('get_rooms_res')}>
-        <button className="back_button">
-          <Icon>arrow_back_ios</Icon>
-        </button>
-      </Link>
-      <h3>Room counter: {(Rooms !== null) ? Object.keys(Rooms['rooms']).length.toString() : 0}</h3>
-      {(Rooms !== null) &&
-        Object.keys(Rooms['rooms']).map((roomCode, index) =>
-          <LobbyElement
-            key={index}
-            lobbyName={Rooms['rooms'][roomCode].lobbyName}
-            roomCode={Rooms['rooms'][roomCode].code}
-            usersCount={Rooms['rooms'][roomCode].users.length}
-            usersMax={Rooms['rooms'][roomCode].maxPlayerNumber}
-            hasPassword={Rooms['rooms'][roomCode].hasPassword}
-            password={Rooms['rooms'][roomCode].password}
-            joinFun={joinRoom}
-          />)
-      }
+      <div class="flex justify-between h-auto w-full text-proba-100 mt-5">
+        <div class="w-36 h-12">
+          <Link to='/' onClick={() => socket.off('get_rooms_res')}>
+            <button className="back_button">
+              <Icon>arrow_back_ios</Icon>
+            </button>
+          </Link></div>
+        <div class="w-36 h-12 text-2xl flex flex-row items-center justify-center">Rooms</div>
+        <div class="w-36 h-12 text-lg flex flex-row items-center justify-center">
+          <h3>total: {(Rooms !== null) ? Object.keys(Rooms['rooms']).length.toString() : 0}</h3>
+        </div>
+      </div>
+      <div class="flex space-x-4 border-4 border-proba-100/20 border-solid mt-5 rounded-xl min-h-[400px] max-h-full overflow-y-auto xs:min-w-[350px] sm:min-w-[520px] md:min-w-[800px] lg:min-w-[1000px]">
+
+        <div class="w-2/3 flex-grow">
+          <div className="w-full px-4 py-4">
+            <RadioGroup value={selected} onChange={setSelected}>
+              <div className="space-y-2">
+                {(Rooms !== null) &&
+                  Object.keys(Rooms['rooms']).map((roomCode, index) => (
+                    <RadioGroup.Option
+                      key={roomCode}
+                      value={roomCode}
+                      className={({ active, checked }) =>
+                        `${active
+                          ? 'ring-2 ring-offset-2 ring-offset-proba-300 ring-white ring-opacity-60'
+                          : ''
+                        }
+                        ${checked ? 'bg-proba-700 bg-opacity-75 text-white' : 'bg-proba-400 text-proba-100'
+                        }
+                        relative rounded-lg shadow-md px-5 py-4 cursor-pointer flex focus:outline-none`
+                      }
+                    >
+                      {({ active, checked }) => (
+                        <>
+                          <div className="flex items-center justify-between w-full">
+
+                            <RadioGroup.Label
+                              as="span"
+                              className={`font-medium text-xl  ${checked ? 'text-proba-100' : 'text-proba-900'
+                                }`}
+                            >
+                              {Rooms['rooms'][roomCode].lobbyName}
+                            </RadioGroup.Label>
+                            <RadioGroup.Description
+                              as="span"
+                              className={`flex justify-end space-x-10 items-center ${checked ? 'text-proba-100' : 'text-proba-500'
+                                }`}
+                            >
+                              {/* <span aria-hidden="true">&middot;</span>{' '} */}
+                              <div className='flex flex-col items-center'>
+                                <Icon>
+                                  {(Rooms['rooms'][roomCode].hasPassword) ? 'lock' : 'lock_open'}
+                                </Icon>
+                                <span>
+                                  {(Rooms['rooms'][roomCode].hasPassword) ? 'Private' : 'Public'}
+                                </span>{' '}
+                              </div>
+                              <div className='flex flex-col'>
+                                <Icon>
+                                  groups
+                                </Icon>
+                                <span>
+                                  {Rooms['rooms'][roomCode].users.length}/{Rooms['rooms'][roomCode].maxPlayerNumber}
+                                </span>{' '}
+                              </div>
+                              <button disabled={(Rooms['rooms'][roomCode].users.length === Rooms['rooms'][roomCode].maxPlayerNumber)} className={` border-2 
+                              border-proba-200 rounded-lg p-2 
+                              ${(Rooms['rooms'][roomCode].users.length === Rooms['rooms'][roomCode].maxPlayerNumber) ? 'bg-proba-200 text-proba-100' : 'bg-proba-500 hover:bg-proba-600 focus:ring-proba-300 focus:ring-1 text-proba-100'}`} onClick={() => joinRoom(roomCode)}>
+
+                                <div className='flex flex-col items-center'>
+                                  <Icon>
+                                    login
+                                  </Icon>
+                                  <span>
+                                    Join
+                                  </span>{' '}
+                                </div>
+                              </button>
+                            </RadioGroup.Description>
+                          </div>
+                        </>
+                      )}
+                    </RadioGroup.Option>
+                  ))}
+              </div>
+            </RadioGroup>
+          </div>
+        </div>
+        <div class="w-1/3 sm:hidden xs:hidden">
+          <div className='h-11/12 border-4 border-proba-100/20 rounded-xl m-4 pr-5 pl-5 ml-0'>
+            <div className="flex justify-center items-center mt-4 mb-2 text-xl">Players in the room</div>
+            <Divider />
+            {selected &&
+              Rooms['rooms'][selected].users.map(user => (
+                <div className="flex flex-row m-2 p-2 items-center">
+                  <Avatar
+                    alt={user.username}
+                    src="/static/images/avatar/1.jpg"
+                    sx={{ bgcolor: stringToColor(user.username), }}
+                  />
+                  <span className="ml-4 text-lg">{user.username}</span>
+                </div>
+              ))
+            }
+          </div>
+
+        </div>
+      </div>
     </>
 
+  )
+}
+
+function CheckIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" {...props}>
+      <circle cx={12} cy={12} r={12} fill="#fff" opacity="0.2" />
+      <path
+        d="M7 13l3 3 7-7"
+        stroke="#fff"
+        strokeWidth={1.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   )
 }

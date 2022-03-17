@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { InLobby } from '../Components/InLobby'
 import { useSelector, useDispatch } from 'react-redux'
-import { setLoading } from '../Store/slices/loadingSlice'
+import { setIsHomepage, setLoading } from '../Store/slices/loadingSlice'
 import { useSocket } from '../Contexts/SocketContext'
 import { useLocation, useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
@@ -16,6 +16,8 @@ function Room(props) {
   const { state } = useLocation();
   const socket = useSocket()
   const navigate = useNavigate()
+  const location = useLocation();
+
 
   //redux store
   const { isLoading } = useSelector((state) => state.loading)
@@ -64,7 +66,9 @@ function Room(props) {
   useEffect(() => {
     dispatch(setLoading(true))
 
-
+    // if (location.pathname === '/')
+    //   dispatch(setIsHomepage(true))
+    // else dispatch(setIsHomepage(false))
 
     // megkapva a szoba adatait
     socket.off('get_room_by_id_res')

@@ -188,6 +188,11 @@ div {
     border-radius: 15px;
 }
 
+.borderl-dotted {
+    border-left: dotted;
+    border-color: rgb(209 214 212 / 0.2);
+}
+
 
 
 

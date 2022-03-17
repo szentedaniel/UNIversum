@@ -42,6 +42,7 @@ Modal.setAppElement(document.getElementById('root'));
 
 const LangSelector = () => {
   const { t, i18n } = useTranslation();
+  const { isHomepage } = useSelector((state) => state.loading)
   const { language } = useSelector(state => state.user)
   const [selectedLang, setSelectedLang] = useState(cookies.get('i18next') || language);
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -85,8 +86,11 @@ const LangSelector = () => {
   return (
 
     <>
-      <div onClick={openModal}
-        className='
+      {(isHomepage) &&
+        <>
+
+          <div onClick={openModal}
+            className='
       min-w-[70px] 
       p-2 
       top-5 
@@ -105,66 +109,68 @@ const LangSelector = () => {
       border-solid 
       border-proba-100 
       rounded-lg'>
-        <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 icon icon-tabler icon-tabler-world" width="24" height="24"
-          viewBox="0 0 24 24" strokeWidth="1.5" stroke='#d1d6d4' fill="none" strokeLinecap="round"
-          strokeLinejoin="round">
-          <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-          <circle cx="12" cy="12" r="9" />
-          <line x1="3.6" y1="9" x2="20.4" y2="9" />
-          <line x1="3.6" y1="15" x2="20.4" y2="15" />
-          <path d="M11.5 3a17 17 0 0 0 0 18" />
-          <path d="M12.5 3a17 17 0 0 1 0 18" />
-        </svg>
-        <p className='flex-1 text-center uppercase text-proba-100 '>{i18n.language}</p>
-      </div>
-
-      <Modal isOpen={modalIsOpen} onAfterOpen={afterOpenModal} onRequestClose={closeModal} style={customStyles}
-        contentLabel="Example Modal">
-
-        <div className="relative bg-proba-500 rounded-lg shadow dark:bg-gray-700">
-
-          <div className="flex justify-between items-center p-5 rounded-t dark:border-gray-600">
-            <h3 className="text-xl font-medium text-white">
-              {t('language_selector')}
-            </h3>
-            <button onClick={closeModal} type="button"
-              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
-              data-modal-toggle="default-modal">
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path fillRule="evenodd"
-                  d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                  clipRule="evenodd"></path>
-              </svg>
-            </button>
+            <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 icon icon-tabler icon-tabler-world" width="24" height="24"
+              viewBox="0 0 24 24" strokeWidth="1.5" stroke='#d1d6d4' fill="none" strokeLinecap="round"
+              strokeLinejoin="round">
+              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+              <circle cx="12" cy="12" r="9" />
+              <line x1="3.6" y1="9" x2="20.4" y2="9" />
+              <line x1="3.6" y1="15" x2="20.4" y2="15" />
+              <path d="M11.5 3a17 17 0 0 0 0 18" />
+              <path d="M12.5 3a17 17 0 0 1 0 18" />
+            </svg>
+            <p className='flex-1 text-center uppercase text-proba-100 '>{i18n.language}</p>
           </div>
 
-          <div
-            className="rounded-lg bg-proba-400 w-full mx-auto py-5 xs:grid sm:grid md:grid lg:grid xl:grid 2xl:grid 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 xs:grid-cols-1 sm:grid-cols-1 xl:grid-cols-3 px-10 overflow-y-auto max-h-96 scrollbar">
-            {(LANGUAGES.map(lang => {
-              if (lang.code === selectedLang) {
-                return (<div key={lang.code} className="bg-proba-200 hover:bg-proba-200 ring ring-proba-800 p-3 shadow-md rounded-md m-3 max-h-[4rem] flex flex-col" onClick={() => { handleLangSelect(lang.code) }}>
-                  <h3 className="text-center text-xl text-gray-800 font-semibold pr-3"><span className={`rounded-sm fi
-                fi-${lang.countryCode} m-2`}></span> {lang.name}</h3>
-                </div>)
-              } else {
-                return (<div key={lang.code} className="bg-proba-100 hover:bg-proba-200 p-3 shadow-md rounded-md m-3 max-h-[4rem]" onClick={() => { handleLangSelect(lang.code) }}>
-                  <h3 className="text-center text-xl text-gray-800 font-semibold pr-3"><span className={`rounded-sm fi
-                fi-${lang.countryCode} m-2`}></span> {lang.name}</h3>
-                </div>)
-              }
-            }))}
+          <Modal isOpen={modalIsOpen} onAfterOpen={afterOpenModal} onRequestClose={closeModal} style={customStyles}
+            contentLabel="Example Modal">
 
-          </div>
+            <div className="relative bg-proba-500 rounded-lg shadow dark:bg-gray-700">
 
-          <div className="flex items-center justify-center p-6 space-x-2 rounded-b border-gray-200 dark:border-gray-600">
-            <button onClick={() => { changeLanguage(selectedLang) }} type="button"
-              className="text-white bg-proba-700 hover:bg-proba-800 focus:ring-4 focus:ring-proba-300 font-medium rounded-lg
+              <div className="flex justify-between items-center p-5 rounded-t dark:border-gray-600">
+                <h3 className="text-xl font-medium text-white">
+                  {t('language_selector')}
+                </h3>
+                <button onClick={closeModal} type="button"
+                  className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white"
+                  data-modal-toggle="default-modal">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                    <path fillRule="evenodd"
+                      d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                      clipRule="evenodd"></path>
+                  </svg>
+                </button>
+              </div>
+
+              <div
+                className="rounded-lg bg-proba-400 w-full mx-auto py-5 xs:grid sm:grid md:grid lg:grid xl:grid 2xl:grid 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 xs:grid-cols-1 sm:grid-cols-1 xl:grid-cols-3 px-10 overflow-y-auto max-h-96 scrollbar">
+                {(LANGUAGES.map(lang => {
+                  if (lang.code === selectedLang) {
+                    return (<div key={lang.code} className="bg-proba-200 hover:bg-proba-200 ring ring-proba-800 p-3 shadow-md rounded-md m-3 max-h-[4rem] flex flex-col" onClick={() => { handleLangSelect(lang.code) }}>
+                      <h3 className="text-center text-xl text-gray-800 font-semibold pr-3"><span className={`rounded-sm fi
+                fi-${lang.countryCode} m-2`}></span> {lang.name}</h3>
+                    </div>)
+                  } else {
+                    return (<div key={lang.code} className="bg-proba-100 hover:bg-proba-200 p-3 shadow-md rounded-md m-3 max-h-[4rem]" onClick={() => { handleLangSelect(lang.code) }}>
+                      <h3 className="text-center text-xl text-gray-800 font-semibold pr-3"><span className={`rounded-sm fi
+                fi-${lang.countryCode} m-2`}></span> {lang.name}</h3>
+                    </div>)
+                  }
+                }))}
+
+              </div>
+
+              <div className="flex items-center justify-center p-6 space-x-2 rounded-b border-gray-200 dark:border-gray-600">
+                <button onClick={() => { changeLanguage(selectedLang) }} type="button"
+                  className="text-white bg-proba-700 hover:bg-proba-800 focus:ring-4 focus:ring-proba-300 font-medium rounded-lg
             text-sm px-5 py-2.5 text-center dark:bg-proba-600 dark:hover:bg-proba-700 dark:focus:ring-proba-800">I
-              accept</button>
-          </div>
-        </div>
+                  accept</button>
+              </div>
+            </div>
 
-      </Modal>
+          </Modal>
+        </>
+      }
     </>
   )
 }
