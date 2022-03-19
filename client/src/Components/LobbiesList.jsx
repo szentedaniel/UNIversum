@@ -42,10 +42,10 @@ export function LobbiesList() {
   // navigate
   const navigate = useNavigate()
 
+  const [Rooms, setRooms] = useState(null)
+
   const [selected, setSelected] = useState(null)
 
-
-  const [Rooms, setRooms] = useState(null)
 
   useEffect(() => {
     console.log(selected)
@@ -59,7 +59,7 @@ export function LobbiesList() {
     socket.off('get_rooms_res').on('get_rooms_res', data => {
 
       console.log(data['rooms'])
-      if (data !== null) setRooms(data)
+      if (data !== null) setRooms(data); setSelected(Object.keys(data['rooms'])[0])
 
       dispatch(setLoading(false))
 
@@ -109,9 +109,9 @@ export function LobbiesList() {
           <h3>total: {(Rooms !== null) ? Object.keys(Rooms['rooms']).length.toString() : 0}</h3>
         </div>
       </div>
-      <div class="flex space-x-4 border-4 border-proba-100/20 border-solid mt-5 rounded-xl min-h-[400px] max-h-full overflow-y-auto xs:min-w-[350px] sm:min-w-[520px] md:min-w-[800px] lg:min-w-[1000px]">
+      <div class="flex space-x-4 border-4 border-proba-100/20 border-solid mt-5 rounded-xl h-[80%] overflow-y-auto xs:min-w-[150px] sm:min-w-[320px] md:min-w-[800px] lg:min-w-[1000px] min-w-[1300px] overflow-hidden">
 
-        <div class="w-2/3 flex-grow">
+        <div class="w-7/12 flex-grow overflow-y-scroll simple">
           <div className="w-full px-4 py-4">
             <RadioGroup value={selected} onChange={setSelected}>
               <div className="space-y-2">
@@ -147,7 +147,7 @@ export function LobbiesList() {
                                 }`}
                             >
                               {/* <span aria-hidden="true">&middot;</span>{' '} */}
-                              <div className='flex flex-col items-center'>
+                              <div className='flex flex-col items-center gap-1'>
                                 <Icon>
                                   {(Rooms['rooms'][roomCode].hasPassword) ? 'lock' : 'lock_open'}
                                 </Icon>
@@ -155,7 +155,7 @@ export function LobbiesList() {
                                   {(Rooms['rooms'][roomCode].hasPassword) ? 'Private' : 'Public'}
                                 </span>{' '}
                               </div>
-                              <div className='flex flex-col'>
+                              <div className='flex flex-col gap-1'>
                                 <Icon>
                                   groups
                                 </Icon>
@@ -169,10 +169,10 @@ export function LobbiesList() {
 
                                 <div className='flex flex-col items-center'>
                                   <Icon>
-                                    login
+                                    {(Rooms['rooms'][roomCode].users.length === Rooms['rooms'][roomCode].maxPlayerNumber) ? 'priority_high' : 'login'}
                                   </Icon>
                                   <span>
-                                    Join
+                                    {(Rooms['rooms'][roomCode].users.length === Rooms['rooms'][roomCode].maxPlayerNumber) ? 'Full' : 'Join'}
                                   </span>{' '}
                                 </div>
                               </button>
@@ -186,25 +186,25 @@ export function LobbiesList() {
             </RadioGroup>
           </div>
         </div>
-        <div class="w-1/3 sm:hidden xs:hidden">
-          <div className='h-11/12 border-4 border-proba-100/20 rounded-xl m-4 pr-5 pl-5 ml-0'>
-            <div className="flex justify-center items-center mt-4 mb-2 text-xl">Players in the room</div>
-            <Divider />
-            {selected &&
-              Rooms['rooms'][selected].users.map(user => (
-                <div className="flex flex-row m-2 p-2 items-center">
-                  <Avatar
-                    alt={user.username}
-                    src="/static/images/avatar/1.jpg"
-                    sx={{ bgcolor: stringToColor(user.username), }}
-                  />
-                  <span className="ml-4 text-lg">{user.username}</span>
-                </div>
-              ))
-            }
-          </div>
+        <div class="w-4/12 sm:hidden xs:hidden h-11/12 border-4 border-proba-100/20 rounded-xl m-4 pr-5 pl-5 ml-0 bg-proba-600">
+
+          <div className="flex justify-center items-center mt-4 mb-2 text-xl">Players in the room</div>
+          <Divider />
+          {selected &&
+            Rooms['rooms'][selected].users.map(user => (
+              <div key={user.username} className="flex flex-row m-2 p-2 items-center">
+                <Avatar
+                  alt={user.username}
+                  src="/static/images/avatar/1.jpg"
+                  sx={{ bgcolor: stringToColor(user.username), }}
+                />
+                <span className="ml-4 text-lg">{user.username}</span>
+              </div>
+            ))
+          }
 
         </div>
+        <div class="mr-4 sm:hidden xs:hidden"></div>
       </div>
     </>
 

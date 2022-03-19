@@ -53,12 +53,15 @@ function Room(props) {
     if (Room) {
       if (!Room.hasPassword) {
         joinRoom(Room.code, false, null)
+        console.log('joined becaouse no pass');
       } else if (state) {
         if (state.created) {
           joinRoom(Room.code, false, state.secret)
+          console.log('joined because created')
         }
       } else {
         openPasswordInput()
+        console.log('has password popup open')
       }
     }
   }

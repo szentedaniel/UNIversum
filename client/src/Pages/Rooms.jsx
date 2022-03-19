@@ -15,7 +15,7 @@ function Rooms() {
         // else dispatch(setIsHomepage(false))
     }, [])
     return (
-        <div>
+        <div className='h-full overflow-hidden'>
             <LobbiesList />
         </div>
     )
