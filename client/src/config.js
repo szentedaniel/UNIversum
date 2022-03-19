@@ -1,5 +1,4 @@
-
-export const SOCKET_URL = 'localhost:3001'
+export const SOCKET_URL = process.env.SOCKET || '192.168.0.10:3001' //'localhost:3001'
 
 export const LANGUAGES = [
   {
@@ -17,21 +16,21 @@ export const LANGUAGES = [
     "name": "Deutsch",
     "countryCode": "de"
   },
-  
-  ]
 
-  export const COLOR_THEMES = {
-    '1': {
-      'dark': '#262335',
-      'lessdark': '#503c52',
-      'mid': '#9f6c66',
-      'light': '#d4896a',
-      'lighter': '#ffbb6c',
-    },
-    '2':{
-      
-    },
-    '3':{
-      
-    }
+]
+
+export const COLOR_THEMES = {
+  '1': {
+    'dark': '#262335',
+    'lessdark': '#503c52',
+    'mid': '#9f6c66',
+    'light': '#d4896a',
+    'lighter': '#ffbb6c',
+  },
+  '2': {
+
+  },
+  '3': {
+
   }
+}

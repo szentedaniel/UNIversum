@@ -23,4 +23,50 @@
     .scrollbar::-webkit-scrollbar-thumb:hover {
       background: #333333;
     }
+
+
+    .simple::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    .simple::-webkit-scrollbar-track {
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    .simple::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .simple::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .simple::-webkit-scrollbar-thumb:active {
+      background: rgba(0, 0, 0, .9);
+    }
+  }
+
+  @layer components {
+
+    /* This won't be included in your compiled CSS unless you actually use it */
+    .button {
+      @apply bg-proba-700 hover:bg-proba-800 focus:ring-4 focus:ring-proba-300 rounded-lg px-5 py-4 flex flex-row items-center space-x-1
+    }
+    a {
+      @apply m-3 w-fit h-fit
+    }
+    input[type=text] {
+      @apply appearance-none ease-in-out text-base focus:outline-none focus:ring focus:ring-proba-400 block w-full bg-proba-400 text-proba-200 border-proba-200 border-2 rounded-lg py-3 px-4 my-3 leading-tight focus:outline-none focus:bg-proba-600
+    }
+
+    .back_button {
+      @apply p-2 left-5 xs:left-0 absolute xs:relative bg-proba-700 hover:bg-proba-800 focus:ring-4 focus:ring-proba-300 px-5 py-4 flex flex-row items-center space-x-1 rounded-full pr-3
+    }
+    
+    .item {
+      @apply bg-indigo-700 text-gray-100 text-xl font-bold flex items-center content-center justify-center rounded
+    }
   }

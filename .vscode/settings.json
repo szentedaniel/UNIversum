@@ -3,5 +3,6 @@
     "source.fixAll.eslint": true
   },
   "eslint.validate": ["javascript"],
-  "terminal.integrated.fontFamily": "MesloLGS NF"
- }
+  "terminal.integrated.fontFamily": "MesloLGS NF",
+  "liveServer.settings.multiRootWorkspaceName": "szakdogaReact"
+}
