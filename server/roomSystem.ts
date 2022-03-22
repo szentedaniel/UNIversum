@@ -1,16 +1,19 @@
 const bcrypt = require('bcrypt')
-const generateRoomCode = require('./functions')
+import { generateRoomCode } from './utils/generateRoomCode'
 const MESSAGES = require('./config/messages')
+import { Server, Socket } from "socket.io";
+import { Client } from "socket.io/dist/client";
+import { ClientData, JoinRoomData, RoomData } from "./types/RoomSystemTypes";
 
-let io = null
-const setIo = (io_) => {
+let io: Server | null = null
+export const setIo = (io_: Server) => {
   io = io_
 }
 
 const saltRounds = 10
-const salt = bcrypt.genSaltSync(saltRounds)
+const salt: string = bcrypt.genSaltSync(saltRounds)
 
-const createRoom = (socket_, rooms_, roomData) => {
+export const createRoom = (socket_: Socket, rooms_: Map<string, RoomData>, roomData: RoomData) => {
 
   const roomId = generateRoomCode(rooms_)
   try {
@@ -40,17 +43,18 @@ const createRoom = (socket_, rooms_, roomData) => {
   }
 }
 
-const joinRoom = (socket_, rooms_, allClients_, data_) => {
+export const joinRoom = (socket_: Socket, rooms_: Map<string, RoomData>, allClients_: Map<string, ClientData>, data_: JoinRoomData) => {
   try {
     if (data_.create) {
 
       socket_.join(data_.room)
-      allClients_.get(socket_.id).room = data_.room
 
-      const room = rooms_.get(data_.room.toString())
-      room['users'].push({
+      allClients_.get(socket_.id)!.room = data_.room
+
+      const room = rooms_.get(data_.room)
+      room!['users'].push({
         userId: socket_.id,
-        username: allClients_.get(socket_.id).username
+        username: allClients_.get(socket_.id)!.username!
       })
 
       console.log(`User with ID: ${socket_.id} joined room: ${data_.room}`)
@@ -69,19 +73,19 @@ const joinRoom = (socket_, rooms_, allClients_, data_) => {
     } else {
 
       if (rooms_.has(data_.room)) {
-        if (rooms_.get(data_.room)['users'].length < rooms_.get(data_.room)['maxPlayerNumber']) {
-          if (rooms_.get(data_.room)['hasPassword']) {
-            if (bcrypt.compareSync((data_.password || ''), rooms_.get(data_.room)['password'])) {
+        const room = rooms_.get(data_.room)!
+        if (room['users'].length < room!['maxPlayerNumber']) {
+          if (room['hasPassword']) {
+            if (bcrypt.compareSync((data_.password || ''), room['password'])) {
               console.log(data_.password.toString())
-              console.log(bcrypt.compareSync(data_.password.toString(), rooms_.get(data_.room)['password']))
+              console.log(bcrypt.compareSync(data_.password.toString(), room['password']))
               socket_.join(data_.room)
-              allClients_.get(socket_.id).room = data_.room
+              allClients_.get(socket_.id)!.room = data_.room
               //rooms[data.room].users.push({userId: socket.id})
               //rooms.push({[data.room]: {userId: socket.id}})
-              const room = rooms_.get(data_.room.toString())
               room['users'].push({
                 userId: socket_.id,
-                username: allClients_.get(socket_.id).username
+                username: allClients_.get(socket_.id)!.username!
               })
               console.log(room['users'])
               console.log(`User with ID: ${socket_.id} joined room: ${data_.room}`)
@@ -106,13 +110,12 @@ const joinRoom = (socket_, rooms_, allClients_, data_) => {
 
           } else {
             socket_.join(data_.room)
-            allClients_.get(socket_.id).room = data_.room
+            allClients_.get(socket_.id)!.room = data_.room
             //rooms[data.room].users.push({userId: socket.id})
             //rooms.push({[data.room]: {userId: socket.id}})
-            const room = rooms_.get(data_.room.toString())
             room['users'].push({
               userId: socket_.id,
-              username: allClients_.get(socket_.id).username
+              username: allClients_.get(socket_.id)!.username!
             })
             console.log(room['users'])
             console.log(`User with ID: ${socket_.id} joined room: ${data_.room}`)
@@ -160,19 +163,19 @@ const joinRoom = (socket_, rooms_, allClients_, data_) => {
   }
 }
 
-const leaveRoom = (socket_, rooms_, allClients_, serverLeave_ = false) => {
+export const leaveRoom = (socket_: Socket, rooms_: Map<string, RoomData>, allClients_: Map<string, ClientData>, serverLeave_ = false) => {
   try {
     const socketId = socket_.id
     if (allClients_.has(socketId)) {
 
 
-      const roomID = allClients_.get(socketId).room
+      const roomID = allClients_.get(socketId)!.room
       if (roomID) {
 
-        const user = rooms_.get(roomID)['users'].filter(it => it.userId === socketId)[0]
-        rooms_.get(roomID)['users'].splice(rooms_.get(roomID)['users'].indexOf(user), 1)
+        const user = rooms_.get(roomID)!['users'].filter(it => it.userId === socketId)[0]
+        rooms_.get(roomID)!['users'].splice(rooms_.get(roomID)!['users'].indexOf(user), 1)
 
-        if (rooms_.get(roomID)['users'].length === 0) {
+        if (rooms_.get(roomID)!['users'].length === 0) {
           rooms_.delete(roomID)
         }
         console.log(rooms_)
@@ -190,7 +193,7 @@ const leaveRoom = (socket_, rooms_, allClients_, serverLeave_ = false) => {
       if (serverLeave_) {
         allClients_.delete(socketId)
       } else {
-        allClients_.get(socketId).room = null
+        allClients_.get(socketId)!.room = null
       }
     }
     sendRoomsToClient(rooms_)
@@ -200,14 +203,14 @@ const leaveRoom = (socket_, rooms_, allClients_, serverLeave_ = false) => {
 
 }
 
-const sendRoomsToClient = (rooms_) => {
+export const sendRoomsToClient = (rooms_: Map<string, RoomData>) => {
 
-  io.emit('get_rooms_res', { rooms: Object.fromEntries(rooms_) })
+  io!.emit('get_rooms_res', { rooms: Object.fromEntries(rooms_) })
 
 }
 
 
-const getRoomById = (socket, id, rooms) => {
+export const getRoomById = (socket: Socket, id: string, rooms: Map<string, RoomData>) => {
   setTimeout(() => {
     if (rooms.has(id)) socket.emit('get_room_by_id_res', { status: 200, room: rooms.get(id), message: MESSAGES[200] })
     else socket.emit('get_room_by_id_res', { status: 404, room: null, message: MESSAGES[404] })
@@ -215,12 +218,3 @@ const getRoomById = (socket, id, rooms) => {
   }, 3000)
 }
 
-
-module.exports = {
-  createRoom,
-  joinRoom,
-  leaveRoom,
-  sendRoomsToClient,
-  setIo,
-  getRoomById,
-}
