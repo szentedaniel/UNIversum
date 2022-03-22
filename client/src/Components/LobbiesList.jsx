@@ -10,26 +10,7 @@ import { Link } from "react-router-dom";
 import { Icon, Avatar } from "@mui/material";
 import { RadioGroup } from '@headlessui/react'
 import { Divider } from '@mui/material'
-
-function stringToColor(string) {
-  let hash = 0;
-  let i;
-
-  /* eslint-disable no-bitwise */
-  for (i = 0; i < string.length; i += 1) {
-    hash = string.charCodeAt(i) + ((hash << 5) - hash);
-  }
-
-  let color = '#';
-
-  for (i = 0; i < 3; i += 1) {
-    const value = (hash >> (i * 8)) & 0xff;
-    color += `00${value.toString(16)}`.substr(-2);
-  }
-  /* eslint-enable no-bitwise */
-
-  return color;
-}
+import stringToColor from "../Utils/stringToColor";
 
 export function LobbiesList() {
   // socket
@@ -97,21 +78,21 @@ export function LobbiesList() {
   }
   return (
     <>
-      <div class="flex justify-between h-auto w-full text-proba-100 mt-5">
-        <div class="w-36 h-12">
+      <div className="flex justify-between h-auto w-full text-proba-100 mt-5">
+        <div className="w-36 h-12">
           <Link to='/' onClick={() => socket.off('get_rooms_res')}>
             <button className="back_button">
               <Icon>arrow_back_ios</Icon>
             </button>
           </Link></div>
-        <div class="w-36 h-12 text-2xl flex flex-row items-center justify-center">Rooms</div>
-        <div class="w-36 h-12 text-lg flex flex-row items-center justify-center">
+        <div className="w-36 h-12 text-2xl flex flex-row items-center justify-center">Rooms</div>
+        <div className="w-36 h-12 text-lg flex flex-row items-center justify-center">
           <h3>total: {(Rooms !== null) ? Object.keys(Rooms['rooms']).length.toString() : 0}</h3>
         </div>
       </div>
-      <div class="flex space-x-4 border-4 border-proba-100/20 border-solid mt-5 rounded-xl h-[80%] overflow-y-auto xs:min-w-[150px] sm:min-w-[320px] md:min-w-[800px] lg:min-w-[1000px] min-w-[1300px] overflow-hidden">
+      <div className="flex space-x-4 border-4 border-proba-100/20 border-solid mt-5 rounded-xl h-[80%] overflow-y-auto xs:min-w-[150px] sm:min-w-[320px] md:min-w-[800px] lg:min-w-[1000px] min-w-[1300px] overflow-hidden">
 
-        <div class="w-7/12 flex-grow overflow-y-scroll simple">
+        <div className="w-7/12 flex-grow overflow-y-scroll simple">
           <div className="w-full px-4 py-4">
             <RadioGroup value={selected} onChange={setSelected}>
               <div className="space-y-2">
@@ -186,7 +167,7 @@ export function LobbiesList() {
             </RadioGroup>
           </div>
         </div>
-        <div class="w-4/12 sm:hidden xs:hidden h-11/12 border-4 border-proba-100/20 rounded-xl m-4 pr-5 pl-5 ml-0 bg-proba-600">
+        <div className="w-4/12 sm:hidden xs:hidden h-11/12 border-4 border-proba-100/20 rounded-xl m-4 pr-5 pl-5 ml-0 bg-proba-600">
 
           <div className="flex justify-center items-center mt-4 mb-2 text-xl">Players in the room</div>
           <Divider />
@@ -204,7 +185,7 @@ export function LobbiesList() {
           }
 
         </div>
-        <div class="mr-4 sm:hidden xs:hidden"></div>
+        <div className="mr-4 sm:hidden xs:hidden"></div>
       </div>
     </>
 

@@ -16,7 +16,7 @@ function Create() {
         // else dispatch(setIsHomepage(false))
     }, [])
     return (
-        <div>
+        <div className='h-full overflow-hidden'>
             <CreateLobby />
         </div>
     )

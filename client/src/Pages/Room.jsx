@@ -9,7 +9,6 @@ import PasswordPopup from '../Components/PasswordPopup'
 
 
 
-
 function Room(props) {
 
   const { code } = useParams();
@@ -120,7 +119,7 @@ function Room(props) {
   }
 
   return (
-    <div>
+    <div className='h-full overflow-hidden'>
 
       {room ?
         <>
