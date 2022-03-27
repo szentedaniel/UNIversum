@@ -42,7 +42,7 @@ Modal.setAppElement(document.getElementById('root'));
 
 const LangSelector = () => {
   const { t, i18n } = useTranslation();
-  const { isHomepage } = useSelector((state) => state.loading)
+  const { isGame } = useSelector((state) => state.loading)
   const { language } = useSelector(state => state.user)
   const [selectedLang, setSelectedLang] = useState(cookies.get('i18next') || language);
   const [modalIsOpen, setIsOpen] = useState(false);
@@ -86,7 +86,7 @@ const LangSelector = () => {
   return (
 
     <>
-      {(isHomepage) &&
+      {!(isGame) &&
         <>
 
           <div onClick={openModal}

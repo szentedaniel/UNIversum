@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { InLobby } from '../Components/InLobby'
 import { useSelector, useDispatch } from 'react-redux'
-import { setIsHomepage, setLoading } from '../Store/slices/loadingSlice'
+import { setIsGame, setLoading } from '../Store/slices/loadingSlice'
 import { useSocket } from '../Contexts/SocketContext'
 import { useLocation, useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
@@ -23,6 +23,7 @@ function Room(props) {
   const { isLoading } = useSelector((state) => state.loading)
   const User = useSelector((state) => state.user)
   const dispatch = useDispatch()
+  dispatch(setIsGame(false))
 
   //console.log(code);
   const [room, setRoom] = useState(null)

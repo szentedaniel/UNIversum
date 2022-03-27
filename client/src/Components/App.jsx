@@ -16,6 +16,7 @@ import Logo from './Logo'
 import Home from '../Pages/Home';
 import Loading from './Loading';
 import InitSomeStuff from './InitSomeStuff';
+import Game from '../Pages/Game';
 
 function App() {
   const particlesInit = (main) => {
@@ -774,14 +775,15 @@ function App() {
                 position="bottom-left"
                 reverseOrder={false}
               />
-                <BrowserRouter>
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/rooms" element={<Rooms />} />
-                    <Route path="/create" element={<Create />} />
-                    <Route path="/room/:code" element={<Room />} />
-                  </Routes>
-                </BrowserRouter>
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/rooms" element={<Rooms />} />
+                  <Route path="/create" element={<Create />} />
+                  <Route path="/room/:code" element={<Room />} />
+                  <Route path="/game" element={<Game />} />
+                </Routes>
+              </BrowserRouter>
 
             </div>
           </div>

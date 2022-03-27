@@ -4,19 +4,19 @@ export const counterSlice = createSlice({
   name: 'loading',
   initialState: {
     isLoading: false,
-    isHomepage: true,
+    isGame: false,
   },
   reducers: {
     setLoading: (state, action) => {
       state.isLoading = action.payload
     },
-    setIsHomepage: (state, action) => {
-      state.isHomepage = action.payload
+    setIsGame: (state, action) => {
+      state.isGame = action.payload
     },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { setLoading, setIsHomepage } = counterSlice.actions
+export const { setLoading, setIsGame } = counterSlice.actions
 
 export default counterSlice.reducer

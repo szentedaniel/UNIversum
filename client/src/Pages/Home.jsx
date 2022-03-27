@@ -5,13 +5,15 @@ import Loading from '../Components/Loading'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { useLocation } from 'react-router-dom'
-import { setIsHomepage } from '../Store/slices/loadingSlice'
+import { setIsGame, setIsHomepage } from '../Store/slices/loadingSlice'
 
 
 
 function Home() {
     const { isLoading } = useSelector((state) => state.loading)
     const dispatch = useDispatch()
+    dispatch(setIsGame(false))
+
     const location = useLocation();
     console.log(location.pathname);
     useEffect(() => {
