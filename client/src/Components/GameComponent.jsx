@@ -1,11 +1,8 @@
-import React, { useCallback, useReducer, useRef, useState } from 'react'
-import { Spring } from 'react-spring'
-import { Texture } from 'pixi.js'
+import React, { useCallback, useState } from 'react'
 import { Stage, Sprite } from '@inlet/react-pixi/animated'
-import { min, times } from 'lodash'
+import { min } from 'lodash'
 import * as PIXI from 'pixi.js'
-import { Container, Graphics, useApp } from '@inlet/react-pixi'
-import { Sprite2d, Sprite2s } from 'pixi-projection'
+import { Container, Graphics } from '@inlet/react-pixi'
 import { useEffect } from 'react'
 import { Switch } from '@mantine/core';
 import { DropShadowFilter } from 'pixi-filters';
@@ -23,11 +20,11 @@ export default function GameComponent(props) {
 
 
 
-    }, [props.height, props.width])
+    }, [isometric, props.height, props.width])
 
     let shadowFilter = new DropShadowFilter({ rotation: 45, distance: 6 })
 
-    let texture = PIXI.Texture.from('../Images/logos/monopoly_logo.png');
+    // let texture = PIXI.Texture.from('../Images/logos/monopoly_logo.png');
 
     const stageProps = {
         height,

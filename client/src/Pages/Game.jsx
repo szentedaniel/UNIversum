@@ -1,4 +1,4 @@
-import React, { lazy, useRef } from 'react'
+import React, {  } from 'react'
 import GameComponent from '../Components/GameComponent'
 import { useElementSize } from '@mantine/hooks';
 import { useDispatch } from 'react-redux';
