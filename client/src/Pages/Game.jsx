@@ -1,4 +1,4 @@
-import React, {  } from 'react'
+import React, { } from 'react'
 import GameComponent from '../Components/GameComponent'
 import { useElementSize } from '@mantine/hooks';
 import { useDispatch } from 'react-redux';
@@ -11,7 +11,7 @@ export default function Game(props) {
     dispatch(setIsGame(true))
 
     return (
-        <div className='absolute top-0 left-0 w-full h-full z-10 bg-gradient-to-t from-blue-200 to-blue-400 rounded-lg' id='game' ref={ref}>
+        <div className='absolute top-0 overflow-hidden left-0 w-full h-full items-center content-center justify-center flex z-10 bg-gradient-to-t from-blue-200 to-blue-400 rounded-lg' id='game' ref={ref}>
             <GameComponent
                 width={width}
                 height={height}

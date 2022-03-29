@@ -6,33 +6,38 @@ import { Container, Graphics } from '@inlet/react-pixi'
 import { useEffect } from 'react'
 import { Switch } from '@mantine/core';
 import { DropShadowFilter } from 'pixi-filters';
-import CornerComponent from './CornerComponent'
+import CornerComponent from './GameComponents/CornerComponent'
 
 
 export default function GameComponent(props) {
-    const [width, setWidth] = useState(props.width)
-    const [height, setHeight] = useState(props.height)
-    const [scale, setScale] = useState(1.0)
+    const [width, setWidth] = useState(1920)
+    const [height, setHeight] = useState(1280)
+    const [scale, setScale] = useState(window.devicePixelRatio)
     const [isometric, setIsometric] = useState(true)
     useEffect(() => {
-        setWidth(props.width);
-        setHeight(props.height);
-        setScale(min([props.width / 1400, isometric ? (props.height / 900) : (props.height / 1400)]))
+        // setWidth(window.innerWidth * 2);
+        // setHeight(window.innerHeight * 2);
+        // setScale(min([window.innerWidth / 1400, isometric ? (window.innerWidth / 900) : (window.innerWidth / 1400)]))
+        setScale(window.devicePixelRatio)
+    }, [isometric, props.width, props.height])
 
+    useEffect(() => {
+        console.log(scale);
 
+    }, [scale])
 
-    }, [isometric, props.height, props.width])
 
     let shadowFilter = new DropShadowFilter({ rotation: 45, distance: 6 })
 
     // let texture = PIXI.Texture.from('../Images/logos/monopoly_logo.png');
+
 
     const stageProps = {
         height,
         width,
         options: {
             backgroundAlpha: 0,
-            antialias: true,
+            // antialias: true,
             resolution: PIXI.settings.RESOLUTION,
         },
     }
@@ -50,14 +55,18 @@ export default function GameComponent(props) {
         g.drawCircle(0, 0, 200);
     }, []);
 
+    useEffect(() => {
+
+    });
+
     return (
         <>
-            <Switch label={'Isometric'} checked={isometric} onChange={(event) => setIsometric(event.currentTarget.checked)} />
+            {/* <Switch label={'Isometric'} checked={isometric} onChange={(event) => setIsometric(event.currentTarget.checked)} /> */}
 
-            <Stage {...stageProps}>
+            <Stage id='gameCanvas' {...stageProps}>
                 {/* <Sprite image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png" width={width} height={height} anchor={0.5} position={[width / 2, height / 2]} /> */}
                 <Container
-                    scale={[1 * scale, isometric ? (0.6 * scale) : 1 * scale]}
+                    scale={[1, isometric ? (0.6) : 1]}
                     anchor={0.5}
                     position={[width / 2, height / 2]}
 

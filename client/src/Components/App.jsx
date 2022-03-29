@@ -781,7 +781,6 @@ function App() {
                   <Route path="/rooms" element={<Rooms />} />
                   <Route path="/create" element={<Create />} />
                   <Route path="/room/:code" element={<Room />} />
-                  <Route path="/game" element={<Game />} />
                 </Routes>
               </BrowserRouter>
 
@@ -789,6 +788,11 @@ function App() {
           </div>
         </div>
       </div>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/game" element={<Game />} />
+        </Routes>
+      </BrowserRouter>
     </SocketProvider>
   );
 }
