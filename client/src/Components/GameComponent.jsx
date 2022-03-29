@@ -6,6 +6,7 @@ import { Container, Graphics } from '@inlet/react-pixi'
 import { useEffect } from 'react'
 import { Switch } from '@mantine/core';
 import { DropShadowFilter } from 'pixi-filters';
+import CornerComponent from './CornerComponent'
 
 
 export default function GameComponent(props) {
@@ -16,7 +17,7 @@ export default function GameComponent(props) {
     useEffect(() => {
         setWidth(props.width);
         setHeight(props.height);
-        setScale(min([props.width / 1400, isometric ? (props.height / 1000) : (props.height / 1400)]))
+        setScale(min([props.width / 1400, isometric ? (props.height / 900) : (props.height / 1400)]))
 
 
 
@@ -39,14 +40,14 @@ export default function GameComponent(props) {
     const draw = useCallback((g) => {
         g.clear();
         g.lineStyle(2, 0xffffff);
-        for (let i = -100; i <= 100; i += 50) {
-            g.moveTo(-150, i);
-            g.lineTo(150, i);
-            g.moveTo(i, -150);
-            g.lineTo(i, 150);
+        for (let i = -200; i <= 200; i += 50) {
+            g.moveTo(-300, i);
+            g.lineTo(300, i);
+            g.moveTo(i, -300);
+            g.lineTo(i, 300);
         }
 
-        g.drawCircle(0, 0, 100);
+        g.drawCircle(0, 0, 200);
     }, []);
 
     return (
@@ -65,7 +66,6 @@ export default function GameComponent(props) {
                     <Container
                         anchor={0.5}
                         rotation={isometric && (-Math.PI / 4)}
-                        scale={[2, 2]}
                         filters={[shadowFilter]}
 
                     >
@@ -77,7 +77,7 @@ export default function GameComponent(props) {
 
 
                         </Graphics>
-                        <Sprite
+                        {/* <Sprite
 
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
                             rotation={2 * Math.PI / 4}
@@ -87,6 +87,24 @@ export default function GameComponent(props) {
                             height={75}
                             x={-212.5}
                             y={212.5}
+                        /> */}
+                        <CornerComponent
+                            x={-400}
+                            y={400}
+                            top={false}
+                            left={true}
+                        />
+
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+                            rotation={2 * Math.PI / 4}
+
+
+                            anchor={0.5}
+                            width={100}
+                            height={100}
+                            x={-400}
+                            y={300}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
@@ -94,10 +112,10 @@ export default function GameComponent(props) {
 
 
                             anchor={0.5}
-                            width={50}
+                            width={100}
                             height={50}
-                            x={-200}
-                            y={150}
+                            x={-475}
+                            y={300}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
@@ -105,10 +123,10 @@ export default function GameComponent(props) {
 
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-237.5}
-                            y={150}
+                            width={100}
+                            height={100}
+                            x={-400}
+                            y={200}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
@@ -116,9 +134,20 @@ export default function GameComponent(props) {
 
 
                             anchor={0.5}
-                            width={50}
+                            width={100}
                             height={50}
-                            x={-200}
+                            x={-475}
+                            y={200}
+                        />
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+                            rotation={2 * Math.PI / 4}
+
+
+                            anchor={0.5}
+                            width={100}
+                            height={100}
+                            x={-400}
                             y={100}
                         />
                         <Sprite
@@ -127,9 +156,9 @@ export default function GameComponent(props) {
 
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-237.5}
+                            width={100}
+                            height={50}
+                            x={-475}
                             y={100}
                         />
                         <Sprite
@@ -138,31 +167,9 @@ export default function GameComponent(props) {
 
 
                             anchor={0.5}
-                            width={50}
-                            height={50}
-                            x={-200}
-                            y={50}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-                            rotation={2 * Math.PI / 4}
-
-
-                            anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-237.5}
-                            y={50}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-                            rotation={2 * Math.PI / 4}
-
-
-                            anchor={0.5}
-                            width={50}
-                            height={50}
-                            x={-200}
+                            width={100}
+                            height={100}
+                            x={-400}
                             y={0}
                         />
                         <Sprite
@@ -171,9 +178,9 @@ export default function GameComponent(props) {
 
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-237.5}
+                            width={100}
+                            height={50}
+                            x={-475}
                             y={0}
                         />
                         <Sprite
@@ -182,31 +189,9 @@ export default function GameComponent(props) {
 
 
                             anchor={0.5}
-                            width={50}
-                            height={50}
-                            x={-200}
-                            y={-50}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-                            rotation={2 * Math.PI / 4}
-
-
-                            anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-237.5}
-                            y={-50}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-                            rotation={2 * Math.PI / 4}
-
-
-                            anchor={0.5}
-                            width={50}
-                            height={50}
-                            x={-200}
+                            width={100}
+                            height={100}
+                            x={-400}
                             y={-100}
                         />
                         <Sprite
@@ -215,9 +200,9 @@ export default function GameComponent(props) {
 
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-237.5}
+                            width={100}
+                            height={50}
+                            x={-475}
                             y={-100}
                         />
                         <Sprite
@@ -226,10 +211,21 @@ export default function GameComponent(props) {
 
 
                             anchor={0.5}
-                            width={50}
+                            width={100}
+                            height={100}
+                            x={-400}
+                            y={-200}
+                        />
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+                            rotation={2 * Math.PI / 4}
+
+
+                            anchor={0.5}
+                            width={100}
                             height={50}
-                            x={-200}
-                            y={-150}
+                            x={-475}
+                            y={-200}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
@@ -237,60 +233,83 @@ export default function GameComponent(props) {
 
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-237.5}
-                            y={-150}
+                            width={100}
+                            height={100}
+                            x={-400}
+                            y={-300}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
                             rotation={2 * Math.PI / 4}
 
-                            anchor={0.5}
-                            width={75}
-                            height={75}
-                            x={-212.5}
-                            y={-212.5}
-                        />
-
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-                            rotation={2 * Math.PI / 4}
 
                             anchor={0.5}
-                            width={75}
-                            height={75}
-                            x={212.5}
-                            y={212.5}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-                            rotation={2 * Math.PI / 4}
-
-                            anchor={0.5}
-                            width={50}
+                            width={100}
                             height={50}
-                            x={225}
-                            y={150}
+                            x={-475}
+                            y={-300}
+                        />
+                        <CornerComponent
+                            x={-400}
+                            y={-400}
+                            top={true}
+                            left={true}
+                        />
+
+                        <CornerComponent
+                            x={400}
+                            y={400}
+                            top={false}
+                            left={false}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
                             rotation={2 * Math.PI / 4}
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={187.5}
-                            y={150}
+                            width={100}
+                            height={100}
+                            x={450}
+                            y={300}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
                             rotation={2 * Math.PI / 4}
 
                             anchor={0.5}
-                            width={50}
+                            width={100}
                             height={50}
-                            x={225}
+                            x={375}
+                            y={300}
+                        />
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+                            rotation={2 * Math.PI / 4}
+
+                            anchor={0.5}
+                            width={100}
+                            height={100}
+                            x={450}
+                            y={200}
+                        />
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+                            rotation={2 * Math.PI / 4}
+
+                            anchor={0.5}
+                            width={100}
+                            height={50}
+                            x={375}
+                            y={200}
+                        />
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+                            rotation={2 * Math.PI / 4}
+
+                            anchor={0.5}
+                            width={100}
+                            height={100}
+                            x={450}
                             y={100}
                         />
                         <Sprite
@@ -298,9 +317,9 @@ export default function GameComponent(props) {
                             rotation={2 * Math.PI / 4}
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={187.5}
+                            width={100}
+                            height={50}
+                            x={375}
                             y={100}
                         />
                         <Sprite
@@ -308,29 +327,9 @@ export default function GameComponent(props) {
                             rotation={2 * Math.PI / 4}
 
                             anchor={0.5}
-                            width={50}
-                            height={50}
-                            x={225}
-                            y={50}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-                            rotation={2 * Math.PI / 4}
-
-                            anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={187.5}
-                            y={50}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-                            rotation={2 * Math.PI / 4}
-
-                            anchor={0.5}
-                            width={50}
-                            height={50}
-                            x={225}
+                            width={100}
+                            height={100}
+                            x={450}
                             y={0}
                         />
                         <Sprite
@@ -338,9 +337,9 @@ export default function GameComponent(props) {
                             rotation={2 * Math.PI / 4}
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={187.5}
+                            width={100}
+                            height={50}
+                            x={375}
                             y={0}
                         />
                         <Sprite
@@ -348,29 +347,9 @@ export default function GameComponent(props) {
                             rotation={2 * Math.PI / 4}
 
                             anchor={0.5}
-                            width={50}
-                            height={50}
-                            x={225}
-                            y={-50}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-                            rotation={2 * Math.PI / 4}
-
-                            anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={187.5}
-                            y={-50}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-                            rotation={2 * Math.PI / 4}
-
-                            anchor={0.5}
-                            width={50}
-                            height={50}
-                            x={225}
+                            width={100}
+                            height={100}
+                            x={450}
                             y={-100}
                         />
                         <Sprite
@@ -378,9 +357,9 @@ export default function GameComponent(props) {
                             rotation={2 * Math.PI / 4}
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={187.5}
+                            width={100}
+                            height={50}
+                            x={375}
                             y={-100}
                         />
                         <Sprite
@@ -388,288 +367,304 @@ export default function GameComponent(props) {
                             rotation={2 * Math.PI / 4}
 
                             anchor={0.5}
-                            width={50}
-                            height={50}
-                            x={225}
-                            y={-150}
+                            width={100}
+                            height={100}
+                            x={450}
+                            y={-200}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
                             rotation={2 * Math.PI / 4}
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={187.5}
-                            y={-150}
+                            width={100}
+                            height={50}
+                            x={375}
+                            y={-200}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
                             rotation={2 * Math.PI / 4}
 
                             anchor={0.5}
-                            width={75}
-                            height={75}
-                            x={212.5}
-                            y={-212.5}
+                            width={100}
+                            height={100}
+                            x={450}
+                            y={-300}
                         />
-
-
-
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+                            rotation={2 * Math.PI / 4}
 
                             anchor={0.5}
-                            width={50}
+                            width={100}
                             height={50}
-                            x={150}
-                            y={-225}
+                            x={375}
+                            y={-300}
+                        />
+                        <CornerComponent
+                            x={400}
+                            y={-400}
+                            top={true}
+                            left={false}
+                        />
+
+
+
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+
+                            anchor={0.5}
+                            width={100}
+                            height={100}
+                            x={300}
+                            y={-450}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={150}
-                            y={-187.5}
+                            width={100}
+                            height={50}
+                            x={300}
+                            y={-375}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
+                            width={100}
+                            height={100}
+                            x={200}
+                            y={-450}
+                        />
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+
+                            anchor={0.5}
+                            width={100}
+                            height={50}
+                            x={200}
+                            y={-375}
+                        />
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+
+                            anchor={0.5}
+                            width={100}
+                            height={100}
+                            x={100}
+                            y={-450}
+                        />
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+
+                            anchor={0.5}
+                            width={100}
                             height={50}
                             x={100}
-                            y={-225}
+                            y={-375}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={100}
-                            y={-187.5}
+                            width={100}
+                            height={100}
+                            x={-0}
+                            y={-450}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={50}
-                            x={50}
-                            y={-225}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-
-                            anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={50}
-                            y={-187.5}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-
-                            anchor={0.5}
-                            width={50}
+                            width={100}
                             height={50}
                             x={-0}
-                            y={-225}
+                            y={-375}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-0}
-                            y={-187.5}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-
-                            anchor={0.5}
-                            width={50}
-                            height={50}
-                            x={-50}
-                            y={-225}
+                            width={100}
+                            height={100}
+                            x={-100}
+                            y={-450}
                         /><Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-50}
-                            y={-187.5}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-
-                            anchor={0.5}
-                            width={50}
+                            width={100}
                             height={50}
                             x={-100}
-                            y={-225}
+                            y={-375}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-100}
-                            y={-187.5}
+                            width={100}
+                            height={100}
+                            x={-200}
+                            y={-450}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
+                            width={100}
                             height={50}
-                            x={-150}
-                            y={-225}
+                            x={-200}
+                            y={-375}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-150}
-                            y={-187.5}
+                            width={100}
+                            height={100}
+                            x={-300}
+                            y={-450}
                         />
-
-
-
-
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
+                            width={100}
                             height={50}
-                            x={150}
-                            y={200}
+                            x={-300}
+                            y={-375}
+                        />
+
+
+
+
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+
+                            anchor={0.5}
+                            width={100}
+                            height={100}
+                            x={300}
+                            y={400}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={150}
-                            y={237.5}
+                            width={100}
+                            height={50}
+                            x={300}
+                            y={475}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
+                            width={100}
+                            height={100}
+                            x={200}
+                            y={400}
+                        />
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+
+                            anchor={0.5}
+                            width={100}
+                            height={50}
+                            x={200}
+                            y={475}
+                        />
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+
+                            anchor={0.5}
+                            width={100}
+                            height={100}
+                            x={100}
+                            y={400}
+                        />
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+
+                            anchor={0.5}
+                            width={100}
                             height={50}
                             x={100}
-                            y={200}
+                            y={475}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={100}
-                            y={237.5}
+                            width={100}
+                            height={100}
+                            x={0}
+                            y={400}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={50}
-                            x={50}
-                            y={200}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-
-                            anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={50}
-                            y={237.5}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-
-                            anchor={0.5}
-                            width={50}
+                            width={100}
                             height={50}
                             x={0}
-                            y={200}
+                            y={475}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={0}
-                            y={237.5}
+                            width={100}
+                            height={100}
+                            x={-100}
+                            y={400}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={50}
-                            x={-50}
-                            y={200}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-
-                            anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-50}
-                            y={237.5}
-                        />
-                        <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
-
-                            anchor={0.5}
-                            width={50}
+                            width={100}
                             height={50}
                             x={-100}
-                            y={200}
+                            y={475}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-100}
-                            y={237.5}
+                            width={100}
+                            height={100}
+                            x={-200}
+                            y={400}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
+                            width={100}
                             height={50}
-                            x={-150}
-                            y={200}
+                            x={-200}
+                            y={475}
                         />
                         <Sprite
                             image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
 
                             anchor={0.5}
-                            width={50}
-                            height={25}
-                            x={-150}
-                            y={237.5}
+                            width={100}
+                            height={100}
+                            x={-300}
+                            y={400}
+                        />
+                        <Sprite
+                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+
+                            anchor={0.5}
+                            width={100}
+                            height={50}
+                            x={-300}
+                            y={475}
                         />
                     </Container>
                 </Container>
