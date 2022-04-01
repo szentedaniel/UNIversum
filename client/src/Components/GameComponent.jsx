@@ -5,31 +5,25 @@ import * as PIXI from 'pixi.js'
 import { Container, Graphics } from '@inlet/react-pixi'
 import { useEffect } from 'react'
 import { Switch } from '@mantine/core';
-import { DropShadowFilter } from 'pixi-filters';
+import { DropShadowFilter, ColorReplaceFilter } from 'pixi-filters';
 import CornerComponent from './GameComponents/CornerComponent'
 
 
 export default function GameComponent(props) {
     const [width, setWidth] = useState(1920)
-    const [height, setHeight] = useState(1280)
-    const [scale, setScale] = useState(window.devicePixelRatio)
+    const [height, setHeight] = useState(1080)
     const [isometric, setIsometric] = useState(true)
-    useEffect(() => {
-        // setWidth(window.innerWidth * 2);
-        // setHeight(window.innerHeight * 2);
-        // setScale(min([window.innerWidth / 1400, isometric ? (window.innerWidth / 900) : (window.innerWidth / 1400)]))
-        setScale(window.devicePixelRatio)
-    }, [isometric, props.width, props.height])
 
-    useEffect(() => {
-        console.log(scale);
-
-    }, [scale])
 
 
     let shadowFilter = new DropShadowFilter({ rotation: 45, distance: 6 })
+    let adjustment = new ColorReplaceFilter()
+    adjustment.originalColor = 0xFFCD0A
+    adjustment.newColor = 0x52c44f
+    adjustment.epsilon = 0.5
 
-    // let texture = PIXI.Texture.from('../Images/logos/monopoly_logo.png');
+    const label_bg = PIXI.Texture.from('../Images/game/monopolyums/label_bg.png');
+    const first = PIXI.Texture.from('../Images/game/monopolyums/1.png')
 
 
     const stageProps = {
@@ -105,9 +99,9 @@ export default function GameComponent(props) {
                         />
 
                         <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+                            texture={first} // https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png
                             rotation={2 * Math.PI / 4}
-
+                            filters={[]}
 
                             anchor={0.5}
                             width={100}
@@ -116,7 +110,7 @@ export default function GameComponent(props) {
                             y={300}
                         />
                         <Sprite
-                            image="https://s3-us-west-2.amazonaws.com/s.cdpn.io/693612/coin.png"
+                            texture={label_bg}
                             rotation={2 * Math.PI / 4}
 
 

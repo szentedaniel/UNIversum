@@ -34,3 +34,33 @@ export const COLOR_THEMES = {
 
   }
 }
+
+export const GROUP_COLORS = {
+  '0': {
+    color: 0x00000000
+  },
+  '1': {
+    color: 0x915537
+  },
+  '2': {
+    color: 0xADDEFE
+  },
+  '3': {
+    color: 0xD43B90
+  },
+  '4': {
+    color: 0xF49424
+  },
+  '5': {
+    color: 0xEA1C25
+  },
+  '6': {
+    color: 0xFBF204
+  },
+  '7': {
+    color: 0x1DB458
+  },
+  '8': {
+    color: 0x0572BB
+  },
+}
