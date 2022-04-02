@@ -17,10 +17,7 @@ export default function GameComponent(props) {
 
 
     let shadowFilter = new DropShadowFilter({ rotation: 45, distance: 6 })
-    let adjustment = new ColorReplaceFilter()
-    adjustment.originalColor = 0xFFCD0A
-    adjustment.newColor = 0x52c44f
-    adjustment.epsilon = 0.5
+
 
     const label_bg = PIXI.Texture.from('../Images/game/monopolyums/label_bg.png');
     const first = PIXI.Texture.from('../Images/game/monopolyums/1.png')

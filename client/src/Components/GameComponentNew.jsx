@@ -5,11 +5,15 @@ import { forEachRight } from 'lodash'
 import { ColorReplaceFilter, DropShadowFilter } from 'pixi-filters'
 import NormalComponentNew from './GameComponents/NormalComponentNew'
 import CornerComponentNew from './GameComponents/CornerComponentNew'
+import { Avatar, Icon } from '@mui/material'
+import FullscreenSwitcher from './GameComponents/FullscreenSwitcher'
+import PlayerInfo from './GameComponents/PlayerInfo'
 
 export default function GameComponentNew() {
   const [width, setWidth] = useState(1920)
   const [height, setHeight] = useState(1080)
   const label_bg = PIXI.Texture.from('../Images/game/isometriccity/PNG/cityTiles_072.png');
+  const karibacsik = PIXI.Texture.from('../Images/game/caracters/karibacsik.png');
 
   const scale = 0.65
 
@@ -43,6 +47,9 @@ export default function GameComponentNew() {
     console.log('valami'); // true
   }
   const asd = e.on('pointerdown', emitted, context)
+
+
+
   return (
     <>
       <Stage {...stageProps}>
@@ -53,6 +60,7 @@ export default function GameComponentNew() {
           position={[width / 2, height / 2]}
           sortableChildren
           filters={[shadowFilter]}
+          scale={[1, 1.1]}
 
         >
 
@@ -283,6 +291,7 @@ export default function GameComponentNew() {
             start={true}
           />
           <Sprite
+            zIndex={0}
             interactive={true}
             on={asd}
             anchor={0.5}
@@ -306,9 +315,19 @@ export default function GameComponentNew() {
             y={0 - SPACE_Y * 2}
           />
 
+          <Sprite
+            zIndex={90}
+            anchor={0.5}
+            scale={0.1}
+            x={-((WIDTH_N + SPACE_X) * 8 + WIDTH_N / 2)}
+            y={-30}
+            texture={karibacsik}
+          />
+
 
         </Container>
       </Stage>
+      <PlayerInfo />
     </>
   )
 }

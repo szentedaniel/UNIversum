@@ -1,32 +1,44 @@
-import React, { } from 'react'
+import React, { useEffect, useState } from 'react'
 import GameComponent from '../Components/GameComponent'
-import { useElementSize } from '@mantine/hooks';
+import { useElementSize, useFullscreen } from '@mantine/hooks';
 import { useDispatch } from 'react-redux';
 import { setIsGame } from '../Store/slices/loadingSlice';
 import GameComponentNew from '../Components/GameComponentNew';
+import FullscreenSwitcher from '../Components/GameComponents/FullscreenSwitcher';
 
 
 export default function Game(props) {
-    const { ref, width, height } = useElementSize();
-    const dispatch = useDispatch()
-    dispatch(setIsGame(true))
+  const { toggle, fullscreen } = useFullscreen()
+  const dispatch = useDispatch()
+  dispatch(setIsGame(true))
+  const [bg, setBg] = useState(null)
 
-    return (
-        <>
-            <div className=' blur-[2px] absolute top-0 overflow-hidden left-0 w-full h-full items-center content-center justify-center flex z-10 bg-repeat-x' style={{
-                backgroundImage: `url(../Images/game/background-elements-redux-fix/Backgrounds/${Math.floor(Math.random() * 8 + 1)}.png)`
-            }} >
-            </div >
-            < div className='absolute top-0 overflow-hidden left-0 w-full h-full items-center content-center justify-center flex z-10 bg-repeat-x'
+  useEffect(() => {
+    if (!bg) {
+      setBg(Math.floor(Math.random() * 8 + 1))
+    }
+  }, [])
 
-                id='game' ref={ref} >
-                {/* bg-gradient-to-t from-blue-200 to-blue-400 rounded-lg */}
-                {/* <GameComponent
+
+  return (
+    <>
+      <div className={` blur-[2px] absolute top-0 overflow-hidden left-0 w-full h-full items-center content-center justify-center flex z-10 bg-repeat-x ${(fullscreen && 'bg-contain')}`} style={{
+        backgroundImage: `url(../Images/game/background-elements-redux-fix/Backgrounds/${bg}.png)`
+      }} >
+      </div >
+      < div className='absolute top-0 overflow-hidden left-0 w-full h-full items-center content-center justify-center flex z-10 bg-repeat-x' >
+        {/* bg-gradient-to-t from-blue-200 to-blue-400 rounded-lg */}
+        {/* <GameComponent
                 width={width}
                 height={height}
             /> */}
-                <GameComponentNew />
-            </div >
-        </>
-    )
+        <GameComponentNew />
+        <FullscreenSwitcher
+          toggle={toggle}
+          fullscreen={fullscreen}
+        />
+
+      </div >
+    </>
+  )
 }
