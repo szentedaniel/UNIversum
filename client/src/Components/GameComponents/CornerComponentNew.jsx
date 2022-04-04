@@ -2,6 +2,7 @@ import { Container, Sprite, Text } from '@inlet/react-pixi'
 import * as PIXI from 'pixi.js'
 import { TextStyle } from 'pixi.js';
 import React from 'react'
+import { GAME_CONFIG } from '../../gameConfig';
 
 export default function CornerComponentNew(props) {
 
@@ -10,6 +11,10 @@ export default function CornerComponentNew(props) {
   const left_road_bg = PIXI.Texture.from('../images/game/isometriclandscape/PNG/landscapeTiles_087.png');
   const right_road_bg = PIXI.Texture.from('../images/game/isometriclandscape/PNG/landscapeTiles_080.png');
   const top_road_bg = PIXI.Texture.from('../images/game/isometriclandscape/PNG/landscapeTiles_114.png');
+  const karibacsik = PIXI.Texture.from('../Images/game/caracters/karibacsik.png');
+  const repulo = PIXI.Texture.from('../Images/game/caracters/erasmus.png');
+  const doubler = PIXI.Texture.from('../Images/game/caracters/diploma.png');
+  const tabla = PIXI.Texture.from('../Images/game/caracters/tabla.png');
 
   let HEIGHT = 96 / 2
   const BOTTOM_HEIGHT = 32
@@ -21,7 +26,7 @@ export default function CornerComponentNew(props) {
     <Container
       sortableChildren
       anchor={0.5}
-      scale={0.65}
+      scale={GAME_CONFIG.scale}
       interactive={true}
       //pointerdown={(e) => e.currentTarget.y -= 10}
       //pointerup={(e) => e.currentTarget.y += 10}
@@ -35,7 +40,7 @@ export default function CornerComponentNew(props) {
       <Text
         zIndex={90}
 
-        text={`Hello World`}
+        text={(props.isStart ? '' : props.label)}
         anchor={0.5}
         // skew={[0.6, -0.3]}
         style={
@@ -82,7 +87,7 @@ export default function CornerComponentNew(props) {
         scale={1}
         x={-WIDTH}
         y={HEIGHT}
-        texture={(props.start ? label_bg : road_bg)}
+        texture={(props.isStart ? label_bg : road_bg)}
       />
       <Sprite
         anchor={0.5}
@@ -90,7 +95,7 @@ export default function CornerComponentNew(props) {
         scale={1}
         x={-WIDTH * 2}
         y={-BOTTOM_HEIGHT + HEIGHT}
-        texture={(props.start ? label_bg : road_bg)}
+        texture={(props.isStart ? label_bg : road_bg)}
       />
       <Sprite
         anchor={0.5}
@@ -98,7 +103,7 @@ export default function CornerComponentNew(props) {
         scale={1}
         x={0}
         y={BOTTOM_HEIGHT + HEIGHT}
-        texture={(props.start ? label_bg : road_bg)}
+        texture={(props.isStart ? label_bg : road_bg)}
       />
       <Sprite
         anchor={0.5}
@@ -106,7 +111,7 @@ export default function CornerComponentNew(props) {
         scale={1}
         x={WIDTH}
         y={HEIGHT}
-        texture={(props.start ? label_bg : road_bg)}
+        texture={(props.isStart ? label_bg : road_bg)}
       />
       <Sprite
         anchor={0.5}
@@ -114,7 +119,7 @@ export default function CornerComponentNew(props) {
         scale={1}
         x={WIDTH * 2}
         y={-BOTTOM_HEIGHT + HEIGHT}
-        texture={(props.start ? label_bg : road_bg)}
+        texture={(props.isStart ? label_bg : road_bg)}
       />
 
 
@@ -133,7 +138,7 @@ export default function CornerComponentNew(props) {
         scale={1}
         x={-WIDTH}
         y={-BOTTOM_HEIGHT * 2 + HEIGHT}
-        texture={(props.start ? left_road_bg : road_bg)}
+        texture={(props.isStart ? left_road_bg : road_bg)}
       />
 
       <Sprite
@@ -142,7 +147,7 @@ export default function CornerComponentNew(props) {
         scale={1}
         x={0}
         y={-BOTTOM_HEIGHT * 3 + HEIGHT}
-        texture={(props.start ? top_road_bg : road_bg)}
+        texture={(props.isStart ? top_road_bg : road_bg)}
       />
       <Sprite
         anchor={0.5}
@@ -150,8 +155,48 @@ export default function CornerComponentNew(props) {
         scale={1}
         x={WIDTH}
         y={-BOTTOM_HEIGHT * 2 + HEIGHT}
-        texture={(props.start ? right_road_bg : road_bg)}
+        texture={(props.isStart ? right_road_bg : road_bg)}
       />
+      {props.isQuarantaine &&
+        <Sprite
+          texture={karibacsik}
+          scale={0.2}
+          anchor={0.5}
+          zIndex={5}
+          x={-WIDTH * 1.25}
+          y={-HEIGHT * 1.25}
+        />
+      }
+      {props.isErasmus &&
+        <Sprite
+          texture={repulo}
+          scale={{ x: -0.5, y: 0.5 }}
+          anchor={0.5}
+          zIndex={5}
+          x={0}
+          y={-BOTTOM_HEIGHT / 2}
+        />
+      }
+      {props.isDoubler &&
+        <Sprite
+          texture={doubler}
+          scale={{ x: 0.5, y: 0.5 }}
+          anchor={0.5}
+          zIndex={5}
+          x={0}
+          y={-BOTTOM_HEIGHT}
+        />
+      }
+      {props.isStart &&
+        <Sprite
+          texture={tabla}
+          scale={{ x: 1, y: 1 }}
+          anchor={0.5}
+          zIndex={5}
+          x={0}
+          y={-BOTTOM_HEIGHT - HEIGHT * 1.6}
+        />
+      }
 
 
     </Container>

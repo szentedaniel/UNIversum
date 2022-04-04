@@ -64,3 +64,18 @@ export const GROUP_COLORS = {
     color: 0x0572BB
   },
 }
+
+export const PLAYER_COLORS = {
+  '0': {
+    color: 0xF29DB6
+  },
+  '1': {
+    color: 0x8DB5E7
+  },
+  '2': {
+    color: 0x70C4A8
+  },
+  '3': {
+    color: 0xFFCC00
+  },
+}

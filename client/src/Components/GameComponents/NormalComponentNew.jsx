@@ -5,6 +5,7 @@ import { ColorReplaceFilter, MultiColorReplaceFilter } from 'pixi-filters';
 import PropTypes from 'prop-types';
 import { GROUP_COLORS } from '../../config';
 import { TextStyle } from 'pixi.js';
+import { GAME_CONFIG } from '../../gameConfig';
 
 
 export default function NormalComponentNew(props) {
@@ -21,13 +22,45 @@ export default function NormalComponentNew(props) {
     const BOTTOM_HEIGHT = 32
     const WIDTH = 129 / 2
 
+    const calcTextCoords = (text) => {
+        let foo = text.toString().trim()
+        if (foo.includes(' ') && foo.length > 9) {
+            return { x: -33, y: 7 }
+        } else {
+            return { x: -50, y: 14 }
+        }
+    }
+    const textCoords = calcTextCoords(props.label)
+
+    const pointerDown = (e) => {
+        e.currentTarget.y -= 10
+    }
+    const pointerUp = (e) => {
+        if (e.currentTarget.y === props.y - 10) {
+            e.currentTarget.y += 10
+        }
+    }
+    const pointerUpOutside = (e) => {
+        if (e.currentTarget.y === props.y - 10) {
+            e.currentTarget.y += 10
+        }
+    }
+
+
+
     return (
         <Container
-            on={(e) => console.log(e)}
             sortableChildren
             anchor={0.5}
-            scale={{ x: (props.flip ? -1 : 1) * 0.65, y: 0.65 }}
-            position={[0, 0]}
+            scale={{ x: (props.flip ? -1 : 1) * GAME_CONFIG.scale, y: GAME_CONFIG.scale }}
+            interactive={true}
+            //pointerdown={(e) => e.currentTarget.y -= 10}
+            //pointerup={(e) => e.currentTarget.y += 10}
+            //pointerout={(e) => e.currentTarget.y += 10}
+            pointerdown={pointerDown}
+            pointerupoutside={pointerUpOutside}
+            pointerup={pointerUp}
+
             {...props}
         >
             <Container
@@ -35,14 +68,14 @@ export default function NormalComponentNew(props) {
                 scale={[1, 1.2]}
                 rotation={Math.PI / 6.66667}
                 anchor={0.5}
-                x={-50}
-                y={14}
+                x={textCoords.x}
+                y={textCoords.y}
             >
 
 
                 <Text
                     zIndex={90}
-                    text={`veszprém`.toUpperCase()} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
+                    text={props.label.toUpperCase()} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
                     anchor={0.5}
                     skew={[-Math.PI / 4, 0]}
                     scale={{ x: (props.flip ? -1 : 1) * 1, y: 1 }}
@@ -77,7 +110,6 @@ export default function NormalComponentNew(props) {
                             wordWrap: true,
                             wordWrapWidth: 150,
                             breakWords: false,
-                            textBaseline: 'bottom',
                             lineHeight: 30
                         })
                     }
