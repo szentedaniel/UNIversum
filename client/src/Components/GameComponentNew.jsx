@@ -14,10 +14,10 @@ import MuseumComponent from './GameComponents/MuseumComponent'
 import TaxComponent from './GameComponents/TaxComponent'
 import LuckComponent from './GameComponents/LuckComponent'
 
-export default function GameComponentNew() {
+export default function GameComponentNew(props) {
   const [width, setWidth] = useState(GAME_CONFIG.width)
   const [height, setHeight] = useState(GAME_CONFIG.height)
-  const label_bg = PIXI.Texture.from('../Images/game/isometriccity/PNG/cityTiles_072.png');
+
 
   let shadowFilter = new DropShadowFilter({ rotation: 45, distance: 6 })
 
@@ -26,7 +26,7 @@ export default function GameComponentNew() {
     width,
     options: {
       backgroundAlpha: 0,
-      // antialias: true,
+      antialias: true,
       resolution: PIXI.settings.RESOLUTION,
     },
   }
@@ -40,6 +40,30 @@ export default function GameComponentNew() {
     if (mezo.isChance) return (<LuckComponent {...mezo} x={coords.x} y={coords.y} key={mezo.id} />)
     if (mezo.isTax) return (<TaxComponent {...mezo} x={coords.x} y={coords.y} key={mezo.id} />)
   })
+
+  const users = [
+    {
+      username: 'test1',
+      userId: null,
+      userColor: 0,
+    },
+    {
+      username: 'test2',
+      userId: null,
+      userColor: 111,
+    },
+    {
+      username: 'test3',
+      userId: null,
+      userColor: 2,
+    },
+    {
+      username: 'test4',
+      userId: null,
+      userColor: 3,
+    }
+  ]
+
 
 
 

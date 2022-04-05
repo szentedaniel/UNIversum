@@ -30,7 +30,7 @@ function App() {
   };
   return (
     <SocketProvider>
-      <Particles
+      {/* <Particles
         id="tsparticles"
         className='z-0'
         init={particlesInit}
@@ -755,7 +755,7 @@ function App() {
             "zLayers": 100
           }
         }
-      />
+      /> */}
       <div className="App bg-proba-500 text-proba-200 overflow-hidden">
         <div className='
         flex

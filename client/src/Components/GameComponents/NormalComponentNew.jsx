@@ -1,14 +1,18 @@
-import { Container, Sprite, Text } from '@inlet/react-pixi'
-import React from 'react'
+import { Container, Sprite, Text } from '@inlet/react-pixi/animated'
+import React, { useState } from 'react'
 import * as PIXI from 'pixi.js'
 import { ColorReplaceFilter, MultiColorReplaceFilter } from 'pixi-filters';
 import PropTypes from 'prop-types';
 import { GROUP_COLORS } from '../../config';
 import { TextStyle } from 'pixi.js';
 import { GAME_CONFIG } from '../../gameConfig';
+import Building from './Building';
 
 
 export default function NormalComponentNew(props) {
+    const [id, setId] = useState(props.id)
+    const [level, setLevel] = useState(0)
+
 
     const label_bg = PIXI.Texture.from('../Images/game/isometriccity/PNG/cityTiles_072.png');
     const ehh = PIXI.Texture.from('../Images/game/isometriclandscape/PNG/landscapeTiles_067.png');
@@ -21,6 +25,7 @@ export default function NormalComponentNew(props) {
     const HEIGHT = 96 / 2
     const BOTTOM_HEIGHT = 32
     const WIDTH = 129 / 2
+
 
     const calcTextCoords = (text) => {
         let foo = text.toString().trim()
@@ -39,10 +44,14 @@ export default function NormalComponentNew(props) {
         if (e.currentTarget.y === props.y - 10) {
             e.currentTarget.y += 10
         }
+        if (e.currentTarget.id === id) {
+            setLevel(level + 1)
+        }
     }
     const pointerUpOutside = (e) => {
         if (e.currentTarget.y === props.y - 10) {
             e.currentTarget.y += 10
+            setLevel(level - 1)
         }
     }
 
@@ -222,6 +231,13 @@ export default function NormalComponentNew(props) {
                 x={WIDTH}
                 y={-BOTTOM_HEIGHT * 2 + HEIGHT + HEIGHT / 2}
                 texture={ehh}
+            />
+            <Building
+                zIndex={10}
+                anchor={0.5}
+                currentLevel={level}
+                x={WIDTH / 4}
+                y={-BOTTOM_HEIGHT}
             />
         </Container>
     )

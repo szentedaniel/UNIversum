@@ -32,7 +32,7 @@ export default function Game(props) {
                 width={width}
                 height={height}
             /> */}
-        <GameComponentNew />
+        <GameComponentNew numberOfPlayers={4} />
         <FullscreenSwitcher
           toggle={toggle}
           fullscreen={fullscreen}

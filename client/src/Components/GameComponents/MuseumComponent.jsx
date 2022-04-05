@@ -9,7 +9,6 @@ export default function MuseumComponent(props) {
   const [mezoId, setMezoId] = useState(props.id)
 
   const label_bg = Texture.from('../Images/game/isometriccity/PNG/cityTiles_072.png');
-  const ehh = Texture.from('../Images/game/isometriclandscape/PNG/landscapeTiles_067.png');
   const museum = Texture.from('../Images/game/caracters/museum.png');
 
   const asd = {
