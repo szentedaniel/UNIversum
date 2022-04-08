@@ -1,5 +1,5 @@
 import { Container, Graphics, Sprite, Stage } from '@inlet/react-pixi'
-import React, { useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import * as PIXI from 'pixi.js'
 import { forEachRight } from 'lodash'
 import { ColorReplaceFilter, DropShadowFilter } from 'pixi-filters'
@@ -13,11 +13,11 @@ import { calcCoords } from '../Utils/calcCoords'
 import MuseumComponent from './GameComponents/MuseumComponent'
 import TaxComponent from './GameComponents/TaxComponent'
 import LuckComponent from './GameComponents/LuckComponent'
+import Character from './GameComponents/Character'
 
 export default function GameComponentNew(props) {
   const [width, setWidth] = useState(GAME_CONFIG.width)
   const [height, setHeight] = useState(GAME_CONFIG.height)
-
 
   let shadowFilter = new DropShadowFilter({ rotation: 45, distance: 6 })
 
@@ -31,6 +31,7 @@ export default function GameComponentNew(props) {
     },
   }
 
+  // pálya kreálás
   const map = GAME_CONFIG.map.map(mezo => {
     const coords = calcCoords(mezo.id)
 
@@ -41,31 +42,64 @@ export default function GameComponentNew(props) {
     if (mezo.isTax) return (<TaxComponent {...mezo} x={coords.x} y={coords.y} key={mezo.id} />)
   })
 
-  const users = [
+  const usersGame = [
     {
       username: 'test1',
       userId: null,
       userColor: 0,
+      mezoId: 45
     },
     {
       username: 'test2',
       userId: null,
-      userColor: 111,
+      userColor: 1,
+      mezoId: 2
     },
     {
       username: 'test3',
       userId: null,
       userColor: 2,
+      mezoId: 3
     },
     {
       username: 'test4',
       userId: null,
       userColor: 3,
+      mezoId: 4
     }
   ]
 
+  const users = useMemo(() => usersGame.map(user => ({
+    ...user,
+    mezoId: (user.userColor === 0 ? user.mezoId + 1 : user.mezoId)
+  })), [usersGame])
+
+  const setMezoId = (userColor) => {
+    for (let i = 0; i < users.length; i++) {
+      const ehh = users[i].mezoId
+      if (users[i].userColor === userColor) {
+        users[i].mezoId = ehh + 1
+      }
+    }
+
+  }
+
+  useEffect(() => {
+    console.log('valtozott a users');
+  }, [users])
 
 
+
+  const players = users.map((player) => (
+    <Character
+      anchor={0.5}
+      // interactive={true}
+      // pointerup={setMezoId(player.userColor)}
+      setMezoId={setMezoId}
+      key={player.userColor}
+      {...player}
+    />
+  ))
 
   return (
     <>
@@ -79,6 +113,7 @@ export default function GameComponentNew(props) {
           filters={[shadowFilter]}
           scale={[1, 1.1]}
         >
+          {players}
           {map}
 
         </Container>

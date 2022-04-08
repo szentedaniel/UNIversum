@@ -137,7 +137,7 @@ export default function NormalComponentNew(props) {
 
                 <Text
                     zIndex={90}
-                    text={new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(800000)} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
+                    text={new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
                     anchor={0.5}
                     skew={[-Math.PI / 4, 0]}
                     scale={{ x: (props.flip ? -1 : 1) * 1, y: 1 }}
