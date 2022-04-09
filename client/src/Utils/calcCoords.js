@@ -6,47 +6,48 @@ export const calcCoords = (id) => {
   const HEIGHT_NORMAL = WIDTH_NORMAL / 2
   const WIDTH_CORNER = (3 * g.PIECE_HEIGHT + g.PIECE_BOTTOM_HEIGHT) * g.scale
   const HEIGHT_CORNER = WIDTH_CORNER / 2
+  const correctId = id % 32
 
-  if (id === 1) {
+  if (correctId === 0 || correctId === 32) {
     return {
       x: 0,
       y: HEIGHT_NORMAL * 7 + g.SPACE_Y * 8 + HEIGHT_CORNER
     }
-  } else if (id === 9) {
+  } else if (correctId === 8) {
     return {
       x: -((WIDTH_NORMAL + g.SPACE_X) * 8 + WIDTH_NORMAL / 2),
       y: (0 - g.SPACE_Y * 2)
     }
-  } else if (id === 17) {
+  } else if (correctId === 16) {
     return {
       x: 0,
       y: -HEIGHT_NORMAL * 7 - g.SPACE_Y * 12 - HEIGHT_CORNER
     }
-  } else if (id === 25) {
+  } else if (correctId === 24) {
     return {
       x: ((WIDTH_NORMAL + g.SPACE_X) * 8 + WIDTH_NORMAL / 2),
       y: (0 - g.SPACE_Y * 2)
     }
 
-  } else if (id > 1 && id < 9) {
+  } else if (correctId >= 1 && correctId < 9) {
     return {
-      x: (-WIDTH_NORMAL - g.SPACE_X) * (id - 1),
-      y: (HEIGHT_NORMAL * (9 - id) + g.SPACE_Y * (9 - id))
+      x: (-WIDTH_NORMAL - g.SPACE_X) * (correctId),
+      y: (HEIGHT_NORMAL * (8 - correctId) + g.SPACE_Y * (8 - correctId))
     }
-  } else if (id > 9 && id < 17) {
+  } else if (correctId >= 9 && correctId < 17) {
     return {
-      x: -((WIDTH_NORMAL + g.SPACE_X) * (7 - (id % 10)) + WIDTH_NORMAL / 2),
-      y: (-HEIGHT_NORMAL * (2 + (id % 10)) - g.SPACE_Y * (1 + (id % 10)) + HEIGHT_NORMAL / 2)
+      x: -((WIDTH_NORMAL + g.SPACE_X) * (7 - (correctId % 9)) + WIDTH_NORMAL / 2),
+      y: (-HEIGHT_NORMAL * (2 + (correctId % 9)) - g.SPACE_Y * (1 + (correctId % 9)) + HEIGHT_NORMAL / 2)
     }
-  } else if (id > 17 && id < 25) {
+  } else if (correctId >= 17 && correctId < 25) {
     return {
-      x: ((WIDTH_NORMAL + g.SPACE_X) * (id % 17) + WIDTH_NORMAL / 2),
-      y: (-HEIGHT_NORMAL * (9 - (id % 17)) - g.SPACE_Y * (8 - (id % 17)) + HEIGHT_NORMAL / 2)
+      x: ((WIDTH_NORMAL + g.SPACE_X) * (1 + correctId % 17) + WIDTH_NORMAL / 2),
+      y: (-HEIGHT_NORMAL * (8 - (correctId % 17)) - g.SPACE_Y * (7 - (correctId % 17)) + HEIGHT_NORMAL / 2)
     }
-  } else if (id > 25 && id <= 32) {
+  } else if (correctId >= 25 && correctId < 32) {
     return {
-      x: ((WIDTH_NORMAL + g.SPACE_X) * (8 - (id % 25))),
-      y: (HEIGHT_NORMAL * ((id % 25)) + g.SPACE_Y * (id % 25))
+      x: ((WIDTH_NORMAL + g.SPACE_X) * (7 - (correctId % 25))),
+      y: (HEIGHT_NORMAL * ((1 + correctId % 25)) + g.SPACE_Y * (1 + correctId % 25))
     }
   } else return { x: 0, y: 0 }
 }

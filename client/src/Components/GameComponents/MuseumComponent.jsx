@@ -12,16 +12,16 @@ export default function MuseumComponent(props) {
   const museum = Texture.from('../Images/game/caracters/museum.png');
 
   const asd = {
-    '5': {
+    '4': {
       ownerColor: 0
     },
-    '13': {
+    '12': {
       ownerColor: 1
     },
-    '21': {
+    '20': {
       ownerColor: 2
     },
-    '29': {
+    '28': {
       ownerColor: 3
     },
   }

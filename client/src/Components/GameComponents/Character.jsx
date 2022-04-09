@@ -12,19 +12,28 @@ export default function Character(props) {
   else if (props.userColor === 3) texture = Texture.from('../images/game/moreenemiesanimations/Alien sprites/alienYellow.png')
 
 
-  const spring = { mass: 10, tension: 1000, friction: 350 }
+  const spring = { mass: 10, tension: 1000, friction: 1000 }
   const { userColor, mezoId, setMezoId } = props
 
-  const [coords, setCoords] = useState(calcCoords(mezoId))
+  const [wantToBeCoord, setCoords] = useState(calcCoords(mezoId))
+  const [currentMezoId, setCurrentMezoId] = useState(mezoId)
+  const [tempCoord, setTempCoord] = useState(calcCoords(currentMezoId))
   useEffect(() => {
-    console.log('valtozik a mezoId');
-  }, [mezoId])
+    setTimeout(() => {
+      if (mezoId % 32 !== currentMezoId % 32) {
+        setTempCoord(calcCoords(currentMezoId % 32 + 1))
+        setCurrentMezoId(currentMezoId % 32 + 1)
+      }
+      //setCoords(calcCoords(mezoId))
+
+    }, 300);
+  }, [currentMezoId, mezoId, tempCoord])
 
 
   return (
     <Spring native
-      to={calcCoords(mezoId)}
-      config={spring}
+      to={tempCoord}
+      // config={spring}
       {...props}>
       {props => (
         <Sprite

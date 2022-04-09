@@ -47,42 +47,37 @@ export default function GameComponentNew(props) {
       username: 'test1',
       userId: null,
       userColor: 0,
-      mezoId: 45
+      mezoId: 0,
+      zIndex: 10,
     },
     {
       username: 'test2',
       userId: null,
       userColor: 1,
-      mezoId: 2
+      mezoId: 0,
+      zIndex: 10,
     },
     {
       username: 'test3',
       userId: null,
       userColor: 2,
-      mezoId: 3
+      mezoId: 0,
+      zIndex: 10,
     },
     {
       username: 'test4',
       userId: null,
       userColor: 3,
-      mezoId: 4
+      mezoId: 0,
+      zIndex: 10,
     }
   ]
 
   const users = useMemo(() => usersGame.map(user => ({
     ...user,
-    mezoId: (user.userColor === 0 ? user.mezoId + 1 : user.mezoId)
+    mezoId: (user.mezoId),
+    zIndex: user.zIndex
   })), [usersGame])
-
-  const setMezoId = (userColor) => {
-    for (let i = 0; i < users.length; i++) {
-      const ehh = users[i].mezoId
-      if (users[i].userColor === userColor) {
-        users[i].mezoId = ehh + 1
-      }
-    }
-
-  }
 
   useEffect(() => {
     console.log('valtozott a users');
@@ -95,7 +90,6 @@ export default function GameComponentNew(props) {
       anchor={0.5}
       // interactive={true}
       // pointerup={setMezoId(player.userColor)}
-      setMezoId={setMezoId}
       key={player.userColor}
       {...player}
     />

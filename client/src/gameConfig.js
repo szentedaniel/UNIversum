@@ -11,7 +11,7 @@ export const GAME_CONFIG = {
   SPACE_Y: 2.5,
   map: [
     {
-      id: 1,
+      id: 0,
       isNormal: false,
       isCorner: true,
       isChance: false,
@@ -24,10 +24,10 @@ export const GAME_CONFIG = {
       label: 'start',
       flip: false,
       groupId: 0,
-      zIndex: 0
+      zIndex: -1
     },
     {
-      id: 2,
+      id: 1,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -41,10 +41,10 @@ export const GAME_CONFIG = {
       label: 'veszprém',
       flip: false,
       groupId: 1,
-      zIndex: -1
+      zIndex: -2
     },
     {
-      id: 3,
+      id: 2,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -58,10 +58,10 @@ export const GAME_CONFIG = {
       label: 'budapest',
       flip: false,
       groupId: 1,
-      zIndex: -2
+      zIndex: -3
     },
     {
-      id: 4,
+      id: 3,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -75,10 +75,10 @@ export const GAME_CONFIG = {
       label: 'debrecen',
       flip: false,
       groupId: 1,
-      zIndex: -3
+      zIndex: -4
     },
     {
-      id: 5,
+      id: 4,
       isNormal: false,
       isCorner: false,
       isChance: false,
@@ -92,10 +92,10 @@ export const GAME_CONFIG = {
       label: 'museum',
       flip: false,
       groupId: 0,
-      zIndex: -4
+      zIndex: -5
     },
     {
-      id: 6,
+      id: 5,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -109,10 +109,10 @@ export const GAME_CONFIG = {
       label: 'Zürich',
       flip: false,
       groupId: 2,
-      zIndex: -5
+      zIndex: -6
     },
     {
-      id: 7,
+      id: 6,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -126,10 +126,10 @@ export const GAME_CONFIG = {
       label: 'Paris',
       flip: false,
       groupId: 2,
-      zIndex: -6
+      zIndex: -7
     },
     {
-      id: 8,
+      id: 7,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -143,10 +143,10 @@ export const GAME_CONFIG = {
       label: 'edinburgh',
       flip: false,
       groupId: 2,
-      zIndex: -7
+      zIndex: -8
     },
     {
-      id: 9,
+      id: 8,
       isNormal: false,
       isCorner: true,
       isChance: false,
@@ -160,10 +160,10 @@ export const GAME_CONFIG = {
       label: 'Karantén',
       flip: false,
       groupId: 2,
-      zIndex: -8
+      zIndex: -9
     },
     {
-      id: 10,
+      id: 9,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -177,10 +177,10 @@ export const GAME_CONFIG = {
       label: 'chicago',
       flip: true,
       groupId: 3,
-      zIndex: -9
+      zIndex: -10
     },
     {
-      id: 11,
+      id: 10,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -194,10 +194,10 @@ export const GAME_CONFIG = {
       label: 'austin',
       flip: true,
       groupId: 3,
-      zIndex: -10
+      zIndex: -11
     },
     {
-      id: 12,
+      id: 11,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -211,10 +211,10 @@ export const GAME_CONFIG = {
       label: 'princeton',
       flip: true,
       groupId: 3,
-      zIndex: -11
+      zIndex: -12
     },
     {
-      id: 13,
+      id: 12,
       isNormal: false,
       isCorner: false,
       isChance: false,
@@ -228,10 +228,10 @@ export const GAME_CONFIG = {
       label: 'museum',
       flip: true,
       groupId: 0,
-      zIndex: -12
+      zIndex: -13
     },
     {
-      id: 14,
+      id: 13,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -245,10 +245,10 @@ export const GAME_CONFIG = {
       label: 'vienna',
       flip: true,
       groupId: 4,
-      zIndex: -13
+      zIndex: -14
     },
     {
-      id: 15,
+      id: 14,
       isNormal: false,
       isCorner: false,
       isChance: true,
@@ -262,10 +262,10 @@ export const GAME_CONFIG = {
       label: 'esély',
       flip: true,
       groupId: 0,
-      zIndex: -14
+      zIndex: -15
     },
     {
-      id: 16,
+      id: 15,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -279,10 +279,10 @@ export const GAME_CONFIG = {
       label: 'berlin',
       flip: true,
       groupId: 4,
-      zIndex: -15
+      zIndex: -16
     },
     {
-      id: 17,
+      id: 16,
       isNormal: false,
       isCorner: true,
       isChance: false,
@@ -296,10 +296,10 @@ export const GAME_CONFIG = {
       label: 'Talár',
       flip: false,
       groupId: 0,
-      zIndex: -16
+      zIndex: -17
     },
     {
-      id: 18,
+      id: 17,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -313,10 +313,10 @@ export const GAME_CONFIG = {
       label: 'seattle',
       flip: false,
       groupId: 5,
-      zIndex: -15
+      zIndex: -16
     },
     {
-      id: 19,
+      id: 18,
       isNormal: false,
       isCorner: false,
       isChance: true,
@@ -330,10 +330,10 @@ export const GAME_CONFIG = {
       label: 'esély',
       flip: false,
       groupId: 0,
-      zIndex: -14
+      zIndex: -15
     },
     {
-      id: 20,
+      id: 19,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -347,10 +347,10 @@ export const GAME_CONFIG = {
       label: 'new haven',
       flip: false,
       groupId: 5,
-      zIndex: -13
+      zIndex: -14
     },
     {
-      id: 21,
+      id: 20,
       isNormal: false,
       isCorner: false,
       isChance: false,
@@ -364,6 +364,23 @@ export const GAME_CONFIG = {
       label: 'museum',
       flip: false,
       groupId: 0,
+      zIndex: -13
+    },
+    {
+      id: 21,
+      isNormal: true,
+      isCorner: false,
+      isChance: false,
+      isMuseum: false,
+      isTax: false,
+      isStart: false,
+      isQuarantaine: false,
+      isDoubler: false,
+      isErasmus: false,
+      name: 'london',
+      label: 'london',
+      flip: false,
+      groupId: 6,
       zIndex: -12
     },
     {
@@ -377,8 +394,8 @@ export const GAME_CONFIG = {
       isQuarantaine: false,
       isDoubler: false,
       isErasmus: false,
-      name: 'london',
-      label: 'london',
+      name: 'oxford',
+      label: 'oxford',
       flip: false,
       groupId: 6,
       zIndex: -11
@@ -394,32 +411,15 @@ export const GAME_CONFIG = {
       isQuarantaine: false,
       isDoubler: false,
       isErasmus: false,
-      name: 'oxford',
-      label: 'oxford',
-      flip: false,
-      groupId: 6,
-      zIndex: -10
-    },
-    {
-      id: 24,
-      isNormal: true,
-      isCorner: false,
-      isChance: false,
-      isMuseum: false,
-      isTax: false,
-      isStart: false,
-      isQuarantaine: false,
-      isDoubler: false,
-      isErasmus: false,
       name: 'cambridge uk',
       label: 'cambridge uk',
       flip: false,
       groupId: 6,
-      zIndex: -9
+      zIndex: -10
     },
 
     {
-      id: 25,
+      id: 24,
       isNormal: false,
       isCorner: true,
       isChance: false,
@@ -433,11 +433,11 @@ export const GAME_CONFIG = {
       label: 'Erasmus',
       flip: false,
       groupId: 0,
-      zIndex: -8
+      zIndex: -9
     },
 
     {
-      id: 26,
+      id: 25,
       isNormal: false,
       isCorner: false,
       isChance: true,
@@ -451,10 +451,10 @@ export const GAME_CONFIG = {
       label: 'esély',
       flip: true,
       groupId: 0,
-      zIndex: -7
+      zIndex: -8
     },
     {
-      id: 27,
+      id: 26,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -468,10 +468,10 @@ export const GAME_CONFIG = {
       label: 'berkeley',
       flip: true,
       groupId: 7,
-      zIndex: -6
+      zIndex: -7
     },
     {
-      id: 28,
+      id: 27,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -485,10 +485,10 @@ export const GAME_CONFIG = {
       label: 'new york',
       flip: true,
       groupId: 7,
-      zIndex: -5
+      zIndex: -6
     },
     {
-      id: 29,
+      id: 28,
       isNormal: false,
       isCorner: false,
       isChance: false,
@@ -502,10 +502,10 @@ export const GAME_CONFIG = {
       label: 'museum',
       flip: true,
       groupId: 0,
-      zIndex: -4
+      zIndex: -5
     },
     {
-      id: 30,
+      id: 29,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -519,10 +519,10 @@ export const GAME_CONFIG = {
       label: 'stanford',
       flip: true,
       groupId: 8,
-      zIndex: -3
+      zIndex: -4
     },
     {
-      id: 31,
+      id: 30,
       isNormal: false,
       isCorner: false,
       isChance: false,
@@ -536,10 +536,10 @@ export const GAME_CONFIG = {
       label: 'adó',
       flip: true,
       groupId: 0,
-      zIndex: -2
+      zIndex: -3
     },
     {
-      id: 32,
+      id: 31,
       isNormal: true,
       isCorner: false,
       isChance: false,
@@ -553,7 +553,7 @@ export const GAME_CONFIG = {
       label: 'cambridge us',
       flip: true,
       groupId: 8,
-      zIndex: -1
+      zIndex: -2
     },
 
   ]

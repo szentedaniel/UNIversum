@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import * as PIXI from 'pixi.js'
 import { ColorReplaceFilter, MultiColorReplaceFilter } from 'pixi-filters';
 import PropTypes from 'prop-types';
-import { GROUP_COLORS } from '../../config';
+import { GROUP_COLORS, PLAYER_COLORS } from '../../config';
 import { TextStyle } from 'pixi.js';
 import { GAME_CONFIG } from '../../gameConfig';
 import Building from './Building';
@@ -21,6 +21,13 @@ export default function NormalComponentNew(props) {
     groupFilter.originalColor = 0xC2BEAC
     groupFilter.newColor = GROUP_COLORS[props.groupId].color
     groupFilter.epsilon = 0.095
+
+
+    const ownerFilter = new ColorReplaceFilter()
+    ownerFilter.originalColor = 0x8AB549
+    ownerFilter.newColor = PLAYER_COLORS[Math.floor(Math.random() * 4)].color
+    ownerFilter.epsilon = 0.095
+
 
     const HEIGHT = 96 / 2
     const BOTTOM_HEIGHT = 32
@@ -63,6 +70,7 @@ export default function NormalComponentNew(props) {
             anchor={0.5}
             scale={{ x: (props.flip ? -1 : 1) * GAME_CONFIG.scale, y: GAME_CONFIG.scale }}
             interactive={true}
+            // filters={[ownerFilter]}
             //pointerdown={(e) => e.currentTarget.y -= 10}
             //pointerup={(e) => e.currentTarget.y += 10}
             //pointerout={(e) => e.currentTarget.y += 10}
