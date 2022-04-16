@@ -6,7 +6,9 @@ import PropTypes from 'prop-types';
 import { GROUP_COLORS, PLAYER_COLORS } from '../../config';
 import { TextStyle } from 'pixi.js';
 import { GAME_CONFIG } from '../../gameConfig';
+
 import Building from './Building';
+import calcPrice from '../../Utils/calcPrice';
 
 
 export default function NormalComponentNew(props) {
@@ -145,7 +147,7 @@ export default function NormalComponentNew(props) {
 
                 <Text
                     zIndex={90}
-                    text={new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
+                    text={new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(calcPrice(id, 1).tandij)} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
                     anchor={0.5}
                     skew={[-Math.PI / 4, 0]}
                     scale={{ x: (props.flip ? -1 : 1) * 1, y: 1 }}
