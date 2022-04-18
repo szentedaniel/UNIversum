@@ -14,6 +14,8 @@ import MuseumComponent from './GameComponents/MuseumComponent'
 import TaxComponent from './GameComponents/TaxComponent'
 import LuckComponent from './GameComponents/LuckComponent'
 import Character from './GameComponents/Character'
+import Dice from './GameComponents/Dice'
+import RollDice from './GameComponents/RollDice'
 
 export default function GameComponentNew(props) {
   const [width, setWidth] = useState(GAME_CONFIG.width)
@@ -113,6 +115,7 @@ export default function GameComponentNew(props) {
         </Container>
       </Stage>
       <PlayerInfo />
+      <RollDice />
     </>
   )
 }

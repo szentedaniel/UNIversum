@@ -12,7 +12,7 @@ import calcPrice from '../../Utils/calcPrice';
 
 
 export default function NormalComponentNew(props) {
-    const [id, setId] = useState(props.id)
+    const {id} = props
     const [level, setLevel] = useState(0)
 
 
