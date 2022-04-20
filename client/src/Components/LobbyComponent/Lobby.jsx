@@ -32,43 +32,6 @@ function Lobby() {
   const [rooms, setRooms] = useState(null);
   const [roomCode, setRoomCode] = useState(null);
 
-  const schema = yup.object().shape({
-    name: yup.string().required(t('WARNING_NAME')),
-    email: yup.string().email('You must enter a valid email').required('You must enter a email'),
-    password: yup
-      .string()
-      .required('Please enter your password.')
-      .min(8, 'Password is too short - should be 8 chars minimum.'),
-    passwordConfirm: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match'),
-    acceptTermsConditions: yup
-      .boolean()
-      .oneOf([true], 'The terms and conditions must be accepted.'),
-  });
-
-  const defaultValues = {
-    name: '',
-    email: '',
-    password: '',
-    passwordConfirm: '',
-    acceptTermsConditions: false,
-  };
-
-  //const dispatch = useDispatch();
-  //const authRegister = useSelector(({ auth }) => auth.register);
-
-  const { control, formState, handleSubmit, reset } = useForm({
-    mode: 'onChange',
-    defaultValues,
-    resolver: yupResolver(schema),
-  });
-
-  const { isValid, dirtyFields, errors } = formState;
-
-  function onSubmit(model) {
-    //dispatch(submitRegister(model));
-    // reset(defaultValues);
-  }
-
   let firstLoad = true
 
   useEffect(() => {

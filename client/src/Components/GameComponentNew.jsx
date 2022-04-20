@@ -16,6 +16,8 @@ import LuckComponent from './GameComponents/LuckComponent'
 import Character from './GameComponents/Character'
 import Dice from './GameComponents/Dice'
 import RollDice from './GameComponents/RollDice'
+import { useDispatch, useSelector } from 'react-redux'
+import { countdownStart } from '../Store/slices/gameStateSlice'
 
 export default function GameComponentNew(props) {
   const [width, setWidth] = useState(GAME_CONFIG.width)
@@ -44,42 +46,14 @@ export default function GameComponentNew(props) {
     if (mezo.isTax) return (<TaxComponent {...mezo} x={coords.x} y={coords.y} key={mezo.id} />)
   })
 
-  const usersGame = [
-    {
-      username: 'test1',
-      userId: null,
-      userColor: 0,
-      mezoId: 0,
-      zIndex: 10,
-    },
-    {
-      username: 'test2',
-      userId: null,
-      userColor: 1,
-      mezoId: 0,
-      zIndex: 10,
-    },
-    {
-      username: 'test3',
-      userId: null,
-      userColor: 2,
-      mezoId: 0,
-      zIndex: 10,
-    },
-    {
-      username: 'test4',
-      userId: null,
-      userColor: 3,
-      mezoId: 0,
-      zIndex: 10,
-    }
-  ]
+  const { players, currentPlayer, showDiceRoll } = useSelector((state) => state.gameState)
+  const dispatch = useDispatch()
 
-  const users = useMemo(() => usersGame.map(user => ({
+  const users = useMemo(() => players.map(user => ({
     ...user,
     mezoId: (user.mezoId),
-    zIndex: user.zIndex
-  })), [usersGame])
+    zIndex: user.zIndex,
+  })), [players])
 
   useEffect(() => {
     console.log('valtozott a users');
@@ -87,12 +61,16 @@ export default function GameComponentNew(props) {
 
 
 
-  const players = users.map((player) => (
+  const characters = users.map((player) => (
     <Character
+      key={player.colorCode}
       anchor={0.5}
       // interactive={true}
       // pointerup={setMezoId(player.userColor)}
-      key={player.userColor}
+      zIndex={10}
+      dispatch={dispatch}
+      currentPlayer={currentPlayer}
+      showDiceRoll={showDiceRoll}
       {...player}
     />
   ))
@@ -109,12 +87,12 @@ export default function GameComponentNew(props) {
           filters={[shadowFilter]}
           scale={[1, 1.1]}
         >
-          {players}
+          {characters}
           {map}
 
         </Container>
       </Stage>
-      <PlayerInfo />
+      <PlayerInfo players={players} currentPlayer={currentPlayer} />
       <RollDice />
     </>
   )
