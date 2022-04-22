@@ -7,13 +7,15 @@ import { Spring } from 'react-spring'
 
 
 export default function Building(props) {
+  const { ownerColor } = props
+
   const haz_alap = Texture.from('../Images/game/caracters/haz_alap.png');
   const haz_resz = Texture.from('../Images/game/caracters/haz_resz.png');
   const haz_teto = Texture.from('../Images/game/caracters/haz_teto.png');
 
   const colorFilter = new ColorReplaceFilter()
   colorFilter.originalColor = 0xD8D2BE
-  colorFilter.newColor = PLAYER_COLORS[Math.floor(Math.random() * 4)].color
+  colorFilter.newColor = (ownerColor !== null) ? PLAYER_COLORS[ownerColor].color : 0xfff
   colorFilter.epsilon = 1
 
   const spring = { mass: 10, tension: 1000, friction: 350 }
@@ -25,6 +27,7 @@ export default function Building(props) {
       emeletek.push(
         <Spring key={i} native from={{ y: -1000 }} to={{ y: -32 * i - 1 }} config={spring}>
           {props => <Sprite
+            filters={[colorFilter]}
             texture={haz_alap}
             anchor={0.5}
             scale={{ x: (props.flip ? 1 : -1) * 1, y: 1 }}
@@ -37,6 +40,7 @@ export default function Building(props) {
         <Spring key={i} native from={{ y: -1000 }} to={{ y: -32 * i }} config={spring}>
           {props => (
             <Sprite
+              filters={[colorFilter]}
               texture={haz_resz}
               anchor={0.5}
               scale={{ x: (props.flip ? 1 : -1) * 1, y: 1 }}

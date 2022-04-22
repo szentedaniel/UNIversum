@@ -32,24 +32,29 @@ function PlayerInfoPiece(props) {
 
   const [remain, setRemain] = useState(0)
   let img = pinkAvatar
-  let color = 'pink'
+  let bgColor = 'bg-pink-300'
+  let borderColor = 'border-pink-300'
   let position = 'top-0 left-0'
 
   if (colorCode === 1) {
     img = blueAvatar
-    color = 'blue'
+    bgColor = 'bg-blue-300'
+    borderColor = 'border-blue-300'
     position = 'top-0 right-0'
   } else if (colorCode === 2) {
     img = greenAvatar
-    color = 'green'
+    bgColor = 'bg-green-300'
+    borderColor = 'border-green-300'
     position = 'bottom-0 right-0'
   } else if (colorCode === 3) {
     img = yellowAvatar
-    color = 'yellow'
+    bgColor = 'bg-yellow-300'
+    borderColor = 'border-yellow-300'
     position = 'bottom-0 left-0'
   } else {
     img = pinkAvatar
-    color = 'pink'
+    bgColor = 'bg-pink-300'
+    borderColor = 'border-pink-300'
     position = 'top-0 left-0'
   }
 
@@ -87,12 +92,12 @@ function PlayerInfoPiece(props) {
     minimumFractionDigits: 0
   })
   return (
-    <div className={`w-56 h-32 bg-[#F5ECE3] absolute ${position} rounded-xl border-8 border-${color}-300 m-3 flex flex-1 flex-col shadow-md`}>
-      <div className={`w-52 h-10 top-0 bg-${color}-300 items-center justify-center flex text-xl font-extrabold `}>{username}</div>
+    <div className={`w-56 h-32 bg-[#F5ECE3] absolute ${position} rounded-xl border-8 ${borderColor} m-3 flex flex-1 flex-col shadow-md`}>
+      <div className={`w-52 h-10 top-0 ${bgColor} items-center justify-center flex text-xl font-extrabold `}>{username}</div>
       <div className={`flex ${(colorCode === 1 || colorCode === 2) ? 'flex-row-reverse' : 'flex-row'} items-center text-center`}>
         <img src={img} alt="Alien" className='' />
         <div className='flex flex-col h-full justify-between p-6'>
-          <Progress color={color} radius="xl" value={(playerCountdown) ? (remain / 20) * 100 : 0} striped animate />
+          <Progress color={bgColor} radius="xl" value={(playerCountdown) ? (remain / 20) * 100 : 0} striped animate />
           <span className='w-full'>{formatter.format(money)}</span>
         </div>
       </div>

@@ -4,31 +4,22 @@ import { TextStyle, Texture } from 'pixi.js';
 import React, { useState } from 'react'
 import { GROUP_COLORS, PLAYER_COLORS } from '../../config';
 import { GAME_CONFIG } from '../../gameConfig';
+import calcPrice from '../../Utils/calcPrice';
 
 export default function MuseumComponent(props) {
-  const [mezoId, setMezoId] = useState(props.id)
+  const { fields } = props
+  const [id, setId] = useState(props.id)
+  const price = calcPrice(id, fields[id].level, fields)
 
   const label_bg = Texture.from('../Images/game/isometriccity/PNG/cityTiles_072.png');
   const museum = Texture.from('../Images/game/caracters/museum.png');
 
-  const asd = {
-    '4': {
-      ownerColor: 0
-    },
-    '12': {
-      ownerColor: 1
-    },
-    '20': {
-      ownerColor: 2
-    },
-    '28': {
-      ownerColor: 3
-    },
-  }
+  const formatter = new Intl.NumberFormat('en-GB', { notation: 'compact' })
 
   const colorFilter = new ColorReplaceFilter()
+  const filterNeeded = fields[id].ownerColor !== null
   colorFilter.originalColor = 0xC2BEA8
-  colorFilter.newColor = PLAYER_COLORS[asd[mezoId].ownerColor].color
+  colorFilter.newColor = (filterNeeded) ? PLAYER_COLORS[fields[id].ownerColor].color : 0xfff
   colorFilter.epsilon = 0.05
 
   const HEIGHT = 96 / 2
@@ -112,7 +103,7 @@ export default function MuseumComponent(props) {
 
         <Text
           zIndex={90}
-          text={new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(800000)} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
+          text={(price.tandij) ? formatter.format(price.tandij) : ''} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
           anchor={0.5}
           skew={[-Math.PI / 4, 0]}
           scale={{ x: (props.flip ? -1 : 1) * 1, y: 1 }}
@@ -162,7 +153,7 @@ export default function MuseumComponent(props) {
         x={-WIDTH}
         y={+ HEIGHT + HEIGHT / 2}
         texture={label_bg}
-        filters={[(props.groupId && colorFilter)]}
+        filters={[((props.groupId && filterNeeded) && colorFilter)]}
       />
       <Sprite
         anchor={0.5}
@@ -171,7 +162,7 @@ export default function MuseumComponent(props) {
         x={-WIDTH * 2 + 1}
         y={-BOTTOM_HEIGHT + HEIGHT + HEIGHT / 2}
         texture={label_bg}
-        filters={[(props.groupId && colorFilter)]}
+        filters={[((props.groupId && filterNeeded) && colorFilter)]}
       />
 
       <Sprite
@@ -208,7 +199,7 @@ export default function MuseumComponent(props) {
         texture={label_bg}
       />
       <Sprite
-        filters={[colorFilter]}
+        filters={[((filterNeeded) && colorFilter)]}
         anchor={0.5}
         zIndex={10}
         scale={0.26}

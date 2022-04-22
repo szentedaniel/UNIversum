@@ -1,5 +1,5 @@
 import { Container, Sprite, Text } from '@inlet/react-pixi/animated'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as PIXI from 'pixi.js'
 import { ColorReplaceFilter, MultiColorReplaceFilter } from 'pixi-filters';
 import PropTypes from 'prop-types';
@@ -12,8 +12,17 @@ import calcPrice from '../../Utils/calcPrice';
 
 
 export default function NormalComponentNew(props) {
-    const {id} = props
-    const [level, setLevel] = useState(0)
+    const { id, fields } = props
+    const [level, setLevel] = useState(fields[id].level)
+    const [ownerColor, setOwnerColor] = useState(fields[id].ownerColor)
+
+
+    useEffect(() => {
+        setOwnerColor(fields[id].ownerColor)
+    }, [fields, id])
+
+
+    const formater = new Intl.NumberFormat('en-GB', { notation: 'compact' })
 
 
     const label_bg = PIXI.Texture.from('../Images/game/isometriccity/PNG/cityTiles_072.png');
@@ -27,8 +36,8 @@ export default function NormalComponentNew(props) {
 
     const ownerFilter = new ColorReplaceFilter()
     ownerFilter.originalColor = 0x8AB549
-    ownerFilter.newColor = PLAYER_COLORS[Math.floor(Math.random() * 4)].color
-    ownerFilter.epsilon = 0.095
+    ownerFilter.newColor = (fields[id].ownerColor !== null) ? PLAYER_COLORS[fields[id].ownerColor].color : 0xfff
+    ownerFilter.epsilon = 1
 
 
     const HEIGHT = 96 / 2
@@ -47,21 +56,21 @@ export default function NormalComponentNew(props) {
     const textCoords = calcTextCoords(props.label)
 
     const pointerDown = (e) => {
-        e.currentTarget.y -= 10
+        // e.currentTarget.y -= 10
     }
     const pointerUp = (e) => {
-        if (e.currentTarget.y === props.y - 10) {
-            e.currentTarget.y += 10
-        }
-        if (e.currentTarget.id === id) {
-            setLevel(level + 1)
-        }
+        // if (e.currentTarget.y === props.y - 10) {
+        //     e.currentTarget.y += 10
+        // }
+        // if (e.currentTarget.id === id) {
+        //     setLevel(level + 1)
+        // }
     }
     const pointerUpOutside = (e) => {
-        if (e.currentTarget.y === props.y - 10) {
-            e.currentTarget.y += 10
-            setLevel(level - 1)
-        }
+        // if (e.currentTarget.y === props.y - 10) {
+        //     e.currentTarget.y += 10
+        //     setLevel(level - 1)
+        // }
     }
 
 
@@ -147,7 +156,7 @@ export default function NormalComponentNew(props) {
 
                 <Text
                     zIndex={90}
-                    text={new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(calcPrice(id, 1).tandij)} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
+                    text={(level !== 0 && level !== null) ? formater.format(calcPrice(id, level, fields).tandij) : ''} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
                     anchor={0.5}
                     skew={[-Math.PI / 4, 0]}
                     scale={{ x: (props.flip ? -1 : 1) * 1, y: 1 }}
@@ -243,9 +252,11 @@ export default function NormalComponentNew(props) {
                 texture={ehh}
             />
             <Building
+                // filters={[ownerFilter]}
                 zIndex={10}
                 anchor={0.5}
                 currentLevel={level}
+                ownerColor={ownerColor}
                 x={WIDTH / 4}
                 y={-BOTTOM_HEIGHT}
             />

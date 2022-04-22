@@ -18,10 +18,13 @@ import Dice from './GameComponents/Dice'
 import RollDice from './GameComponents/RollDice'
 import { useDispatch, useSelector } from 'react-redux'
 import { countdownStart } from '../Store/slices/gameStateSlice'
+import BuyComponent from './GameComponents/BuyComponent'
 
 export default function GameComponentNew(props) {
   const [width, setWidth] = useState(GAME_CONFIG.width)
   const [height, setHeight] = useState(GAME_CONFIG.height)
+  const { players, currentPlayer, showDiceRoll, showBuyPanel, map: fields } = useSelector((state) => state.gameState)
+  const dispatch = useDispatch()
 
   let shadowFilter = new DropShadowFilter({ rotation: 45, distance: 6 })
 
@@ -39,15 +42,13 @@ export default function GameComponentNew(props) {
   const map = GAME_CONFIG.map.map(mezo => {
     const coords = calcCoords(mezo.id)
 
-    if (mezo.isCorner) return (<CornerComponentNew {...mezo} x={coords.x} y={coords.y} key={mezo.id} />)
-    if (mezo.isNormal) return (<NormalComponentNew {...mezo} x={coords.x} y={coords.y} key={mezo.id} />)
-    if (mezo.isMuseum) return (<MuseumComponent {...mezo} x={coords.x} y={coords.y} key={mezo.id} />)
-    if (mezo.isChance) return (<LuckComponent {...mezo} x={coords.x} y={coords.y} key={mezo.id} />)
-    if (mezo.isTax) return (<TaxComponent {...mezo} x={coords.x} y={coords.y} key={mezo.id} />)
+    if (mezo.isCorner) return (<CornerComponentNew {...mezo} x={coords.x} y={coords.y} key={mezo.id} fields={fields} />)
+    if (mezo.isNormal) return (<NormalComponentNew {...mezo} x={coords.x} y={coords.y} key={mezo.id} fields={fields} />)
+    if (mezo.isMuseum) return (<MuseumComponent {...mezo} x={coords.x} y={coords.y} key={mezo.id} fields={fields} />)
+    if (mezo.isChance) return (<LuckComponent {...mezo} x={coords.x} y={coords.y} key={mezo.id} fields={fields} />)
+    if (mezo.isTax) return (<TaxComponent {...mezo} x={coords.x} y={coords.y} key={mezo.id} fields={fields} />)
   })
 
-  const { players, currentPlayer, showDiceRoll } = useSelector((state) => state.gameState)
-  const dispatch = useDispatch()
 
   const users = useMemo(() => players.map(user => ({
     ...user,
@@ -94,6 +95,13 @@ export default function GameComponentNew(props) {
       </Stage>
       <PlayerInfo players={players} currentPlayer={currentPlayer} />
       <RollDice />
+      <BuyComponent
+        players={players}
+        currentPlayer={currentPlayer}
+        showDiceRoll={showDiceRoll}
+        showBuyPanel={showBuyPanel}
+        fields={fields}
+      />
     </>
   )
 }

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import GameComponent from '../Components/GameComponent'
 import { useElementSize, useFullscreen } from '@mantine/hooks';
 import { useDispatch } from 'react-redux';
 import { setIsGame } from '../Store/slices/loadingSlice';

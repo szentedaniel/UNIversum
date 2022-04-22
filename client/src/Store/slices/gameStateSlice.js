@@ -9,6 +9,7 @@ export const gameStateSlice = createSlice({
     roomCode: null,
     currentPlayer: 0,
     showDiceRoll: true,
+    showBuyPanel: false,
     lastDiceRoll: 0,
     players: [
       {
@@ -76,13 +77,13 @@ export const gameStateSlice = createSlice({
       },
       {
         id: 1,
-        level: 0,
-        ownerColor: null,
+        level: 2,
+        ownerColor: 0,
       },
       {
         id: 2,
-        level: 0,
-        ownerColor: null,
+        level: 1,
+        ownerColor: 0,
       },
       {
         id: 3,
@@ -246,14 +247,17 @@ export const gameStateSlice = createSlice({
         state.currentPlayer = 0
       } else state.currentPlayer = state.currentPlayer + 1
 
+      state.showBuyPanel = false
       state.showDiceRoll = true
       state.players[state.currentPlayer].playerCountdown = true
-
     },
+    setShowBuyPanel: (state, action) => {
+      state.showBuyPanel = action.payload
+    }
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { nextPlayer, setShowDiceRoll, setDiceRollValue } = gameStateSlice.actions
+export const { nextPlayer, setShowDiceRoll, setDiceRollValue, setShowBuyPanel } = gameStateSlice.actions
 
 export default gameStateSlice.reducer

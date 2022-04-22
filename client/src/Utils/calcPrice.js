@@ -1,6 +1,48 @@
+import { includes } from "lodash"
 import { GAME_CONFIG } from "../gameConfig"
 
-const calcPrice = (id, level, monopol = false) => {
+const calcPrice = (id, level, fields) => {
+
+  let isMonopolium = false
+
+  const isMuseum = GAME_CONFIG.map[id].isMuseum
+  let museumMultiplier = 1
+
+  if (fields) {
+    const ownerColor = fields[id].ownerColor
+    const groupId = GAME_CONFIG.map[id].groupId
+    const filteredGroup = GAME_CONFIG.map.filter(x => x.groupId === groupId)
+    const ids = filteredGroup.map(x => x.id)
+
+    let filteredColorOwnerGroup = fields.map(x => {
+      if (ids.includes(x.id)) {
+        return x.ownerColor
+      }
+      return null
+    })
+
+    filteredColorOwnerGroup = filteredColorOwnerGroup.filter(x => { return x !== null })
+
+    const occurrences = filteredColorOwnerGroup.reduce(function (acc, curr) {
+      return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
+    }, {})
+
+    if (occurrences[ownerColor] === ids.length) {
+      isMonopolium = true
+    }
+
+    if (isMuseum) {
+      museumMultiplier = (occurrences[ownerColor]) ? occurrences[ownerColor] : 0
+      return {
+        toBuy: (fields[id].ownerColor) ? null : 400000,
+        tandij: 75_000 * museumMultiplier,
+        sellToBank: 400000,
+        sellToPlayer: null
+      }
+    }
+  }
+
+
 
   const start = 200000
   const diffOnLevel = 20000
@@ -20,7 +62,7 @@ const calcPrice = (id, level, monopol = false) => {
     }
   }
   const toBuy = start + ((correctId - 1) * diffOnLevel) + ((level - 1) * ((start + ((correctId - 1) * diffOnLevel)) * buyScale))
-  const tandij = toBuy * tandijScale
+  const tandij = (toBuy * tandijScale) * (isMonopolium ? 1.4 : 1)
 
   return {
     toBuy: toBuy,

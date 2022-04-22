@@ -3,7 +3,7 @@ import { Texture } from 'pixi.js'
 import React, { useEffect, useState } from 'react'
 import { Spring } from 'react-spring'
 import { calcCoords } from '../../Utils/calcCoords'
-import { nextPlayer, countdownStart } from '../../Store/slices/gameStateSlice'
+import { nextPlayer, setShowBuyPanel } from '../../Store/slices/gameStateSlice'
 
 export default function Character(props) {
 
@@ -37,7 +37,8 @@ export default function Character(props) {
 
   useEffect(() => {
     if (!showDiceRoll && isDoneWithSteps && (colorCode === currentPlayer)) {
-      dispatch(nextPlayer())
+      dispatch(setShowBuyPanel(true))
+      //dispatch(nextPlayer())
     }
   }, [isDoneWithSteps, showDiceRoll])
 
