@@ -7,16 +7,16 @@ import { Progress } from '@mantine/core'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { nextPlayer } from '../../Store/slices/gameStateSlice'
+import { nextPlayer, setDiceRollValue } from '../../Store/slices/gameStateSlice'
 
 
 export default function PlayerInfo(props) {
-  const { players, currentPlayer } = props
+  const { players, currentPlayer, resetCountdown } = props
   return (
     <>
       {
         players.map(player => (
-          <PlayerInfoPiece {...player} key={player.colorCode} currentPlayer={currentPlayer} />
+          <PlayerInfoPiece {...player} key={player.colorCode} currentPlayer={currentPlayer} resetCountdown={resetCountdown} />
         ))
       }
 
@@ -27,32 +27,37 @@ export default function PlayerInfo(props) {
 
 
 function PlayerInfoPiece(props) {
-  const { colorCode, username, money, currentPlayer, playerCountdown } = props
+  const { colorCode, username, money, currentPlayer, playerCountdown, resetCountdown } = props
   const dispatch = useDispatch()
 
   const [remain, setRemain] = useState(0)
   let img = pinkAvatar
+  let color = 'pink'
   let bgColor = 'bg-pink-300'
   let borderColor = 'border-pink-300'
   let position = 'top-0 left-0'
 
   if (colorCode === 1) {
     img = blueAvatar
+    color = 'blue'
     bgColor = 'bg-blue-300'
     borderColor = 'border-blue-300'
     position = 'top-0 right-0'
   } else if (colorCode === 2) {
     img = greenAvatar
+    color = 'green'
     bgColor = 'bg-green-300'
     borderColor = 'border-green-300'
     position = 'bottom-0 right-0'
   } else if (colorCode === 3) {
     img = yellowAvatar
+    color = 'yellow'
     bgColor = 'bg-yellow-300'
     borderColor = 'border-yellow-300'
     position = 'bottom-0 left-0'
   } else {
     img = pinkAvatar
+    color = 'pink'
     bgColor = 'bg-pink-300'
     borderColor = 'border-pink-300'
     position = 'top-0 left-0'
@@ -71,15 +76,18 @@ function PlayerInfoPiece(props) {
       }, 1000)
       return () => {
         clearInterval(interval)
-        setRemain(0)
+        setRemain(20)
       }
     }
-  }, [colorCode, currentPlayer, playerCountdown])
+  }, [colorCode, currentPlayer, playerCountdown, resetCountdown])
 
   useEffect(() => {
     if (remain < 0) {
       console.log('lejart');
+      // dispatch(setDiceRollValue(0))
       dispatch(nextPlayer())
+    }
+    return () => {
     }
   }, [remain])
 
@@ -97,7 +105,7 @@ function PlayerInfoPiece(props) {
       <div className={`flex ${(colorCode === 1 || colorCode === 2) ? 'flex-row-reverse' : 'flex-row'} items-center text-center`}>
         <img src={img} alt="Alien" className='' />
         <div className='flex flex-col h-full justify-between p-6'>
-          <Progress color={bgColor} radius="xl" value={(playerCountdown) ? (remain / 20) * 100 : 0} striped animate />
+          <Progress color={color} radius="xl" value={Math.min((playerCountdown) ? (remain / 20) * 100 : 0, 100)} striped animate />
           <span className='w-full'>{formatter.format(money)}</span>
         </div>
       </div>

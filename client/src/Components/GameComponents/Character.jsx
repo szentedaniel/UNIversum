@@ -3,7 +3,7 @@ import { Texture } from 'pixi.js'
 import React, { useEffect, useState } from 'react'
 import { Spring } from 'react-spring'
 import { calcCoords } from '../../Utils/calcCoords'
-import { nextPlayer, setShowBuyPanel } from '../../Store/slices/gameStateSlice'
+import { giveRoundBonus, nextPlayer, setShowBalance, setShowBuyPanel } from '../../Store/slices/gameStateSlice'
 
 export default function Character(props) {
 
@@ -14,7 +14,7 @@ export default function Character(props) {
   else if (props.colorCode === 3) texture = Texture.from('../images/game/moreenemiesanimations/Alien sprites/alienYellow.png')
 
   const spring = { mass: 10, tension: 1000, friction: 1000 }
-  const { colorCode, field, showDiceRoll, dispatch, currentPlayer } = props
+  const { colorCode, field, showDiceRoll, dispatch, currentPlayer, lastDiceRoll } = props
 
   const [isDoneWithSteps, setIsDoneWithSteps] = useState(false)
   const [currentMezoId, setCurrentMezoId] = useState(field)
@@ -26,19 +26,31 @@ export default function Character(props) {
         setTimeout(() => {
           setTempCoord(calcCoords(currentMezoId % 32 + 1))
           setCurrentMezoId(currentMezoId % 32 + 1)
+
         }, 300);
       } else {
-        setIsDoneWithSteps(true)
+        let started = (currentMezoId - lastDiceRoll) % 32
+        if (started < 0) {
+          started = 32 + started
+        }
+        console.log('started: ', started, ' finished: ', currentMezoId % 32);
+        if (started > currentMezoId % 32) {
+          dispatch(giveRoundBonus())
+        }
+        setTimeout(() => {
+          setIsDoneWithSteps(true)
+        }, 1000);
       }
 
     }
-  }, [colorCode, currentMezoId, currentPlayer, dispatch, field, tempCoord])
+  }, [currentMezoId, lastDiceRoll, field])
 
 
   useEffect(() => {
     if (!showDiceRoll && isDoneWithSteps && (colorCode === currentPlayer)) {
-      dispatch(setShowBuyPanel(true))
-      //dispatch(nextPlayer())
+      dispatch(setShowBalance(true))
+      // dispatch(setShowBuyPanel(true))
+      // dispatch(nextPlayer())
     }
   }, [isDoneWithSteps, showDiceRoll])
 
@@ -46,12 +58,13 @@ export default function Character(props) {
 
   return (
     <Spring native
-      to={tempCoord}
+      to={{ x: tempCoord.x - ((colorCode === 0) ? 15 : (colorCode === 1) ? 5 : (colorCode === 2) ? -5 : -15), y: tempCoord.y }}
       // config={spring}
       {...props}>
       {props => (
         <Sprite
-          alpha={0.8}
+
+          alpha={(colorCode === currentPlayer) ? 1 : 0.7}
           anchor={[0.5, 0.7]}
           texture={texture}
           {...props}

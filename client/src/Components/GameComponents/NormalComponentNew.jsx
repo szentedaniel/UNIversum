@@ -19,6 +19,7 @@ export default function NormalComponentNew(props) {
 
     useEffect(() => {
         setOwnerColor(fields[id].ownerColor)
+        setLevel(fields[id].level)
     }, [fields, id])
 
 

@@ -48,7 +48,14 @@ const calcPrice = (id, level, fields) => {
   const diffOnLevel = 20000
   let buyScale = 0
   let tandijScale = 0
-  if (level === 0) { buyScale = 0; tandijScale = 0 }
+  if (level === 0) {
+    return {
+      toBuy: 0,
+      tandij: 0,
+      sellToBank: 0,
+      sellToPlayer: 0
+    }
+  }
   if (level === 1) { buyScale = 0.2; tandijScale = 0.55 }
   if (level === 2) { buyScale = 0.2; tandijScale = 0.7 }
   if (level === 3) { buyScale = 0.3; tandijScale = 0.85 }
@@ -65,10 +72,10 @@ const calcPrice = (id, level, fields) => {
   const tandij = (toBuy * tandijScale) * (isMonopolium ? 1.4 : 1)
 
   return {
-    toBuy: toBuy,
-    tandij: tandij,
-    sellToBank: toBuy * 0.9,
-    sellToPlayer: toBuy * 1.5
+    toBuy: Math.round(toBuy),
+    tandij: Math.round(tandij),
+    sellToBank: Math.round(toBuy * 0.9),
+    sellToPlayer: Math.round(toBuy * 2)
   }
 }
 

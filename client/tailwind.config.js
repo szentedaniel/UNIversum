@@ -3,7 +3,12 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'roboto': ['"Roboto"', 'sans-serif'],
+        'sigmar-one': ['"Sigmar One"', 'cursive']
+      }
+    },
     colors: {
       sajat: {
         100: '#ffbb6c',

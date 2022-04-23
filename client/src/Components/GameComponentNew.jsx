@@ -19,11 +19,14 @@ import RollDice from './GameComponents/RollDice'
 import { useDispatch, useSelector } from 'react-redux'
 import { countdownStart } from '../Store/slices/gameStateSlice'
 import BuyComponent from './GameComponents/BuyComponent'
+import Balance from './GameComponents/Balance'
+import Quarantine from './GameComponents/Quarantine'
+import InQuarantine from './GameComponents/InQuarantine'
 
 export default function GameComponentNew(props) {
   const [width, setWidth] = useState(GAME_CONFIG.width)
   const [height, setHeight] = useState(GAME_CONFIG.height)
-  const { players, currentPlayer, showDiceRoll, showBuyPanel, map: fields } = useSelector((state) => state.gameState)
+  const { players, currentPlayer, showDiceRoll, showBuyPanel, map: fields, showBalance, lastDiceRoll, resetCountdown, museumPrice } = useSelector((state) => state.gameState)
   const dispatch = useDispatch()
 
   let shadowFilter = new DropShadowFilter({ rotation: 45, distance: 6 })
@@ -72,6 +75,8 @@ export default function GameComponentNew(props) {
       dispatch={dispatch}
       currentPlayer={currentPlayer}
       showDiceRoll={showDiceRoll}
+      lastDiceRoll={lastDiceRoll}
+      players={players}
       {...player}
     />
   ))
@@ -93,15 +98,27 @@ export default function GameComponentNew(props) {
 
         </Container>
       </Stage>
-      <PlayerInfo players={players} currentPlayer={currentPlayer} />
+      <PlayerInfo
+        players={players}
+        currentPlayer={currentPlayer}
+        resetCountdown={resetCountdown} />
       <RollDice />
+      <Balance
+        showBalance={showBalance}
+        players={players}
+        currentPlayer={currentPlayer}
+        fields={fields}
+      />
       <BuyComponent
         players={players}
         currentPlayer={currentPlayer}
         showDiceRoll={showDiceRoll}
         showBuyPanel={showBuyPanel}
         fields={fields}
+        museumPrice={museumPrice}
       />
+      <Quarantine />
+      <InQuarantine />
     </>
   )
 }

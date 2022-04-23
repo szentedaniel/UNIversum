@@ -31,9 +31,9 @@ export default function CornerComponentNew(props) {
       //pointerdown={(e) => e.currentTarget.y -= 10}
       //pointerup={(e) => e.currentTarget.y += 10}
       //pointerout={(e) => e.currentTarget.y += 10}
-      pointerdown={(e) => e.currentTarget.y -= 10}
-      pointerupoutside={(e) => e.currentTarget.y += 10}
-      pointerup={(e) => e.currentTarget.y += 10}
+      // pointerdown={(e) => e.currentTarget.y -= 10}
+      // pointerupoutside={(e) => e.currentTarget.y += 10}
+      // pointerup={(e) => e.currentTarget.y += 10}
 
       {...props}
     >
