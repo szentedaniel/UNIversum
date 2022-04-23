@@ -63,20 +63,7 @@ export const gameStateSlice = createSlice({
         playerCountdown: false,
 
       },
-      {
-        username: 'user' + Math.floor(Math.random() * 999999),
-        userId: null,
-        colorCode: 3,
-        money: 2_500_000,
-        hasPCR: false,
-        coutPCR: 0,
-        isInQuarantine: false,
-        QuarantineRounds: 0,
-        field: 0,
-        timeRemain: 0,
-        playerCountdown: false,
 
-      },
     ],
     map: [
       {

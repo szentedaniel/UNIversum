@@ -1,7 +1,7 @@
 import { Modal } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { buyPCR, nextPlayer, QuarantineRoundsDowner, removePCR, setRollingDiceFromQuarantine, setShowDiceRoll, setShowFirstQuarantineTab, setShowQuarantineTab } from '../../Store/slices/gameStateSlice'
+import { buyPCR, nextPlayer, QuarantineRoundsDowner, removePCR, resetCountdown, setRollingDiceFromQuarantine, setShowDiceRoll, setShowFirstQuarantineTab, setShowQuarantineTab } from '../../Store/slices/gameStateSlice'
 import biohazad from '../../Images/game/emojis/biohazard.png'
 import formatter from '../../Utils/formatter'
 
@@ -21,6 +21,9 @@ export default function InQuarantine() {
       setHasEnoughMoney(players[currentPlayer].money >= 200_000)
       setRemain(players[currentPlayer].QuarantineRounds)
     }
+    return () => {
+      setAlreadyClicked(false)
+    }
   }, [showQuarantineTab])
 
   const onColseHandler = () => {
@@ -28,10 +31,11 @@ export default function InQuarantine() {
   }
 
   const rollHandler = () => {
-    if (alreadyClicked) {
+    if (!alreadyClicked) {
       setAlreadyClicked(true)
       setOpened(false)
       setTimeout(() => {
+        dispatch(resetCountdown())
         dispatch(setRollingDiceFromQuarantine(true))
         dispatch(setShowQuarantineTab(false))
         dispatch(setShowDiceRoll(true))
@@ -40,11 +44,12 @@ export default function InQuarantine() {
   }
 
   const buyHandler = () => {
-    if (alreadyClicked) {
+    if (!alreadyClicked) {
       setAlreadyClicked(true)
       if (hasEnoughMoney) {
         setOpened(false)
         setTimeout(() => {
+          dispatch(resetCountdown())
           dispatch(buyPCR())
           dispatch(QuarantineRoundsDowner(12))
           dispatch(setShowQuarantineTab(false))
@@ -55,11 +60,12 @@ export default function InQuarantine() {
   }
 
   const usePCR = () => {
-    if (alreadyClicked) {
+    if (!alreadyClicked) {
       setAlreadyClicked(true)
       if (availablePCR) {
         setOpened(false)
         setTimeout(() => {
+          dispatch(resetCountdown())
           dispatch(removePCR())
           dispatch(QuarantineRoundsDowner(12))
           dispatch(setShowQuarantineTab(false))

@@ -56,12 +56,6 @@ export default function BuyComponent(props) {
 
   useEffect(() => {
     if (showBuyPanel) {
-      if (players[currentPlayer].isInQuarantine) {
-        console.log('BENNE VAN MORE MÉG MINDIG KARANTÉNBAN');
-      } else {
-        console.log('MÁ NINCS KARANTÉNBAN');
-
-      }
       dispatch(resetCountdown())
       if ((GAME_CONFIG.map[playerField].isNormal) // ha normális mező
 
@@ -100,7 +94,6 @@ export default function BuyComponent(props) {
           if (!players[currentPlayer].isInQuarantine) {
             dispatch(startQuarantine())
           } else {
-            console.log('még minfig benne van');
             dispatch(nextPlayer())
           }
         } else if (GAME_CONFIG.map[playerField].isDoubler) {
@@ -108,7 +101,7 @@ export default function BuyComponent(props) {
         } else if (GAME_CONFIG.map[playerField].isErasmus) {
 
         } else {  // START
-
+          dispatch(nextPlayer())
         }
       } else if (GAME_CONFIG.map[playerField].isTax) {
 

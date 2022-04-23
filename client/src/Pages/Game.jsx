@@ -18,6 +18,17 @@ export default function Game(props) {
     }
   }, [])
 
+  useEffect(() => {
+    window.addEventListener("beforeunload", alertUser);
+    return () => {
+      window.removeEventListener("beforeunload", alertUser);
+    };
+  }, []);
+  const alertUser = (e) => {
+    e.preventDefault();
+    e.returnValue = "";
+  };
+
 
   return (
     <>
