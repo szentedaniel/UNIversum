@@ -78,19 +78,19 @@ export function LobbiesList() {
   }
   return (
     <>
-      <div className="flex justify-between h-auto w-full text-proba-100 mt-5">
+      <div className="flex justify-between h-auto w-full text-sajat-100 mt-5">
         <div className="w-36 h-12">
           <Link to='/' onClick={() => socket.off('get_rooms_res')}>
             <button className="back_button">
               <Icon>arrow_back_ios</Icon>
             </button>
           </Link></div>
-        <div className="w-36 h-12 text-2xl flex flex-row items-center justify-center">Rooms</div>
+        <div className="w-36 h-12 text-2xl flex flex-row items-center justify-center">Szobák</div>
         <div className="w-36 h-12 text-lg flex flex-row items-center justify-center">
-          <h3>total: {(Rooms !== null) ? Object.keys(Rooms['rooms']).length.toString() : 0}</h3>
+          <h3>össz: {(Rooms !== null) ? Object.keys(Rooms['rooms']).length.toString() : 0}</h3>
         </div>
       </div>
-      <div className="flex space-x-4 border-4 border-proba-100/20 border-solid mt-5 rounded-xl h-[80%] overflow-y-auto xs:min-w-[150px] sm:min-w-[320px] md:min-w-[800px] lg:min-w-[1000px] min-w-[1300px] overflow-hidden">
+      <div className="flex space-x-4 border-4 border-sajat-100/20 border-solid mt-5 rounded-xl h-[80%] overflow-y-auto xs:min-w-[150px] sm:min-w-[320px] md:min-w-[800px] lg:min-w-[1000px] min-w-[1300px] overflow-hidden">
 
         <div className="w-7/12 flex-grow overflow-y-scroll simple">
           <div className="w-full px-4 py-4">
@@ -103,10 +103,10 @@ export function LobbiesList() {
                       value={roomCode}
                       className={({ active, checked }) =>
                         `${active
-                          ? 'ring-2 ring-offset-2 ring-offset-proba-300 ring-white ring-opacity-60'
+                          ? 'ring-2 ring-offset-2 ring-offset-sajat-300 ring-white ring-opacity-60'
                           : ''
                         }
-                        ${checked ? 'bg-proba-700 bg-opacity-75 text-white' : 'bg-proba-400 text-proba-100'
+                        ${checked ? 'bg-sajat-700 bg-opacity-75 text-white' : 'bg-sajat-600 text-sajat-100'
                         }
                         relative rounded-lg shadow-md px-5 py-4 cursor-pointer flex focus:outline-none`
                       }
@@ -117,14 +117,14 @@ export function LobbiesList() {
 
                             <RadioGroup.Label
                               as="span"
-                              className={`font-medium text-xl  ${checked ? 'text-proba-100' : 'text-proba-900'
+                              className={`font-medium text-xl  ${checked ? 'text-sajat-100' : 'text-sajat-900'
                                 }`}
                             >
                               {Rooms['rooms'][roomCode].lobbyName}
                             </RadioGroup.Label>
                             <RadioGroup.Description
                               as="span"
-                              className={`flex justify-end space-x-10 items-center ${checked ? 'text-proba-100' : 'text-proba-500'
+                              className={`flex justify-end space-x-10 items-center ${checked ? 'text-sajat-100' : 'text-sajat-200'
                                 }`}
                             >
                               {/* <span aria-hidden="true">&middot;</span>{' '} */}
@@ -145,8 +145,8 @@ export function LobbiesList() {
                                 </span>{' '}
                               </div>
                               <button disabled={(Rooms['rooms'][roomCode].users.length === Rooms['rooms'][roomCode].maxPlayerNumber)} className={` border-2 
-                              border-proba-200 rounded-lg p-2 
-                              ${(Rooms['rooms'][roomCode].users.length === Rooms['rooms'][roomCode].maxPlayerNumber) ? 'bg-proba-200 text-proba-100' : 'bg-proba-500 hover:bg-proba-600 focus:ring-proba-300 focus:ring-1 text-proba-100'}`} onClick={() => joinRoom(roomCode)}>
+                              border-sajat-200 rounded-lg p-2 
+                              ${(Rooms['rooms'][roomCode].users.length === Rooms['rooms'][roomCode].maxPlayerNumber) ? 'bg-sajat-400 text-sajat-100' : 'bg-sajat-900 hover:bg-sajat-600 focus:ring-sajat-300 focus:ring-1 text-sajat-100'}`} onClick={() => joinRoom(roomCode)}>
 
                                 <div className='flex flex-col items-center'>
                                   <Icon>
@@ -167,9 +167,9 @@ export function LobbiesList() {
             </RadioGroup>
           </div>
         </div>
-        <div className="w-4/12 sm:hidden xs:hidden h-11/12 border-4 border-proba-100/20 rounded-xl m-4 pr-5 pl-5 ml-0 bg-proba-600">
+        <div className="w-4/12 sm:hidden xs:hidden h-11/12 border-4 border-sajat-100/20 rounded-xl m-4 pr-5 pl-5 ml-0 bg-sajat-700">
 
-          <div className="flex justify-center items-center mt-4 mb-2 text-xl">Players in the room</div>
+          <div className="flex justify-center items-center mt-4 mb-2 text-xl">Játékosok a szobában</div>
           <Divider />
           {selected &&
             Rooms['rooms'][selected].users.map(user => (

@@ -37,7 +37,7 @@ export const gameStateSlice = createSlice({
         username: 'user' + Math.floor(Math.random() * 999999),
         userId: null,
         colorCode: 0,
-        money: 0,
+        money: 2_500_000,
         hasPCR: false,
         coutPCR: 0,
         isInQuarantine: false,
@@ -52,7 +52,7 @@ export const gameStateSlice = createSlice({
         username: 'user' + Math.floor(Math.random() * 999999),
         userId: null,
         colorCode: 1,
-        money: 0,
+        money: 2_500_000,
         hasPCR: false,
         coutPCR: 0,
         isInQuarantine: false,
@@ -66,7 +66,7 @@ export const gameStateSlice = createSlice({
         username: 'user' + Math.floor(Math.random() * 999999),
         userId: null,
         colorCode: 2,
-        money: 0,
+        money: 2_500_000,
         hasPCR: false,
         coutPCR: 0,
         isInQuarantine: false,
@@ -80,7 +80,7 @@ export const gameStateSlice = createSlice({
         username: 'user' + Math.floor(Math.random() * 999999),
         userId: null,
         colorCode: 3,
-        money: 0,
+        money: 2_500_000,
         hasPCR: false,
         coutPCR: 0,
         isInQuarantine: false,
@@ -102,15 +102,15 @@ export const gameStateSlice = createSlice({
       },
       {
         id: 1,
-        level: 2,
-        ownerColor: 0,
+        level: 0,
+        ownerColor: null,
         hasDoubler: false,
         doublerCount: 0
       },
       {
         id: 2,
-        level: 1,
-        ownerColor: 0,
+        level: 0,
+        ownerColor: null,
         hasDoubler: false,
         doublerCount: 0
       },
@@ -118,15 +118,15 @@ export const gameStateSlice = createSlice({
         id: 3,
         level: 0,
         ownerColor: null,
-        hasDoubler: true,
-        doublerCount: 1
+        hasDoubler: false,
+        doublerCount: 0
       },
       {
         id: 4,
         level: 1,
         ownerColor: 0,
-        hasDoubler: true,
-        doublerCount: 1
+        hasDoubler: false,
+        doublerCount: 0
       },
       {
         id: 5,
@@ -137,8 +137,8 @@ export const gameStateSlice = createSlice({
       },
       {
         id: 6,
-        level: 2,
-        ownerColor: 0,
+        level: 0,
+        ownerColor: null,
         hasDoubler: false,
         doublerCount: 0
       },
@@ -165,22 +165,22 @@ export const gameStateSlice = createSlice({
       },
       {
         id: 10,
-        level: 3,
-        ownerColor: 3,
+        level: 0,
+        ownerColor: null,
         hasDoubler: false,
         doublerCount: 0
       },
       {
         id: 11,
-        level: 2,
-        ownerColor: 2,
+        level: 0,
+        ownerColor: null,
         hasDoubler: false,
         doublerCount: 0
       },
       {
         id: 12,
-        level: 0,
-        ownerColor: null,
+        level: 1,
+        ownerColor: 1,
         hasDoubler: false,
         doublerCount: 0
       },
@@ -235,8 +235,8 @@ export const gameStateSlice = createSlice({
       },
       {
         id: 20,
-        level: 0,
-        ownerColor: null,
+        level: 1,
+        ownerColor: 2,
         hasDoubler: false,
         doublerCount: 0
       },
@@ -291,8 +291,8 @@ export const gameStateSlice = createSlice({
       },
       {
         id: 28,
-        level: null,
-        ownerColor: null,
+        level: 1,
+        ownerColor: 3,
         hasDoubler: false,
         doublerCount: 0
       },

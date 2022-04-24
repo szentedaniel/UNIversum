@@ -13,10 +13,10 @@
             <p>{t('or')}</p>
             <div className="flex flex-wrap -mx-3 mb-2 center self-center content-center justify-center items-center">
               <div className=" max-w-md px-3 ">
-                {/* <label className="block uppercase text-proba-200 text-xs font-bold mb-2" for="grid-first-name">
+                {/* <label className="block uppercase text-sajat-100 text-xs font-bold mb-2" for="grid-first-name">
                 Room's name
               </label> */}
-                <input onKeyPress={(e) => inputCodeHandler(e)} type="text" onChange={e => setRoomCode(e.target.value)} className="appearance-none focus:ring-indigo-500 block w-full bg-proba-400 text-proba-200 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-proba-400" id="grid-first-name" />
+                <input onKeyPress={(e) => inputCodeHandler(e)} type="text" onChange={e => setRoomCode(e.target.value)} className="appearance-none focus:ring-indigo-500 block w-full bg-sajat-400 text-sajat-100 border border-red-500 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-sajat-400" id="grid-first-name" />
                 {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
               </div>
               <button className="pushable" onClick={() => joinRoom(roomCode)}>

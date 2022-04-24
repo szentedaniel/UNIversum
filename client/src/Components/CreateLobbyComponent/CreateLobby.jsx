@@ -85,7 +85,7 @@ export function CreateLobby() {
         <form autoComplete="off" className="w-full max-w-2xl items-center content-center justify-center m-auto">
           <div className="flex flex-wrap -mx-3 mb-2">
             <div className="w-full px-3 ">
-              <label className="block uppercase tracking-wide text-proba-200 text-xs font-bold mb-2" htmlFor="grid-first-name">
+              <label className="block uppercase tracking-wide text-sajat-100 text-xs font-bold mb-2" htmlFor="grid-first-name">
                 {t('ROOM_NAME')}
               </label>
               <input onChange={e => setLobbyName(e.target.value)} className='
@@ -95,58 +95,58 @@ export function CreateLobby() {
               px-3
               py-1.5
               text-base
-              text-proba-200
+              text-sajat-100
               bg-clip-padding
               border border-solid border-gray-300
               rounded
               transition
               ease-in-out
               m-0
-              focus:text-proba-200 focus:bg-proba-600 focus:border-proba-600 focus:outline-none
-              bg-proba-700 hover:bg-proba-600 focus:ring-4 focus:ring-proba-300
+              focus:text-sajat-100 focus:bg-sajat-600 focus:border-sajat-600 focus:outline-none
+              bg-sajat-700 hover:bg-sajat-700 focus:ring-4 focus:ring-sajat-300
               font-bold' id="grid-first-name" type="text" placeholder={t('PLACEHOLDER_ROOM')} />
               {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
             </div>
           </div>
           <div className="flex flex-wrap -mx-3 mb-2">
             {/* <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-            <label className="block uppercase tracking-wide text-proba-200 text-xs font-bold mb-2" for="grid-city">
+            <label className="block uppercase tracking-wide text-sajat-100 text-xs font-bold mb-2" for="grid-city">
               City
             </label>
-            <input className="appearance-none block w-full bg-gray-200 text-proba-200 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="Albuquerque" />
+            <input className="appearance-none block w-full bg-gray-200 text-sajat-100 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text" placeholder="Albuquerque" />
           </div> */}
             <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-              <label className="block uppercase tracking-wide text-proba-200 text-xs font-bold mb-2" htmlFor="grid-state">
+              <label className="block uppercase tracking-wide text-sajat-100 text-xs font-bold mb-2" htmlFor="grid-state">
                 {t('PLAYERS')}
 
               </label>
               <div className="relative">
-                <select onChange={e => setMaxPlayerNumber(e.target.value)} className="appearance-none ease-in-out focus:text-proba-200 focus:bg-proba-600 focus:border-proba-600 focus:outline-none
-              hover:bg-proba-600 focus:ring-4 focus:ring-proba-300
-              font-bold block w-full bg-proba-400 border border-gray-200 text-proba-200 py-3 px-4 pr-8 rounded leading-tight  " id="grid-state">
+                <select onChange={e => setMaxPlayerNumber(e.target.value)} className="appearance-none ease-in-out focus:text-sajat-100 focus:bg-sajat-600 focus:border-sajat-600 focus:outline-none
+              hover:bg-sajat-700 focus:ring-4 focus:ring-sajat-300
+              font-bold block w-full bg-sajat-600 border border-gray-200 text-sajat-100 py-3 px-4 pr-8 rounded leading-tight  " id="grid-state">
                   <option value="4">4</option>
                   <option value="3">3</option>
                   <option value="2">2</option>
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-proba-200">
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-sajat-100">
                   {/* <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg> */}
                 </div>
               </div>
             </div>
             <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-              <label className="block uppercase tracking-wide text-proba-200 text-xs font-bold mb-2" htmlFor="grid-state">
+              <label className="block uppercase tracking-wide text-sajat-100 text-xs font-bold mb-2" htmlFor="grid-state">
                 {t('TIME')}
 
               </label>
               <div className="relative">
-                <select onChange={e => setMaxPlayerNumber(e.target.value)} className="appearance-none ease-in-out focus:text-proba-200 focus:bg-proba-400 focus:border-proba-600 focus:outline-none
-              hover:bg-proba-600 focus:ring-4 focus:ring-proba-300
-              font-bold block appearance-none w-full bg-proba-400 border border-gray-200 text-proba-200 py-3 px-4 pr-8 rounded leading-tight " id="grid-state">
+                <select onChange={e => setMaxPlayerNumber(e.target.value)} className="appearance-none ease-in-out focus:text-sajat-100 focus:bg-sajat-400 focus:border-sajat-600 focus:outline-none
+              hover:bg-sajat-700 focus:ring-4 focus:ring-sajat-300
+              font-bold block appearance-none w-full bg-sajat-600 border border-gray-200 text-sajat-100 py-3 px-4 pr-8 rounded leading-tight " id="grid-state">
                   <option value="60">60 {t('MIN')}</option>
                   <option value="30">30 {t('MIN')}</option>
                   <option value="15">15 {t('MIN')}</option>
                 </select>
-                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-proba-200">
+                <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-sajat-100">
                   {/* <svg className="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" /></svg> */}
                 </div>
               </div>
@@ -155,7 +155,7 @@ export function CreateLobby() {
 
           <div className="flex flex-wrap -mx-3 mb-2">
             <div className="w-full px-3">
-              <label className="block uppercase tracking-wide text-proba-200 text-xs font-bold mb-2 " htmlFor="grid-password">
+              <label className="block uppercase tracking-wide text-sajat-100 text-xs font-bold mb-2 " htmlFor="grid-password">
                 {t('PASSWORD')}
 
               </label>
@@ -166,16 +166,16 @@ export function CreateLobby() {
                   py-1.5
                   text-base
                   font-normal
-                  text-proba-200
-                  ${(hasPassword ? 'bg-proba-400' : 'bg-proba-500')}
+                  text-sajat-100
+                  ${(hasPassword ? 'bg-sajat-600' : 'bg-sajat-900')}
                   bg-clip-padding
                   border border-solid border-gray-300
                   rounded
                   transition
                   ease-in-out
                   m-0
-                  focus:text-proba-200 focus:bg-proba-600 focus:border-proba-600 focus:outline-none
-                  hover:bg-proba-600 focus:ring-4 focus:ring-proba-300`}
+                  focus:text-sajat-100 focus:bg-sajat-700 focus:border-sajat-600 focus:outline-none
+                  hover:bg-sajat-700 focus:ring-4 focus:ring-sajat-300`}
                 id="grid-password"
                 type="password"
                 placeholder="******************"
@@ -187,8 +187,8 @@ export function CreateLobby() {
 
           </div>
           <div className="flex items-center center content-center self-center  mb-10">
-            <input onChange={e => setHasPassword(e.target.checked)} id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 text-proba-600 focus:ring-proba-500 border-gray-300 bg-proba-400 focus:bg-proba-400 rounded" />
-            <label htmlFor="remember-me" className="ml-2 block text-sm text-proba-200">{t('PASSWORD')} </label>
+            <input onChange={e => setHasPassword(e.target.checked)} id="remember-me" name="remember-me" type="checkbox" className="h-4 w-4 text-sajat-600 focus:ring-sajat-500 border-gray-300 bg-sajat-700 focus:bg-sajat-400 rounded" />
+            <label htmlFor="remember-me" className="ml-2 block text-sm text-sajat-100">{t('PASSWORD')} </label>
           </div>
         </form>
 

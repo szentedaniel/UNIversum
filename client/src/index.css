@@ -53,17 +53,17 @@
 
     /* This won't be included in your compiled CSS unless you actually use it */
     .button {
-      @apply bg-proba-700 hover:bg-proba-800 focus:ring-4 focus:ring-proba-300 rounded-lg px-5 py-4 flex flex-row items-center space-x-1
+      @apply bg-sajat-700 hover:bg-sajat-800 focus:ring-4 focus:ring-sajat-300 rounded-lg px-5 py-4 flex flex-row items-center space-x-1
     }
     a {
       @apply m-3 w-fit h-fit
     }
     input[type=text] {
-      @apply appearance-none ease-in-out text-base focus:outline-none focus:ring focus:ring-proba-400 block w-full bg-proba-400 text-proba-200 border-proba-200 border-2 rounded-lg py-3 px-4 my-3 leading-tight focus:outline-none focus:bg-proba-600
+      @apply appearance-none ease-in-out text-base focus:outline-none focus:ring focus:ring-sajat-400 block w-full bg-sajat-600 text-sajat-100 border-sajat-200 border-2 rounded-lg py-3 px-4 my-3 leading-tight focus:outline-none focus:bg-sajat-700
     }
 
     .back_button {
-      @apply p-2 left-5 xs:left-0 absolute xs:relative bg-proba-700 hover:bg-proba-800 focus:ring-4 focus:ring-proba-300 px-5 py-4 flex flex-row items-center space-x-1 rounded-full pr-3
+      @apply p-2 left-5 xs:left-0 absolute xs:relative bg-sajat-700 hover:bg-sajat-900 focus:ring-4 focus:ring-sajat-300 px-5 py-4 flex flex-row items-center space-x-1 rounded-full pr-3
     }
     
     .item {

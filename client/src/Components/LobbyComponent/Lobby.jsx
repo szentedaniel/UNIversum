@@ -106,7 +106,7 @@ function Lobby() {
 
             <div className="flex flex-wrap -mx-3 mb-2 center self-center content-center justify-center items-center space-x-5">
               <div className=" max-w-md px-3 ">
-                {/* <label className="block uppercase text-proba-200 text-xs font-bold mb-2" for="grid-first-name">
+                {/* <label className="block uppercase text-sajat-100 text-xs font-bold mb-2" for="grid-first-name">
                 Room's name
               </label> */}
                 <input onKeyPress={(e) => inputCodeHandler(e)} type="text" autoComplete="off" onChange={e => setRoomCode(e.target.value)} className="" id="grid-first-name" />
@@ -123,13 +123,13 @@ function Lobby() {
           }
         </>
       </div>
-      {/*  <div className='flex flex-col h-3/4 sm:w-full border-4 border-proba-100/20 rounded-2xl items-center border-solid px-3'>
+      {/*  <div className='flex flex-col h-3/4 sm:w-full border-4 border-sajat-100/20 rounded-2xl items-center border-solid px-3'>
         <div
           component={motion.div}
           initial={{ x: 200 }}
           animate={{ x: 0 }}
           transition={{ bounceDamping: 0 }}
-          className="w-full max-w-400 mx-auto m-1 rounded-20 bg-proba-700"
+          className="w-full max-w-400 mx-auto m-1 rounded-20 bg-sajat-700"
           square
           layout
         >

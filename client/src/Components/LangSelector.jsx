@@ -27,7 +27,7 @@ const customStyles = {
     marginRight: '-50%',
     transform: 'translate(-50%, -50%)',
     border: `4px solid black`,
-    background: '#162a1f',//fullConfig.theme.colors.proba[100], //COLOR_THEMES[1].dark,
+    background: '#3b2f44',//fullConfig.theme.colors.sajat[100], //COLOR_THEMES[1].dark,
 
     overflow: 'auto',
 
@@ -107,7 +107,7 @@ const LangSelector = () => {
       bg-[#2e2e2e67] 
       border-2 
       border-solid 
-      border-proba-100 
+      border-sajat-100 
       rounded-lg'>
             <svg xmlns="http://www.w3.org/2000/svg" className="mr-2 icon icon-tabler icon-tabler-world" width="24" height="24"
               viewBox="0 0 24 24" strokeWidth="1.5" stroke='#d1d6d4' fill="none" strokeLinecap="round"
@@ -119,13 +119,13 @@ const LangSelector = () => {
               <path d="M11.5 3a17 17 0 0 0 0 18" />
               <path d="M12.5 3a17 17 0 0 1 0 18" />
             </svg>
-            <p className='flex-1 text-center uppercase text-proba-100 '>{i18n.language}</p>
+            <p className='flex-1 text-center uppercase text-sajat-100 '>{i18n.language}</p>
           </div>
 
           <Modal isOpen={modalIsOpen} onAfterOpen={afterOpenModal} onRequestClose={closeModal} style={customStyles}
             contentLabel="Example Modal">
 
-            <div className="relative bg-proba-500 rounded-lg shadow dark:bg-gray-700">
+            <div className="relative bg-sajat-900 rounded-lg shadow dark:bg-gray-700">
 
               <div className="flex justify-between items-center p-5 rounded-t dark:border-gray-600">
                 <h3 className="text-xl font-medium text-white">
@@ -143,15 +143,15 @@ const LangSelector = () => {
               </div>
 
               <div
-                className="rounded-lg bg-proba-400 w-full mx-auto py-5 xs:grid sm:grid md:grid lg:grid xl:grid 2xl:grid 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 xs:grid-cols-1 sm:grid-cols-1 xl:grid-cols-3 px-10 overflow-y-auto max-h-96 scrollbar">
+                className="rounded-lg bg-sajat-400 w-full mx-auto py-5 xs:grid sm:grid md:grid lg:grid xl:grid 2xl:grid 2xl:grid-cols-3 lg:grid-cols-3 md:grid-cols-3 xs:grid-cols-1 sm:grid-cols-1 xl:grid-cols-3 px-10 overflow-y-auto max-h-96 scrollbar">
                 {(LANGUAGES.map(lang => {
                   if (lang.code === selectedLang) {
-                    return (<div key={lang.code} className="bg-proba-200 hover:bg-proba-200 ring ring-proba-800 p-3 shadow-md rounded-md m-3 max-h-[4rem] flex flex-col" onClick={() => { handleLangSelect(lang.code) }}>
+                    return (<div key={lang.code} className="bg-sajat-200 hover:bg-sajat-200 ring ring-sajat-800 p-3 shadow-md rounded-md m-3 max-h-[4rem] flex flex-col" onClick={() => { handleLangSelect(lang.code) }}>
                       <h3 className="text-center text-xl text-gray-800 font-semibold pr-3"><span className={`rounded-sm fi
                 fi-${lang.countryCode} m-2`}></span> {lang.name}</h3>
                     </div>)
                   } else {
-                    return (<div key={lang.code} className="bg-proba-100 hover:bg-proba-200 p-3 shadow-md rounded-md m-3 max-h-[4rem]" onClick={() => { handleLangSelect(lang.code) }}>
+                    return (<div key={lang.code} className="bg-sajat-100 hover:bg-sajat-200 p-3 shadow-md rounded-md m-3 max-h-[4rem]" onClick={() => { handleLangSelect(lang.code) }}>
                       <h3 className="text-center text-xl text-gray-800 font-semibold pr-3"><span className={`rounded-sm fi
                 fi-${lang.countryCode} m-2`}></span> {lang.name}</h3>
                     </div>)
@@ -162,9 +162,8 @@ const LangSelector = () => {
 
               <div className="flex items-center justify-center p-6 space-x-2 rounded-b border-gray-200 dark:border-gray-600">
                 <button onClick={() => { changeLanguage(selectedLang) }} type="button"
-                  className="text-white bg-proba-700 hover:bg-proba-800 focus:ring-4 focus:ring-proba-300 font-medium rounded-lg
-            text-sm px-5 py-2.5 text-center dark:bg-proba-600 dark:hover:bg-proba-700 dark:focus:ring-proba-800">I
-                  accept</button>
+                  className="text-white bg-sajat-700 hover:bg-sajat-900 focus:ring-4 focus:ring-sajat-300 font-medium rounded-lg
+            text-sm px-5 py-2.5 text-center dark:bg-sajat-600 dark:hover:bg-sajat-700 dark:focus:ring-sajat-800">Mentés</button>
               </div>
             </div>
 

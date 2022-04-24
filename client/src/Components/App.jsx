@@ -756,7 +756,7 @@ function App() {
           }
         }
       /> */}
-      <div className="App bg-proba-500 text-proba-200 overflow-hidden">
+      <div className="App bg-sajat-900 text-sajat-100 overflow-hidden">
         <div className='
         flex
         flex-1
@@ -764,7 +764,7 @@ function App() {
         justify-center
         items-center
         overflow-auto'>
-          <div className='border-4 border-solid border-proba-100/20 sm:border-none xs:border-none rounded-xl flex flex-column w-[90%] h-[90%] m-auto'>
+          <div className='border-4 border-solid border-sajat-100/20 sm:border-none xs:border-none rounded-xl flex flex-column w-[90%] h-[90%] m-auto'>
             {/* //transform-none xl:scale-[.8] lg:scale-[.65] md:scale-[0.5] */}
             <div className='flex flex-1 items-center relative flex-col self-stretch'>
               <InitSomeStuff />
