@@ -7,16 +7,16 @@ import { Progress } from '@mantine/core'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { nextPlayer, setDiceRollValue } from '../../Store/slices/gameStateSlice'
+import { autoSellSelectedFields, nextPlayer, setDiceRollValue, setShowSell, resetCountdown as resetCountdownFunc, payTax, setShowTax, QuarantineRoundsDowner } from '../../Store/slices/gameStateSlice'
 
 
 export default function PlayerInfo(props) {
-  const { players, currentPlayer, resetCountdown } = props
+  const { players, currentPlayer, resetCountdown, showSell, showTax, showQuarantineTab } = props
   return (
     <>
       {
         players.map(player => (
-          <PlayerInfoPiece {...player} key={player.colorCode} currentPlayer={currentPlayer} resetCountdown={resetCountdown} />
+          <PlayerInfoPiece {...player} key={player.colorCode} currentPlayer={currentPlayer} showTax={showTax} showQuarantineTab={showQuarantineTab} resetCountdown={resetCountdown} showSell={showSell} />
         ))
       }
 
@@ -27,7 +27,7 @@ export default function PlayerInfo(props) {
 
 
 function PlayerInfoPiece(props) {
-  const { colorCode, username, money, currentPlayer, playerCountdown, resetCountdown } = props
+  const { colorCode, username, money, currentPlayer, playerCountdown, resetCountdown, isBankrupt, showSell, showTax, showQuarantineTab } = props
   const dispatch = useDispatch()
 
   const [remain, setRemain] = useState(0)
@@ -63,6 +63,12 @@ function PlayerInfoPiece(props) {
     position = 'top-0 left-0'
   }
 
+  if (isBankrupt) {
+    color = 'gray'
+    bgColor = 'bg-gray-300'
+    borderColor = 'border-gray-300'
+  }
+
   useEffect(() => {
     if (currentPlayer === colorCode) {
 
@@ -85,7 +91,24 @@ function PlayerInfoPiece(props) {
     if (remain < 0) {
       console.log('lejart');
       // dispatch(setDiceRollValue(0))
-      dispatch(nextPlayer())
+      if (showSell) {
+        dispatch(resetCountdownFunc())
+        dispatch(autoSellSelectedFields())
+
+        setTimeout(() => {
+          dispatch(setShowSell({ value: false, from: '' }))
+        }, 400);
+      } else if (showTax) {
+        dispatch(payTax())
+        dispatch(setShowTax(false))
+
+      } else if (showQuarantineTab) {
+        dispatch(QuarantineRoundsDowner())
+        dispatch(nextPlayer())
+
+      } else {
+        dispatch(nextPlayer())
+      }
     }
     return () => {
     }
@@ -104,9 +127,16 @@ function PlayerInfoPiece(props) {
       <div className={`w-52 h-10 top-0 ${bgColor} items-center justify-center flex text-xl font-extrabold `}>{username}</div>
       <div className={`flex ${(colorCode === 1 || colorCode === 2) ? 'flex-row-reverse' : 'flex-row'} items-center text-center`}>
         <img src={img} alt="Alien" className='' />
-        <div className='flex flex-col h-full justify-between p-6'>
-          <Progress color={color} radius="xl" value={Math.min((playerCountdown) ? (remain / 20) * 100 : 0, 100)} striped animate />
-          <span className='w-full'>{formatter.format(money)}</span>
+        <div className='flex flex-col h-full w-full justify-between p-6'>
+          {isBankrupt ? <>
+            <span className='text-3xl'>CSŐD</span>
+          </>
+            : <>
+              <Progress color={color} radius="xl" value={Math.min((playerCountdown) ? (remain / 20) * 100 : 0, 100)} striped animate />
+              <span className='w-full'>{formatter.format(money)}</span>
+
+            </>
+          }
         </div>
       </div>
     </div>

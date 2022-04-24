@@ -3,12 +3,14 @@ import { useUncontrolled } from '@mantine/hooks';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { GAME_CONFIG } from '../../gameConfig';
-import { buyLand, buyMuseum, nextPlayer, resetCountdown, startQuarantine } from '../../Store/slices/gameStateSlice';
+import { buyLand, buyMuseum, nextPlayer, payTax, setShowTax, resetCountdown, setShowDoubler, startQuarantine, setShowErasmus, setShowBuyPanel, setShowSell, setSellValue } from '../../Store/slices/gameStateSlice';
 import calcPrice from '../../Utils/calcPrice';
 import checkmark from '../../Images/game/gameicons/PNG/White/1x/checkmark.png'
 import unavailable from '../../Images/game/gameicons/PNG/White/1x/locked.png'
 import museumPic from '../../Images/game/caracters/museum.png'
+import adoPic from '../../Images/game/caracters/ado2.png'
 import formatter from '../../Utils/formatter';
+import _ from 'lodash';
 
 export default function BuyComponent(props) {
   const [opened, setOpened] = useState(true)
@@ -17,6 +19,7 @@ export default function BuyComponent(props) {
   const [sajat, setSajat] = useState(false)
   const [nemSajat, setNemSajat] = useState(false)
   const [museum, setMuseum] = useState(false)
+  const [tax, setTax] = useState(false)
   const [price, setPrice] = useState({
     toBuy: null,
     tandij: null,
@@ -35,11 +38,12 @@ export default function BuyComponent(props) {
   if (playerField === 32) playerField = 0
 
   useEffect(() => {
+    const price = calcPrice(playerField, selectedLevel, fields)
     setPrice({
-      toBuy: calcPrice(playerField, selectedLevel, fields).toBuy - calcPrice(playerField, fields[playerField].level, fields).toBuy,
-      tandij: calcPrice(playerField, selectedLevel, fields).tandij,
-      sellToBank: calcPrice(playerField, selectedLevel, fields).sellToBank,
-      sellToPlayer: calcPrice(playerField, selectedLevel, fields).sellToPlayer,
+      toBuy: price.toBuy - calcPrice(playerField, fields[playerField].level, fields).toBuy,
+      tandij: price.tandij,
+      sellToBank: price.sellToBank,
+      sellToPlayer: price.sellToPlayer,
     })
 
     return () => {
@@ -57,6 +61,9 @@ export default function BuyComponent(props) {
   useEffect(() => {
     if (showBuyPanel) {
       dispatch(resetCountdown())
+
+      const pricePlusOne = calcPrice(playerField, fields[playerField].level + 1, fields)
+      const price = calcPrice(playerField, fields[playerField].level, fields)
       if ((GAME_CONFIG.map[playerField].isNormal) // ha normális mező
 
       ) {
@@ -64,14 +71,14 @@ export default function BuyComponent(props) {
           dispatch(nextPlayer())
         } else {
           if (
-            (((currentPlayer === fields[playerField].ownerColor) || (fields[playerField].ownerColor === null)) && (players[currentPlayer].money >= (calcPrice(playerField, fields[playerField].level + 1, fields).toBuy - calcPrice(playerField, fields[playerField].level, fields).toBuy))) // ha saját és van pénz fejlesztésre
+            (((currentPlayer === fields[playerField].ownerColor) || (fields[playerField].ownerColor === null)) && (players[currentPlayer].money >= (pricePlusOne.toBuy - price.toBuy))) // ha saját és van pénz fejlesztésre
           ) {
 
             setSajat(true)
             console.log('ez normal sajat')
             setModalTitle(GAME_CONFIG.map[playerField].label.toUpperCase())
             setOpened(true)
-          } else if ((currentPlayer !== fields[playerField].ownerColor) && (players[currentPlayer].money >= calcPrice(playerField, (fields[playerField].level === 0 ? fields[playerField].level + 1 : fields[playerField].level), fields).sellToPlayer)) // ha nem saját de van pénz megvenni)
+          } else if ((currentPlayer !== fields[playerField].ownerColor) && (players[currentPlayer].money >= ((fields[playerField].level === 0) ? pricePlusOne.sellToPlayer : price.sellToPlayer))) // ha nem saját de van pénz megvenni)
           {
             setNemSajat(true)
             console.log('ez normal nem sajat');
@@ -97,14 +104,32 @@ export default function BuyComponent(props) {
             dispatch(nextPlayer())
           }
         } else if (GAME_CONFIG.map[playerField].isDoubler) {
-
+          const hasFields = fields.map(x => x.ownerColor === currentPlayer)
+          if (hasFields.length > 0) {
+            dispatch(setShowDoubler(true))
+          }
         } else if (GAME_CONFIG.map[playerField].isErasmus) {
-
+          const hasFields = fields.map(x => x.ownerColor === currentPlayer)
+          const emptyFields = fields.map(x => x.ownerColor === null)
+          if (hasFields.length > 0 || emptyFields.length > 0) {
+            dispatch(setShowErasmus(true))
+          }
         } else {  // START
           dispatch(nextPlayer())
         }
       } else if (GAME_CONFIG.map[playerField].isTax) {
-
+        const sajatTulajdon = fields.filter(x => x.ownerColor === currentPlayer)
+        const sajatTulajdonErtekei = sajatTulajdon.map(x => calcPrice(x.id, x.level, fields).toBuy)
+        const tax = _.sum(sajatTulajdonErtekei) * 0.1
+        if (players[currentPlayer].money < tax) {
+          dispatch(setShowBuyPanel(false))
+          dispatch(resetCountdown())
+          dispatch(setShowSell({ value: true, from: 'showBuyPanel' }))
+          dispatch(setSellValue(tax - players[currentPlayer].money))
+        }
+        setTax(true)
+        setModalTitle(GAME_CONFIG.map[playerField].label.toUpperCase())
+        setOpened(true)
       } else {
         dispatch(nextPlayer())
         setSelectedLevel(null)
@@ -118,6 +143,7 @@ export default function BuyComponent(props) {
       setSajat(false)
       setNemSajat(false)
       setMuseum(false)
+      setTax(false)
     }
   }, [showBuyPanel])
 
@@ -138,6 +164,8 @@ export default function BuyComponent(props) {
     popupBody = <BuyComponentNemSajat price={price} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} players={players} currentPlayer={currentPlayer} onColseHandler={onColseHandler} />
   } else if (museum) {
     popupBody = <MuseumBuy playerField={playerField} onColseHandler={onColseHandler} />
+  } else if (tax) {
+    popupBody = <TaxBody currentPlayer={currentPlayer} fields={fields} onColseHandler={onColseHandler} />
   }
 
   return (
@@ -170,6 +198,53 @@ export default function BuyComponent(props) {
     </>
   )
 }
+
+
+
+
+function TaxBody(props) {
+  const { onColseHandler, fields, currentPlayer } = props
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(setShowTax(true))
+  
+    return () => {
+      dispatch(setShowTax(false))
+    }
+  }, [])
+  
+
+
+  const sajatTulajdon = fields.filter(x => x.ownerColor === currentPlayer)
+  const sajatTulajdonErtekei = sajatTulajdon.map(x => calcPrice(x.id, x.level, fields).toBuy)
+  const tax = _.sum(sajatTulajdonErtekei) * 0.1
+
+
+  const closeHandler = () => {
+    dispatch(payTax())
+    dispatch(setShowTax(false))
+    onColseHandler()
+  }
+
+  return (
+    <div className='flex flex-col justify-center items-center w-auto'>
+      <div className='flex flex-col items-center content-center w-32 h-32 rounded m-3 drop-shadow-md'>
+        <img src={adoPic} alt="adó" />
+      </div>
+
+      <div className='flex flex-col w-4/5 h-32 rounded-lg bg-[#eedac6] self-center items-center justify-evenly mb-3 p-3 leading-5'>
+        <span>Ráléptél az ADÓ mezőre </span>
+        <p><span>Fizetned kell {formatter(tax)} összeget</span></p>
+      </div>
+
+      <div
+        onClick={closeHandler}
+        className='flex w-32 h-10 bg-orange-300 border-orange-100 border-4 cursor-pointer rounded-full items-center justify-center hover:bg-orange-400 shadow-lg'>Megértettem</div>
+    </div>
+  )
+}
+
 
 
 function MuseumBuy(props) {

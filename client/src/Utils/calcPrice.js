@@ -5,6 +5,8 @@ const calcPrice = (id, level, fields) => {
 
   let isMonopolium = false
 
+  let doublerTandij = null
+
   const isMuseum = GAME_CONFIG.map[id].isMuseum
   let museumMultiplier = 1
 
@@ -33,12 +35,21 @@ const calcPrice = (id, level, fields) => {
 
     if (isMuseum) {
       museumMultiplier = (occurrences[ownerColor]) ? occurrences[ownerColor] : 0
+
+      if (fields[id].hasDoubler) {
+        doublerTandij = (fields[id].doublerCount + 1)
+      }
+
       return {
         toBuy: (fields[id].ownerColor) ? null : 400000,
-        tandij: 75_000 * museumMultiplier,
+        tandij: 75_000 * museumMultiplier * (doublerTandij ? doublerTandij : 1),
         sellToBank: 400000,
         sellToPlayer: null
       }
+    }
+
+    if (fields[id].hasDoubler) {
+      doublerTandij = calcPrice(id, level, null).tandij * (fields[id].doublerCount + 1)
     }
   }
 
@@ -73,7 +84,7 @@ const calcPrice = (id, level, fields) => {
 
   return {
     toBuy: Math.round(toBuy),
-    tandij: Math.round(tandij),
+    tandij: Math.round((doublerTandij ? doublerTandij : tandij)),
     sellToBank: Math.round(toBuy * 0.9),
     sellToPlayer: Math.round(toBuy * 2)
   }

@@ -1,11 +1,13 @@
 import { Container, Sprite, Text } from '@inlet/react-pixi';
 import { ColorReplaceFilter } from 'pixi-filters';
 import { TextStyle, Texture } from 'pixi.js';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { GROUP_COLORS } from '../../config';
 import { GAME_CONFIG } from '../../gameConfig';
 
 export default function LuckComponent(props) {
+  const { showDisabledFields, disabledFilter } = props
+  const [filters, setFilters] = useState([])
 
   const label_bg = Texture.from('../Images/game/isometriccity/PNG/cityTiles_072.png');
   const ehh = Texture.from('../Images/game/isometriclandscape/PNG/landscapeTiles_067.png');
@@ -21,12 +23,18 @@ export default function LuckComponent(props) {
   const BOTTOM_HEIGHT = 32
   const WIDTH = 129 / 2
 
+  useEffect(() => {
+    if (showDisabledFields) setFilters([disabledFilter])
+    else setFilters([])
+  }, [showDisabledFields])
+
   return (
     <Container
       sortableChildren
       anchor={0.5}
       scale={{ x: (props.flip ? -1 : 1) * GAME_CONFIG.scale, y: GAME_CONFIG.scale }}
       interactive={true}
+      filters={filters}
       //pointerdown={(e) => e.currentTarget.y -= 10}
       //pointerup={(e) => e.currentTarget.y += 10}
       //pointerout={(e) => e.currentTarget.y += 10}
@@ -146,7 +154,7 @@ export default function LuckComponent(props) {
         zIndex={10}
         scale={{ x: (props.flip ? -1 : 1) * -0.7, y: 0.7 }}
         x={WIDTH / 6}
-        y={-HEIGHT * 1.2}
+        y={-HEIGHT * 0.8}
         texture={(props.flip ? chest_balra : chest_jobbra)}
       />
     </Container>

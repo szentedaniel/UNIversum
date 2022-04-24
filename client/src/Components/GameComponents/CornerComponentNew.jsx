@@ -1,10 +1,14 @@
 import { Container, Sprite, Text } from '@inlet/react-pixi'
 import * as PIXI from 'pixi.js'
 import { TextStyle } from 'pixi.js';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { GAME_CONFIG } from '../../gameConfig';
+import { CRTFilter, GlowFilter } from 'pixi-filters'
+import { useSelector } from 'react-redux';
 
 export default function CornerComponentNew(props) {
+  const { zIndex, disabledFilter, showDisabledFields } = props
+  const [filters, setFilters] = useState([])
 
   const label_bg = PIXI.Texture.from('../images/game/isometriccity/PNG/cityTiles_072.png');
   const road_bg = PIXI.Texture.from('../images/game/isometriclandscape/PNG/landscapeTiles_081_1.png');
@@ -20,6 +24,10 @@ export default function CornerComponentNew(props) {
   const BOTTOM_HEIGHT = 32
   const WIDTH = 129 / 2
 
+  useEffect(() => {
+    if (showDisabledFields) setFilters([disabledFilter])
+    else setFilters([])
+  }, [showDisabledFields])
 
 
   return (
@@ -28,6 +36,7 @@ export default function CornerComponentNew(props) {
       anchor={0.5}
       scale={GAME_CONFIG.scale}
       interactive={true}
+      filters={filters}
       //pointerdown={(e) => e.currentTarget.y -= 10}
       //pointerup={(e) => e.currentTarget.y += 10}
       //pointerout={(e) => e.currentTarget.y += 10}
@@ -162,7 +171,7 @@ export default function CornerComponentNew(props) {
           texture={karibacsik}
           scale={0.2}
           anchor={0.5}
-          zIndex={5}
+          zIndex={3}
           x={-WIDTH * 1.25}
           y={-HEIGHT * 1.25}
         />
@@ -172,7 +181,7 @@ export default function CornerComponentNew(props) {
           texture={repulo}
           scale={{ x: -0.5, y: 0.5 }}
           anchor={0.5}
-          zIndex={5}
+          zIndex={3}
           x={0}
           y={-BOTTOM_HEIGHT / 2}
         />
@@ -182,9 +191,9 @@ export default function CornerComponentNew(props) {
           texture={doubler}
           scale={{ x: 0.5, y: 0.5 }}
           anchor={0.5}
-          zIndex={5}
+          zIndex={3}
           x={0}
-          y={-BOTTOM_HEIGHT}
+          y={-BOTTOM_HEIGHT - 20}
         />
       }
       {props.isStart &&
@@ -192,7 +201,7 @@ export default function CornerComponentNew(props) {
           texture={tabla}
           scale={{ x: 1, y: 1 }}
           anchor={0.5}
-          zIndex={5}
+          zIndex={3}
           x={0}
           y={-BOTTOM_HEIGHT - HEIGHT * 1.6}
         />

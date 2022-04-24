@@ -14,7 +14,7 @@ export default function Character(props) {
   else if (props.colorCode === 3) texture = Texture.from('../images/game/moreenemiesanimations/Alien sprites/alienYellow.png')
 
   const spring = { mass: 10, tension: 1000, friction: 1000 }
-  const { colorCode, field, showDiceRoll, dispatch, currentPlayer, lastDiceRoll } = props
+  const { colorCode, field, showDiceRoll, dispatch, currentPlayer, lastDiceRoll, isBankrupt } = props
 
   const [isDoneWithSteps, setIsDoneWithSteps] = useState(false)
   const [currentMezoId, setCurrentMezoId] = useState(field)
@@ -42,6 +42,10 @@ export default function Character(props) {
         }, 1000);
       }
 
+      return () => {
+        setIsDoneWithSteps(false)
+      }
+
     }
   }, [currentMezoId, lastDiceRoll, field])
 
@@ -57,20 +61,28 @@ export default function Character(props) {
 
 
   return (
-    <Spring native
-      to={{ x: tempCoord.x - ((colorCode === 0) ? 15 : (colorCode === 1) ? 5 : (colorCode === 2) ? -5 : -15), y: tempCoord.y }}
-      // config={spring}
-      {...props}>
-      {props => (
-        <Sprite
+    <>
+      {!isBankrupt &&
+        <>
+          <Spring native
+            to={{ x: tempCoord.x - ((colorCode === 0) ? 15 : (colorCode === 1) ? 5 : (colorCode === 2) ? -5 : -15), y: tempCoord.y }}
+            // config={spring}
+            {...props}>
+            {props => (
+              <Sprite
 
-          alpha={(colorCode === currentPlayer) ? 1 : 0.7}
-          anchor={[0.5, 0.7]}
-          texture={texture}
-          {...props}
-        />
-      )}
-    </Spring>
+                alpha={(colorCode === currentPlayer) ? 1 : 0.7}
+                anchor={[0.5, 0.7]}
+                texture={texture}
+                {...props}
+              />
+            )}
+          </Spring>
+        </>
+      }
+    </>
+
+
 
   )
 }

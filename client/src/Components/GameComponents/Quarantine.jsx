@@ -13,13 +13,13 @@ export default function Quarantine() {
   useEffect(() => {
     if (showFirstQuarantineTab) {
       setOpened(true)
-    }
+    } else { setOpened(false) }
   }, [showFirstQuarantineTab])
 
   const onColseHandler = () => {
     setOpened(false)
     setTimeout(() => {
-      dispatch(setShowFirstQuarantineTab())
+      dispatch(setShowFirstQuarantineTab(false))
       dispatch(nextPlayer())
     }, 400)
   }
@@ -37,6 +37,8 @@ export default function Quarantine() {
         transitionDuration={300}
         transitiontimingfunction='ease'
         closeOnClickOutside={false}
+        closeOnEscape={false}
+        withCloseButton={false}
         radius={'lg'}
         classNames={{ modal: 'bg-[#F5ECE3] text-center' }}
       //overlayColor={'#F5ECE3'}
@@ -53,7 +55,7 @@ export default function Quarantine() {
 
           <div
             onClick={onColseHandler}
-            className='flex w-32 h-10 bg-orange-300 border-orange-100 border-4 cursor-pointer rounded-full items-center justify-center hover:bg-orange-400 shadow-lg'>Megértettem</div>
+            className='flex w-fit h-fit px-4 py-2 bg-orange-300 border-orange-100 border-4 cursor-pointer rounded-full items-center justify-center hover:bg-orange-400 shadow-lg'>Megértettem</div>
         </div>
 
       </Modal>

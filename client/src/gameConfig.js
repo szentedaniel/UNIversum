@@ -24,7 +24,7 @@ export const GAME_CONFIG = {
       label: 'start',
       flip: false,
       groupId: 0,
-      zIndex: -1
+      zIndex: -2
     },
     {
       id: 1,
@@ -41,7 +41,7 @@ export const GAME_CONFIG = {
       label: 'veszprém',
       flip: false,
       groupId: 1,
-      zIndex: -2
+      zIndex: -4
     },
     {
       id: 2,
@@ -58,7 +58,7 @@ export const GAME_CONFIG = {
       label: 'budapest',
       flip: false,
       groupId: 1,
-      zIndex: -3
+      zIndex: -6
     },
     {
       id: 3,
@@ -75,7 +75,7 @@ export const GAME_CONFIG = {
       label: 'debrecen',
       flip: false,
       groupId: 1,
-      zIndex: -4
+      zIndex: -8
     },
     {
       id: 4,
@@ -92,7 +92,7 @@ export const GAME_CONFIG = {
       label: 'museum',
       flip: false,
       groupId: 0,
-      zIndex: -5
+      zIndex: -10
     },
     {
       id: 5,
@@ -109,7 +109,7 @@ export const GAME_CONFIG = {
       label: 'Zürich',
       flip: false,
       groupId: 2,
-      zIndex: -6
+      zIndex: -12
     },
     {
       id: 6,
@@ -126,7 +126,7 @@ export const GAME_CONFIG = {
       label: 'Paris',
       flip: false,
       groupId: 2,
-      zIndex: -7
+      zIndex: -14
     },
     {
       id: 7,
@@ -143,7 +143,7 @@ export const GAME_CONFIG = {
       label: 'edinburgh',
       flip: false,
       groupId: 2,
-      zIndex: -8
+      zIndex: -16
     },
     {
       id: 8,
@@ -160,7 +160,7 @@ export const GAME_CONFIG = {
       label: 'Karantén',
       flip: false,
       groupId: 2,
-      zIndex: -9
+      zIndex: -18
     },
     {
       id: 9,
@@ -177,7 +177,7 @@ export const GAME_CONFIG = {
       label: 'chicago',
       flip: true,
       groupId: 3,
-      zIndex: -10
+      zIndex: -20
     },
     {
       id: 10,
@@ -194,7 +194,7 @@ export const GAME_CONFIG = {
       label: 'austin',
       flip: true,
       groupId: 3,
-      zIndex: -11
+      zIndex: -22
     },
     {
       id: 11,
@@ -211,7 +211,7 @@ export const GAME_CONFIG = {
       label: 'princeton',
       flip: true,
       groupId: 3,
-      zIndex: -12
+      zIndex: -24
     },
     {
       id: 12,
@@ -228,7 +228,7 @@ export const GAME_CONFIG = {
       label: 'museum',
       flip: true,
       groupId: 0,
-      zIndex: -13
+      zIndex: -26
     },
     {
       id: 13,
@@ -245,7 +245,7 @@ export const GAME_CONFIG = {
       label: 'vienna',
       flip: true,
       groupId: 4,
-      zIndex: -14
+      zIndex: -28
     },
     {
       id: 14,
@@ -262,7 +262,7 @@ export const GAME_CONFIG = {
       label: 'esély',
       flip: true,
       groupId: 0,
-      zIndex: -15
+      zIndex: -30
     },
     {
       id: 15,
@@ -279,7 +279,7 @@ export const GAME_CONFIG = {
       label: 'berlin',
       flip: true,
       groupId: 4,
-      zIndex: -16
+      zIndex: -32
     },
     {
       id: 16,
@@ -296,7 +296,7 @@ export const GAME_CONFIG = {
       label: 'Talár',
       flip: false,
       groupId: 0,
-      zIndex: -17
+      zIndex: -34
     },
     {
       id: 17,
@@ -313,7 +313,7 @@ export const GAME_CONFIG = {
       label: 'seattle',
       flip: false,
       groupId: 5,
-      zIndex: -16
+      zIndex: -32
     },
     {
       id: 18,
@@ -330,7 +330,7 @@ export const GAME_CONFIG = {
       label: 'esély',
       flip: false,
       groupId: 0,
-      zIndex: -15
+      zIndex: -30
     },
     {
       id: 19,
@@ -347,7 +347,7 @@ export const GAME_CONFIG = {
       label: 'new haven',
       flip: false,
       groupId: 5,
-      zIndex: -14
+      zIndex: -28
     },
     {
       id: 20,
@@ -364,7 +364,7 @@ export const GAME_CONFIG = {
       label: 'museum',
       flip: false,
       groupId: 0,
-      zIndex: -13
+      zIndex: -26
     },
     {
       id: 21,
@@ -381,7 +381,7 @@ export const GAME_CONFIG = {
       label: 'london',
       flip: false,
       groupId: 6,
-      zIndex: -12
+      zIndex: -24
     },
     {
       id: 22,
@@ -398,7 +398,7 @@ export const GAME_CONFIG = {
       label: 'oxford',
       flip: false,
       groupId: 6,
-      zIndex: -11
+      zIndex: -22
     },
     {
       id: 23,
@@ -415,7 +415,7 @@ export const GAME_CONFIG = {
       label: 'cambridge uk',
       flip: false,
       groupId: 6,
-      zIndex: -10
+      zIndex: -20
     },
 
     {
@@ -433,7 +433,7 @@ export const GAME_CONFIG = {
       label: 'Erasmus',
       flip: false,
       groupId: 0,
-      zIndex: -9
+      zIndex: -18
     },
 
     {
@@ -451,7 +451,7 @@ export const GAME_CONFIG = {
       label: 'esély',
       flip: true,
       groupId: 0,
-      zIndex: -8
+      zIndex: -16
     },
     {
       id: 26,
@@ -468,7 +468,7 @@ export const GAME_CONFIG = {
       label: 'berkeley',
       flip: true,
       groupId: 7,
-      zIndex: -7
+      zIndex: -14
     },
     {
       id: 27,
@@ -485,7 +485,7 @@ export const GAME_CONFIG = {
       label: 'new york',
       flip: true,
       groupId: 7,
-      zIndex: -6
+      zIndex: -12
     },
     {
       id: 28,
@@ -502,7 +502,7 @@ export const GAME_CONFIG = {
       label: 'museum',
       flip: true,
       groupId: 0,
-      zIndex: -5
+      zIndex: -10
     },
     {
       id: 29,
@@ -519,7 +519,7 @@ export const GAME_CONFIG = {
       label: 'stanford',
       flip: true,
       groupId: 8,
-      zIndex: -4
+      zIndex: -8
     },
     {
       id: 30,
@@ -536,7 +536,7 @@ export const GAME_CONFIG = {
       label: 'adó',
       flip: true,
       groupId: 0,
-      zIndex: -3
+      zIndex: -6
     },
     {
       id: 31,
@@ -553,7 +553,7 @@ export const GAME_CONFIG = {
       label: 'cambridge us',
       flip: true,
       groupId: 8,
-      zIndex: -2
+      zIndex: -4
     },
 
   ]

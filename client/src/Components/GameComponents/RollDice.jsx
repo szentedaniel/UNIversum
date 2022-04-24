@@ -9,7 +9,7 @@ import { setShowDiceRoll, setDiceRollValue, resetCountdown, setRollingDiceFromQu
 
 
 export default function RollDice() {
-  const { showDiceRoll, rollingDiceFromQuarantine, players, currentPlayer } = useSelector((state) => state.gameState)
+  const { showDiceRoll, rollingDiceFromQuarantine, lastDiceRoll } = useSelector((state) => state.gameState)
   const dispatch = useDispatch()
 
   const sides = [1, 2, 3, 4, 5, 6]
@@ -56,7 +56,13 @@ export default function RollDice() {
 
           dispatch(setRollingDiceFromQuarantine(false))
           dispatch(QuarantineRoundsDowner(roll1 + roll2))
-          dispatch(setDiceRollValue(0))
+          if (lastDiceRoll === 0) {
+            setTimeout(() => {
+              dispatch(nextPlayer())
+            }, 4000);
+          } else {
+            dispatch(setDiceRollValue(0))
+          }
         }
       } else {
         dispatch(setDiceRollValue(roll1 + roll2))
@@ -78,7 +84,7 @@ export default function RollDice() {
     showDiceRoll &&
     <div className={`absolute max-h-max max-w-max transition-opacity ease-in-out ${isComplete ? 'opacity-0' : 'opacity-100'}`}>
 
-      <div className='flex flex-col flex-nowrap min-h-screen justify-center items-center'>
+      <div className='flex flex-col flex-nowrap justify-center items-center'>
 
         <div className={`transition-all ease-in-out ${rollValue ? 'opacity-100' : 'opacity-0'} h-14 w-14 border-4 border-red-600 rounded-2xl bg-red-200/75 flex items-center justify-center text-3xl font-semibold shadow-lg ${rolling && 'Die-shaking'}`}>
           {rollValue}

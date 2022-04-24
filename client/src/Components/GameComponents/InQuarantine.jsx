@@ -20,7 +20,7 @@ export default function InQuarantine() {
       setAvailablePCR(players[currentPlayer].hasPCR)
       setHasEnoughMoney(players[currentPlayer].money >= 200_000)
       setRemain(players[currentPlayer].QuarantineRounds)
-    }
+    } else { setOpened(false) }
     return () => {
       setAlreadyClicked(false)
     }

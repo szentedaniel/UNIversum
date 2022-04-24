@@ -1,18 +1,32 @@
 import { Container, Sprite, Text } from '@inlet/react-pixi';
 import { ColorReplaceFilter } from 'pixi-filters';
 import { TextStyle, Texture } from 'pixi.js';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GROUP_COLORS, PLAYER_COLORS } from '../../config';
 import { GAME_CONFIG } from '../../gameConfig';
 import calcPrice from '../../Utils/calcPrice';
+import { addSelection, putDoublerTo, nextPlayer, setDiceRollValue, setSelectErasmus, setShowErasmus, setShowBuyPanel } from '../../Store/slices/gameStateSlice';
+import _ from 'lodash';
+import { Spring } from 'react-spring'
 
 export default function MuseumComponent(props) {
-  const { fields } = props
-  const [id, setId] = useState(props.id)
-  const price = calcPrice(id, fields[id].level, fields)
+  const { id, fields, dispatch, players, currentPlayer, showDisabledFields, disabledFilter, selectedFilter, singleSelecting, multipleSelecting, selectedFields, onlyOwnField, selectDoubler, selectErasmus } = props
+  const [ownerColor, setOwnerColor] = useState(fields[id].ownerColor)
+  const [filters, setFilters] = useState([])
+  const [selectable, setSelectable] = useState(false)
+  const [isPointerDown, setIsPointerDown] = useState(false)
+  const [price, setPrice] = useState(calcPrice(id, fields[id].level, fields))
+  const [hasDoubler, setHasDoubler] = useState(fields[id].hasDoubler)
+
+  useEffect(() => {
+    setOwnerColor(fields[id].ownerColor)
+    setPrice(calcPrice(id, fields[id].level, fields))
+    setHasDoubler(fields[id].hasDoubler)
+  }, [fields])
 
   const label_bg = Texture.from('../Images/game/isometriccity/PNG/cityTiles_072.png');
   const museum = Texture.from('../Images/game/caracters/museum.png');
+  const doubler = Texture.from('../Images/game/caracters/doubler.png');
 
   const formatter = new Intl.NumberFormat('en-GB', { notation: 'compact' })
 
@@ -26,17 +40,105 @@ export default function MuseumComponent(props) {
   const BOTTOM_HEIGHT = 32
   const WIDTH = 129 / 2
 
+
+  useEffect(() => {
+    if (showDisabledFields) {
+      if (onlyOwnField) {
+        if (ownerColor === currentPlayer) {
+          setSelectable(true)
+          setFilters([])
+        } else {
+          setFilters([disabledFilter])
+        }
+      } else {
+
+        if (ownerColor === null || ownerColor === currentPlayer) {
+          setSelectable(true)
+          setFilters([])
+        } else {
+          setFilters([disabledFilter])
+        }
+      }
+    }
+
+    return () => {
+      setSelectable(false)
+      setFilters([])
+
+    }
+  }, [showDisabledFields, currentPlayer])
+
+  useEffect(() => {
+    if (selectedFields.includes(id)) {
+      filters.push(selectedFilter)
+    } else {
+      _.remove(filters, (n) => n === selectedFilter)
+    }
+
+    return () => {
+      _.remove(filters, (n) => n === selectedFilter)
+    }
+  }, [selectedFields])
+
+
+  const pointerDown = (e) => {
+    if (selectable) setIsPointerDown(true)
+  }
+
+  const pointerUp = (e) => {
+
+    if (isPointerDown) {
+      if (multipleSelecting) {
+        dispatch(addSelection(id))
+      } else if (singleSelecting) {
+        if (selectDoubler) {
+          console.log('submit');
+          dispatch(putDoublerTo(id))
+
+          setTimeout(() => {
+            dispatch(nextPlayer())
+          }, 1000);
+        } else if (selectErasmus) {
+
+          let diff = id - players[currentPlayer].field % 32
+          if (diff < 0) diff += 32
+          dispatch(setDiceRollValue(diff))
+          dispatch(setShowErasmus(false))
+          dispatch(setSelectErasmus(false))
+          dispatch(setShowBuyPanel(false))
+        }
+
+      }
+    }
+  }
+
+  const pointerUpOutside = (e) => {
+    setIsPointerDown(false)
+
+  }
+
+  const pointerCancel = (e) => {
+    setIsPointerDown(false)
+  }
+
   return (
     <Container
       sortableChildren
       anchor={0.5}
       scale={{ x: (props.flip ? -1 : 1) * GAME_CONFIG.scale, y: GAME_CONFIG.scale }}
       interactive={true}
+      filters={filters}
       //pointerdown={(e) => e.currentTarget.y -= 10}
       //pointerup={(e) => e.currentTarget.y += 10}
       //pointerout={(e) => e.currentTarget.y += 10}
+      pointerdown={pointerDown}
+      pointerupoutside={pointerUpOutside}
+      pointerup={pointerUp}
+      pointercancel={pointerCancel}
 
       {...props}
+      x={props.x}
+      y={props.y - (selectable ? 15 : 0)}
     >
       <Container
         zIndex={90}
@@ -201,12 +303,32 @@ export default function MuseumComponent(props) {
       <Sprite
         filters={[((filterNeeded) && colorFilter)]}
         anchor={0.5}
-        zIndex={10}
+        zIndex={3}
         scale={0.26}
         x={WIDTH / 3}
         y={-HEIGHT * 1.27}
         texture={museum}
+        pointerdown={pointerDown}
+        pointerupoutside={pointerUpOutside}
+        pointerup={pointerUp}
+        pointercancel={pointerCancel}
       />
+      {hasDoubler &&
+        <Spring native from={{ x: WIDTH, y: -1000 }} to={{ x: WIDTH, y: -BOTTOM_HEIGHT * 5 }} >
+          {props => (
+            <Sprite
+              anchor={0.5}
+              zIndex={-5}
+              scale={0.93}
+              texture={doubler}
+              {...props}
+              x={WIDTH}
+              y={-BOTTOM_HEIGHT * 5}
+            />
+          )}
+        </Spring>
+
+      }
     </Container>
   )
 }

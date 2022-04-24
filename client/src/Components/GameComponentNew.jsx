@@ -2,7 +2,7 @@ import { Container, Graphics, Sprite, Stage } from '@inlet/react-pixi'
 import React, { useEffect, useState, useMemo } from 'react'
 import * as PIXI from 'pixi.js'
 import { forEachRight } from 'lodash'
-import { ColorReplaceFilter, DropShadowFilter } from 'pixi-filters'
+import { ColorReplaceFilter, DropShadowFilter, CRTFilter, GlowFilter } from 'pixi-filters'
 import NormalComponentNew from './GameComponents/NormalComponentNew'
 import CornerComponentNew from './GameComponents/CornerComponentNew'
 import { Avatar, Icon } from '@mui/material'
@@ -22,14 +22,19 @@ import BuyComponent from './GameComponents/BuyComponent'
 import Balance from './GameComponents/Balance'
 import Quarantine from './GameComponents/Quarantine'
 import InQuarantine from './GameComponents/InQuarantine'
+import OnDoubler from './GameComponents/OnDoubler'
+import OnErasmus from './GameComponents/OnErasmus'
+import Sell from './GameComponents/Sell'
 
 export default function GameComponentNew(props) {
   const [width, setWidth] = useState(GAME_CONFIG.width)
   const [height, setHeight] = useState(GAME_CONFIG.height)
-  const { players, currentPlayer, showDiceRoll, showBuyPanel, map: fields, showBalance, lastDiceRoll, resetCountdown, museumPrice } = useSelector((state) => state.gameState)
+  const { players, currentPlayer, showDiceRoll, showTax, showBuyPanel, map: fields, showBalance, lastDiceRoll, resetCountdown, museumPrice, showDisabledFields, singleSelecting, multipleSelecting, selectedFields, showQuarantineTab, onlyOwnField, showDoubler, selectDoubler, showErasmus, selectErasmus, showSell } = useSelector((state) => state.gameState)
   const dispatch = useDispatch()
 
   let shadowFilter = new DropShadowFilter({ rotation: 45, distance: 6 })
+  const disabledFilter = new CRTFilter({ lineContrast: 0.7, noise: 0.7, curvature: 0, lineWidth: 0, vignettingAlpha: 0 })
+  const selectedFilter = new GlowFilter({ distance: 20 })
 
   const stageProps = {
     height,
@@ -45,11 +50,11 @@ export default function GameComponentNew(props) {
   const map = GAME_CONFIG.map.map(mezo => {
     const coords = calcCoords(mezo.id)
 
-    if (mezo.isCorner) return (<CornerComponentNew {...mezo} x={coords.x} y={coords.y} key={mezo.id} fields={fields} />)
-    if (mezo.isNormal) return (<NormalComponentNew {...mezo} x={coords.x} y={coords.y} key={mezo.id} fields={fields} />)
-    if (mezo.isMuseum) return (<MuseumComponent {...mezo} x={coords.x} y={coords.y} key={mezo.id} fields={fields} />)
-    if (mezo.isChance) return (<LuckComponent {...mezo} x={coords.x} y={coords.y} key={mezo.id} fields={fields} />)
-    if (mezo.isTax) return (<TaxComponent {...mezo} x={coords.x} y={coords.y} key={mezo.id} fields={fields} />)
+    if (mezo.isCorner) return (<CornerComponentNew  {...mezo} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} />)
+    if (mezo.isNormal) return (<NormalComponentNew  {...mezo} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} />)
+    if (mezo.isMuseum) return (<MuseumComponent     {...mezo} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} />)
+    if (mezo.isChance) return (<LuckComponent       {...mezo} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} />)
+    if (mezo.isTax) return (<TaxComponent           {...mezo} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} />)
   })
 
 
@@ -101,7 +106,10 @@ export default function GameComponentNew(props) {
       <PlayerInfo
         players={players}
         currentPlayer={currentPlayer}
-        resetCountdown={resetCountdown} />
+        resetCountdown={resetCountdown}
+        showSell={showSell}
+        showTax={showTax}
+        showQuarantineTab={showQuarantineTab} />
       <RollDice />
       <Balance
         showBalance={showBalance}
@@ -119,6 +127,9 @@ export default function GameComponentNew(props) {
       />
       <Quarantine />
       <InQuarantine />
+      <OnDoubler />
+      <OnErasmus />
+      <Sell />
     </>
   )
 }
