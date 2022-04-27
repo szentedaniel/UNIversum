@@ -387,8 +387,8 @@ export const gameStateSlice = createSlice({
           const museums = GAME_CONFIG.map.filter(x => x.isMuseum)
           const museumIds = museums.map(x => x.id)
           const jelenlegiMuseums = state.map.filter(x => museumIds.includes(x.id))
-          let jelenlegiOwnerColors = jelenlegiMuseums.map(x => x.ownerColor)
-          jelenlegiOwnerColors = jelenlegiOwnerColors.filter(x => x != null)
+          let jelenlegiOwnerColors = jelenlegiMuseums.filter(x => x !== null)
+          jelenlegiOwnerColors = jelenlegiOwnerColors.map(x => parseInt(x.ownerColor))
           let supermonopol = false
           if (jelenlegiOwnerColors.length > 0) {
             supermonopol = jelenlegiOwnerColors.every((val, ind, arr) => val === arr[0])
@@ -418,21 +418,21 @@ export const gameStateSlice = createSlice({
               csoportTulajainakSzine = csoportTulajainakSzine.filter(x => x !== undefined)
               csoportTulajainakSzine = csoportTulajainakSzine.filter(x => x !== null)
 
-              csoportTulajainakSzine.forEach(element => {
-                console.log('groupId: ', groupId, 'tulajszin: ', element);
-              });
+              // csoportTulajainakSzine.forEach(element => {
+              //   console.log('groupId: ', groupId, 'tulajszin: ', element);
+              // });
               const monopolE = csoportTulajainakSzine.every((val, ind, arr) => val === arr[0])
-              console.log(monopolE);
+              // console.log(monopolE);
 
               if (monopolE) return csoportTulajainakSzine[0]
 
 
             });
-            console.log('ehhh:');
+            // console.log('ehhh:');
             monopolTulajokColorja = monopolTulajokColorja.map(x => x)
-            monopolTulajokColorja.forEach(element => {
-              console.log(element);
-            });
+            // monopolTulajokColorja.forEach(element => {
+            //   console.log(element);
+            // });
             // const monopolGroupsTulajdonosok = groupIds.map(x => {
             //   const groupId = x
 
@@ -465,22 +465,22 @@ export const gameStateSlice = createSlice({
 
 
 
-          console.log('ido: ', new Date().getTime() >= new Date(state.endDate).getTime());
+          // console.log('ido: ', new Date().getTime() >= new Date(state.endDate).getTime());
           // return logika
           if (validPlayers.length <= 1) {
             state.winnerColor = validPlayers[0].colorCode
-            console.log('nincs tobb player');
+            // console.log('nincs tobb player');
             return true
           } else if (new Date().getTime() >= new Date(state.endDate).getTime()) {
             const winner = _.orderBy(state.players, ['money'], ['desc'])
             state.winnerColor = winner[0]
-            console.log('lejart az ido');
+            // console.log('lejart az ido');
             return true
           } else if (supermonopol) {
-            console.log('supermonopol');
+            // console.log('supermonopol');
             return true
           } else if (hasThreeMonopol) {
-            console.log('3 monopol');
+            // console.log('3 monopol');
             return true
           } else return false
         }
@@ -490,7 +490,7 @@ export const gameStateSlice = createSlice({
 
         if (gameOverCheck()) {
           state.gameOver = true
-          console.log('vege');
+          // console.log('vege');
           state.showDiceRoll = false
         }
         else {
@@ -616,7 +616,7 @@ export const gameStateSlice = createSlice({
     putDoublerTo: (state, action) => {
       try {
 
-        console.log('putDoublerTo ', action.payload);
+        // console.log('putDoublerTo ', action.payload);
         const fieldWithDoublerOnIt = state.map.filter(x => x.hasDoubler)
 
         let same = false
@@ -669,9 +669,9 @@ export const gameStateSlice = createSlice({
       state.currentPlayerIndex -= 1
       let fieldIdAminAll = state.players[state.currentPlayer].field % 32
       if (fieldIdAminAll === 32) fieldIdAminAll = 0
-      console.log('fieldIdAminAll', fieldIdAminAll);
+      // console.log('fieldIdAminAll', fieldIdAminAll);
       const AkinekAFieldjenAllok = state.map[fieldIdAminAll].ownerColor
-      console.log('AkinekAFieldjenAllok', AkinekAFieldjenAllok);
+      // console.log('AkinekAFieldjenAllok', AkinekAFieldjenAllok);
       if (AkinekAFieldjenAllok !== null) {
         state.players[AkinekAFieldjenAllok].money += calcPrice(fieldIdAminAll, state.map[fieldIdAminAll].level, state.map).tandij
       }
@@ -738,8 +738,8 @@ export const gameStateSlice = createSlice({
         let ids = []
         let index = 0
 
-        console.log(_.sum(values));
-        console.log(state.sellValue);
+        // console.log(_.sum(values));
+        // console.log(state.sellValue);
         while (_.sum(values) <= state.sellValue) {
           values.push(playerFields[index].value)
           ids.push(playerFields[index].id)
@@ -757,9 +757,9 @@ export const gameStateSlice = createSlice({
       playerFields = _.orderBy(playerFields, ['value'], ['asc'])
       show(playerFields, true)
       const potencialSell = calcTheSellingIds(state, playerFields)
-      console.log('Kell: ', state.sellValue);
-      console.log('potenciális: ', _.sum(potencialSell.values));
-      console.log('potenciálisID: ', potencialSell.ids);
+      // console.log('Kell: ', state.sellValue);
+      // console.log('potenciális: ', _.sum(potencialSell.values));
+      // console.log('potenciálisID: ', potencialSell.ids);
 
       state.players[state.currentPlayer].money += _.sum(potencialSell.values)
 
@@ -806,9 +806,9 @@ export const gameStateSlice = createSlice({
           })
           playerFields = _.orderBy(playerFields, ['value'], ['asc'])
           const potencialSell = calcTheSellingIds(state, playerFields)
-          console.log('Kell: ', state.sellValue);
-          console.log('potenciális: ', _.sum(potencialSell.values));
-          console.log('potenciálisID: ', potencialSell.ids);
+          // console.log('Kell: ', state.sellValue);
+          // console.log('potenciális: ', _.sum(potencialSell.values));
+          // console.log('potenciálisID: ', potencialSell.ids);
 
           state.players[state.currentPlayer].money += _.sum(potencialSell.values) - 100_000
 
@@ -889,9 +889,9 @@ export const gameStateSlice = createSlice({
             })
             playerFields = _.orderBy(playerFields, ['value'], ['asc'])
             const potencialSell = calcTheSellingIds(playerFields)
-            console.log('Kell: ', state.sellValue);
-            console.log('potenciális: ', _.sum(potencialSell.values));
-            console.log('potenciálisID: ', potencialSell.ids);
+            // console.log('Kell: ', state.sellValue);
+            // console.log('potenciális: ', _.sum(potencialSell.values));
+            // console.log('potenciálisID: ', potencialSell.ids);
 
             state.players[state.currentPlayer].money += _.sum(potencialSell.values) - state.sellValue
             for (let i = 0; i < potencialSell.ids.length; i++) {

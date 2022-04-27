@@ -321,11 +321,13 @@ function BuyComponentSajat(props) {
   const dispatch = useDispatch()
   const buy = () => {
     onColseHandler()
-    dispatch(buyLand({
-      ar: price.toBuy,
-      fieldId: playerField,
-      level: selectedLevel
-    }))
+    setTimeout(() => {
+      dispatch(buyLand({
+        ar: price.toBuy,
+        fieldId: playerField,
+        level: selectedLevel
+      }))
+    }, 550);
   }
 
   return (
