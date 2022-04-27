@@ -65,7 +65,7 @@ export default function RollDice() {
           }
         }
       } else {
-        dispatch(setDiceRollValue(14))
+        dispatch(setDiceRollValue(roll1 + roll2))
       }
 
       setTimeout(() => {
