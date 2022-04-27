@@ -22,11 +22,12 @@ import OnErasmus from './GameComponents/OnErasmus'
 import Sell from './GameComponents/Sell'
 import Winner from './GameComponents/Winner'
 import ChanceCard from './GameComponents/ChanceCard'
+import CountdownBoard from './GameComponents/CountdownBoard'
 
 export default function GameComponentNew(props) {
   const [width, setWidth] = useState(GAME_CONFIG.width)
   const [height, setHeight] = useState(GAME_CONFIG.height)
-  const { players, currentPlayer, showDiceRoll, showTax, showBuyPanel, map: fields, showBalance, lastDiceRoll, resetCountdown, museumPrice, showDisabledFields, singleSelecting, multipleSelecting, selectedFields, showQuarantineTab, onlyOwnField, showDoubler, selectDoubler, showErasmus, selectErasmus, showSell, gameOver } = useSelector((state) => state.gameState)
+  const { players, currentPlayer, showDiceRoll, showTax, showBuyPanel, map: fields, showBalance, lastDiceRoll, resetCountdown, museumPrice, showDisabledFields, singleSelecting, multipleSelecting, selectedFields, showQuarantineTab, onlyOwnField, showDoubler, selectDoubler, showErasmus, selectErasmus, showSell, gameOver, endDate } = useSelector((state) => state.gameState)
   const dispatch = useDispatch()
 
   let shadowFilter = new DropShadowFilter({ rotation: 45, distance: 6 })
@@ -97,6 +98,7 @@ export default function GameComponentNew(props) {
         >
           {characters}
           {map}
+          <CountdownBoard endDate={endDate} />
 
         </Container>
       </Stage>

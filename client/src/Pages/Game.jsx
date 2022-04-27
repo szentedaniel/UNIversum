@@ -4,6 +4,9 @@ import { useDispatch } from 'react-redux';
 import { setIsGame } from '../Store/slices/loadingSlice';
 import GameComponentNew from '../Components/GameComponentNew';
 import FullscreenSwitcher from '../Components/GameComponents/FullscreenSwitcher';
+import { useParams } from 'react-router-dom';
+import { useSocket } from '../Contexts/SocketContext'
+import { useNavigate } from "react-router-dom";
 
 
 export default function Game(props) {
@@ -11,6 +14,15 @@ export default function Game(props) {
   const dispatch = useDispatch()
   dispatch(setIsGame(true))
   const [bg, setBg] = useState(null)
+  const { code } = useParams();
+  const navigate = useNavigate()
+  const socket = useSocket()
+
+  const getGameDataByCode = () => {
+    
+  }
+
+
 
   useEffect(() => {
     if (!bg) {
