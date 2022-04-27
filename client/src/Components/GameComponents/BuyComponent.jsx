@@ -160,7 +160,7 @@ export default function BuyComponent(props) {
     setTimeout(() => {
       dispatch(nextPlayer())
       setSelectedLevel(null)
-    }, 400)
+    }, 500)
   }
 
   let popupBody = <></>
@@ -327,7 +327,7 @@ function BuyComponentSajat(props) {
         fieldId: playerField,
         level: selectedLevel
       }))
-    }, 550);
+    }, 400);
   }
 
   return (
