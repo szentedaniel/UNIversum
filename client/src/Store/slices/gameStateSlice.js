@@ -1,6 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit'
 import calcPrice from '../../Utils/calcPrice'
 import * as _ from 'lodash'
+import { GAME_CONFIG } from '../../gameConfig'
+
+const end = new Date(new Date().getTime() + 50 * 60000).toISOString()
 
 export const gameStateSlice = createSlice({
   name: 'gameState',
@@ -32,6 +35,10 @@ export const gameStateSlice = createSlice({
     resetCountdown: 1,
     currentPlayerIndex: 0,
     gameOver: false,
+    winnerColor: null,
+    endDate: end,
+    selectedCard: 0,
+    showCard: false,
     players: [
       {
         username: 'user' + Math.floor(Math.random() * 999999),
@@ -123,8 +130,8 @@ export const gameStateSlice = createSlice({
       },
       {
         id: 4,
-        level: 1,
-        ownerColor: 0,
+        level: 0,
+        ownerColor: null,
         hasDoubler: false,
         doublerCount: 0
       },
@@ -179,8 +186,8 @@ export const gameStateSlice = createSlice({
       },
       {
         id: 12,
-        level: 1,
-        ownerColor: 1,
+        level: 0,
+        ownerColor: null,
         hasDoubler: false,
         doublerCount: 0
       },
@@ -235,8 +242,8 @@ export const gameStateSlice = createSlice({
       },
       {
         id: 20,
-        level: 1,
-        ownerColor: 2,
+        level: 0,
+        ownerColor: null,
         hasDoubler: false,
         doublerCount: 0
       },
@@ -291,8 +298,8 @@ export const gameStateSlice = createSlice({
       },
       {
         id: 28,
-        level: 1,
-        ownerColor: 3,
+        level: 0,
+        ownerColor: null,
         hasDoubler: false,
         doublerCount: 0
       },
@@ -354,38 +361,159 @@ export const gameStateSlice = createSlice({
 
         const findValidNextPlayer = () => {
           const validPlayers = state.players.filter(x => x.isBankrupt === false)
-          console.log(validPlayers[0].colorCode);
-          console.log(validPlayers[1].colorCode);
-          console.log(validPlayers[2].colorCode);
-          console.log('curremt', state.currentPlayerIndex);
-          if (state.currentPlayerIndex >= validPlayers.length - 1) {
-            console.log('logika', state.currentPlayerIndex >= validPlayers.length - 1);
-            state.currentPlayerIndex = 0
-          } else state.currentPlayerIndex += 1
-          console.log(validPlayers[state.currentPlayerIndex].colorCode);
-          return validPlayers[state.currentPlayerIndex].colorCode
-        }
+          // validPlayers.forEach(element => {
+          //   console.log('lehetID: ', element.colorCode);
+          // });
+          if (validPlayers.length > 1) {
 
-        state.currentPlayer = findValidNextPlayer()
-
-
-
-
-        if (state.players[state.currentPlayer].isInQuarantine) {
-          if (state.players[state.currentPlayer].QuarantineRounds === 0) {
-
-            state.players[state.currentPlayer].isInQuarantine = false
-            state.showDiceRoll = true
-          } else {
-            state.showQuarantineTab = false
-            state.showQuarantineTab = true
+            // console.log('current', state.currentPlayerIndex);
+            if (state.currentPlayerIndex >= validPlayers.length - 1 || state.currentPlayerIndex < 0) {
+              // console.log('logika', state.currentPlayerIndex >= validPlayers.length - 1);
+              state.currentPlayerIndex = 0
+            } else state.currentPlayerIndex += 1
+            // console.log(validPlayers[state.currentPlayerIndex].colorCode);
+            return validPlayers[state.currentPlayerIndex].colorCode
           }
-        } else {
-          state.showDiceRoll = true
+          return -1
+        }
+        const getOccurrence = (array, value) => {
+          var count = 0;
+          array.forEach((v) => (v === value && count++));
+          return count;
         }
 
-        state.players[state.currentPlayer].playerCountdown = true
+        const gameOverCheck = () => {
+          // ha megvan véve mind a 4 museum ugyanattol az embertol
+          const museums = GAME_CONFIG.map.filter(x => x.isMuseum)
+          const museumIds = museums.map(x => x.id)
+          const jelenlegiMuseums = state.map.filter(x => museumIds.includes(x.id))
+          let jelenlegiOwnerColors = jelenlegiMuseums.map(x => x.ownerColor)
+          jelenlegiOwnerColors = jelenlegiOwnerColors.filter(x => x != null)
+          let supermonopol = false
+          if (jelenlegiOwnerColors.length > 0) {
+            supermonopol = jelenlegiOwnerColors.every((val, ind, arr) => val === arr[0])
+            if (supermonopol) state.winnerColor = jelenlegiOwnerColors[0]
+          }
 
+          // ha valaki birtokol 3 monopoliumot
+          let hasThreeMonopol = false
+          try {
+            let groupIds = GAME_CONFIG.map.map(x => x.groupId)
+            groupIds = _.uniq(groupIds)
+            groupIds = _.remove(groupIds, ((x) => x !== 0))
+
+            let monopolTulajokColorja = groupIds.map(groupId => {
+              const CsoportbanLevoMezokIdja = GAME_CONFIG.map.map(x => {
+                if (x.groupId === groupId && x.id) {
+                  return x.id
+                }
+              })
+
+              let csoportTulajainakSzine = state.map.map(x => {
+                if (CsoportbanLevoMezokIdja.includes(x.id)) {
+                  return x.ownerColor
+                }
+              })
+
+              csoportTulajainakSzine = csoportTulajainakSzine.filter(x => x !== undefined)
+              csoportTulajainakSzine = csoportTulajainakSzine.filter(x => x !== null)
+
+              csoportTulajainakSzine.forEach(element => {
+                console.log('groupId: ', groupId, 'tulajszin: ', element);
+              });
+              const monopolE = csoportTulajainakSzine.every((val, ind, arr) => val === arr[0])
+              console.log(monopolE);
+
+              if (monopolE) return csoportTulajainakSzine[0]
+
+
+            });
+            console.log('ehhh:');
+            monopolTulajokColorja = monopolTulajokColorja.map(x => x)
+            monopolTulajokColorja.forEach(element => {
+              console.log(element);
+            });
+            // const monopolGroupsTulajdonosok = groupIds.map(x => {
+            //   const groupId = x
+
+            //   const jelenlegiCsoport = GAME_CONFIG.map.filter(mezo => mezo.groupId === groupId) //jelenlegi csoport id
+
+            //   const csoportTulajainakId = jelenlegiCsoport.map(x => x.ownerColor)
+            //   const monopolE = csoportTulajainakId.every((val, ind, arr) => val === arr[0])
+            //   if (monopolE) return csoportTulajainakId[0]
+            // })
+
+            const validPlayers = state.players.filter(x => x.isBankrupt === false)
+            const validPlayersIds = validPlayers.map(x => x.colorCode)
+
+            for (let i = 0; i < validPlayersIds.length; i++) {
+              const element = validPlayersIds[i];
+              if (getOccurrence(monopolTulajokColorja, element) >= 3) {
+                hasThreeMonopol = true
+                state.winnerColor = element
+              }
+
+            }
+          } catch (error) {
+            console.log(error)
+          }
+
+
+
+          // van e elég játékos
+          const validPlayers = state.players.filter(x => x.isBankrupt === false)
+
+
+
+          console.log('ido: ', new Date().getTime() >= new Date(state.endDate).getTime());
+          // return logika
+          if (validPlayers.length <= 1) {
+            state.winnerColor = validPlayers[0].colorCode
+            console.log('nincs tobb player');
+            return true
+          } else if (new Date().getTime() >= new Date(state.endDate).getTime()) {
+            const winner = _.orderBy(state.players, ['money'], ['desc'])
+            state.winnerColor = winner[0]
+            console.log('lejart az ido');
+            return true
+          } else if (supermonopol) {
+            console.log('supermonopol');
+            return true
+          } else if (hasThreeMonopol) {
+            console.log('3 monopol');
+            return true
+          } else return false
+        }
+
+
+
+
+        if (gameOverCheck()) {
+          state.gameOver = true
+          console.log('vege');
+          state.showDiceRoll = false
+        }
+        else {
+          state.currentPlayer = findValidNextPlayer()
+
+
+
+
+          if (state.players[state.currentPlayer].isInQuarantine) {
+            if (state.players[state.currentPlayer].QuarantineRounds === 0) {
+
+              state.players[state.currentPlayer].isInQuarantine = false
+              state.showDiceRoll = true
+            } else {
+              state.showQuarantineTab = false
+              state.showQuarantineTab = true
+            }
+          } else {
+            state.showDiceRoll = true
+          }
+
+          state.players[state.currentPlayer].playerCountdown = true
+        }
       } catch (error) {
         console.log(error);
       }
@@ -557,8 +685,6 @@ export const gameStateSlice = createSlice({
         state.map[fields[i].id].doublerCount = 0
         state.map[fields[i].id].level = 0
       }
-
-      nextPlayer(state)
     },
     setShowSell: (state, action) => {
       state.showSell = action.payload.value
@@ -587,6 +713,9 @@ export const gameStateSlice = createSlice({
         state.showBalance = true
       } else if (state.sellIsFrom === 'showBuyPanel') {
         state.showBuyPanel = true
+      } else if (state.sellIsFrom === 'chanceCard') {
+        state.players[state.currentPlayer].money -= state.sellValue
+        state.sellValue = 0
       }
 
       state.sellIsFrom = ''
@@ -650,6 +779,142 @@ export const gameStateSlice = createSlice({
     },
     setShowTax: (state, action) => {
       state.showTax = action.payload
+    },
+    doPunishment: (state, action) => {
+      const money = state.players[state.currentPlayer].money
+      if (money <= 100_000) {
+
+        const calcTheSellingIds = (state, playerFields) => {
+          let values = [0]
+          let ids = []
+          let index = 0
+
+          while (_.sum(values) <= 100_000) {
+            values.push(playerFields[index].value)
+            ids.push(playerFields[index].id)
+            index++
+          }
+          return { ids: ids, values: values }
+        }
+
+        let playerFields = state.map.filter(x => x.ownerColor === state.currentPlayer)
+        if (playerFields.length > 0) { // Ha van mező akkor elad
+          playerFields = playerFields.map(x => {
+            let obj = x
+            obj.value = calcPrice(x.id, x.level, state.map).sellToBank
+            return obj
+          })
+          playerFields = _.orderBy(playerFields, ['value'], ['asc'])
+          const potencialSell = calcTheSellingIds(state, playerFields)
+          console.log('Kell: ', state.sellValue);
+          console.log('potenciális: ', _.sum(potencialSell.values));
+          console.log('potenciálisID: ', potencialSell.ids);
+
+          state.players[state.currentPlayer].money += _.sum(potencialSell.values) - 100_000
+
+          for (let i = 0; i < potencialSell.ids.length; i++) {
+            state.map[potencialSell.ids[i]].ownerColor = null
+            state.map[potencialSell.ids[i]].hasDoubler = false
+            state.map[potencialSell.ids[i]].doublerCount = 0
+            state.map[potencialSell.ids[i]].level = 0
+          }
+        } else { // máskülönben csőd
+          state.currentPlayerIndex -= 1
+          state.players[state.currentPlayer].money = 0
+          state.players[state.currentPlayer].isBankrupt = true
+          const fields = state.map.filter(x => x.ownerColor === state.currentPlayer)
+          for (let i = 0; i < fields.length; i++) {
+            state.map[fields[i].id].ownerColor = null
+            state.map[fields[i].id].hasDoubler = false
+            state.map[fields[i].id].doublerCount = 0
+            state.map[fields[i].id].level = 0
+          }
+        }
+      } else {
+        state.players[state.currentPlayer].money -= state.players[state.currentPlayer].money * 0.1
+      }
+    },
+    setShowCard: (state, action) => {
+      const getCardId = () => {
+        const random = Math.floor(Math.random() * GAME_CONFIG.cards.length)
+        if (random === state.selectedCard) return getCardId()
+        return random
+      }
+
+      if (action.payload) {
+        state.selectedCard = getCardId()
+      }
+
+      state.showCard = action.payload
+    },
+    applyCardEffect: (state) => {
+      state.resetCountdown += 1
+      const card = GAME_CONFIG.cards[state.selectedCard]
+      if (card.PCR) { // ha PCR akkor odaadja
+        state.players[state.currentPlayer].hasPCR = true
+      } else if (card.money) {
+        if (state.players[state.currentPlayer].money + card.moneyValue >= 0) { // ha van pénz levonja
+          state.players[state.currentPlayer].money += card.moneyValue
+        } else {
+          const sajatTulajdon = state.map.filter(x => x.ownerColor === state.currentPlayer)
+          const sajatTulajdonErtekei = sajatTulajdon.map(x => calcPrice(x.id, x.level, state.map).sellToBank)
+          const vagyon = _.sum(sajatTulajdonErtekei) + state.players[state.currentPlayer].money
+          if (vagyon + card.moneyValue >= 0) { // ha nincs elég pénz de vagyon igen
+            // state.showSell = true
+            // state.showDisabledFields = true
+            // state.multipleSelecting = true
+            // state.onlyOwnField = true
+            // state.sellIsFrom = 'chanceCard'
+            // state.sellValue = Math.abs(vagyon + card.moneyValue)
+
+            const calcTheSellingIds = (playerFields) => {
+              let values = [0]
+              let ids = []
+              let index = 0
+
+              while (_.sum(values) <= state.sellValue) {
+                values.push(playerFields[index].value)
+                ids.push(playerFields[index].id)
+                index++
+              }
+              return { ids: ids, values: values }
+            }
+
+            let playerFields = state.map.filter(x => x.ownerColor === state.currentPlayer)
+
+            playerFields = playerFields.map(x => {
+              let obj = x
+              obj.value = calcPrice(x.id, x.level, state.map).sellToBank
+              return obj
+            })
+            playerFields = _.orderBy(playerFields, ['value'], ['asc'])
+            const potencialSell = calcTheSellingIds(playerFields)
+            console.log('Kell: ', state.sellValue);
+            console.log('potenciális: ', _.sum(potencialSell.values));
+            console.log('potenciálisID: ', potencialSell.ids);
+
+            state.players[state.currentPlayer].money += _.sum(potencialSell.values) - state.sellValue
+            for (let i = 0; i < potencialSell.ids.length; i++) {
+              state.map[potencialSell.ids[i]].ownerColor = null
+              state.map[potencialSell.ids[i]].hasDoubler = false
+              state.map[potencialSell.ids[i]].doublerCount = 0
+              state.map[potencialSell.ids[i]].level = 0
+            }
+
+          } else if (vagyon + card.moneyValue < 0) { // ha nincs semmi akkor csőd
+            state.currentPlayerIndex -= 1
+            state.players[state.currentPlayer].money = 0
+            state.players[state.currentPlayer].isBankrupt = true
+            const fields = state.map.filter(x => x.ownerColor === state.currentPlayer)
+            for (let i = 0; i < fields.length; i++) {
+              state.map[fields[i].id].ownerColor = null
+              state.map[fields[i].id].hasDoubler = false
+              state.map[fields[i].id].doublerCount = 0
+              state.map[fields[i].id].level = 0
+            }
+          }
+        }
+      }
     }
 
 
@@ -688,7 +953,10 @@ export const {
   setSellValue,
   sellSelectedFields,
   autoSellSelectedFields,
-  setShowTax
+  setShowTax,
+  doPunishment,
+  setShowCard,
+  applyCardEffect
 
 } = gameStateSlice.actions
 

@@ -15,7 +15,7 @@ import _ from 'lodash';
 
 
 export default function NormalComponentNew(props) {
-  const { id, fields, dispatch, players, currentPlayer, showDisabledFields, disabledFilter, selectedFilter, singleSelecting, multipleSelecting, selectedFields, onlyOwnField, selectDoubler, selectErasmus } = props
+  const { id, fields, dispatch, players, currentPlayer, showDisabledFields, disabledFilter, selectedFilter, singleSelecting, multipleSelecting, selectedFields, onlyOwnField, selectDoubler, selectErasmus, showSell } = props
   const [level, setLevel] = useState(fields[id].level)
   const [ownerColor, setOwnerColor] = useState(fields[id].ownerColor)
   const [filters, setFilters] = useState([])
@@ -238,7 +238,7 @@ export default function NormalComponentNew(props) {
 
         <Text
           zIndex={90}
-          text={(level !== 0 && level !== null) ? formater.format(calcPrice(id, level, fields).tandij) : ''} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
+          text={(level !== 0 && level !== null) ? ((showSell && selectable) ? formater.format(calcPrice(id, level, fields).sellToBank) : formater.format(calcPrice(id, level, fields).tandij)) : ''} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
           anchor={0.5}
           skew={[-Math.PI / 4, 0]}
           scale={{ x: (props.flip ? -1 : 1) * 1, y: 1 }}

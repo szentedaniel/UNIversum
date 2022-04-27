@@ -43,7 +43,7 @@ const calcPrice = (id, level, fields) => {
       return {
         toBuy: (fields[id].ownerColor) ? null : 400000,
         tandij: 75_000 * museumMultiplier * (doublerTandij ? doublerTandij : 1),
-        sellToBank: 400000,
+        sellToBank: 400000 * 0.9,
         sellToPlayer: null
       }
     }
@@ -85,7 +85,7 @@ const calcPrice = (id, level, fields) => {
   return {
     toBuy: Math.round(toBuy),
     tandij: Math.round((doublerTandij ? doublerTandij : tandij)),
-    sellToBank: Math.round(toBuy * 0.9),
+    sellToBank: Math.round(Math.round(toBuy) * 0.9),
     sellToPlayer: Math.round(toBuy * 2)
   }
 }

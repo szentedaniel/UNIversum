@@ -9,7 +9,7 @@ import { setShowDiceRoll, setDiceRollValue, resetCountdown, setRollingDiceFromQu
 
 
 export default function RollDice() {
-  const { showDiceRoll, rollingDiceFromQuarantine, lastDiceRoll } = useSelector((state) => state.gameState)
+  const { showDiceRoll, rollingDiceFromQuarantine, lastDiceRoll, currentPlayer } = useSelector((state) => state.gameState)
   const dispatch = useDispatch()
 
   const sides = [1, 2, 3, 4, 5, 6]
@@ -65,7 +65,7 @@ export default function RollDice() {
           }
         }
       } else {
-        dispatch(setDiceRollValue(roll1 + roll2))
+        dispatch(setDiceRollValue(14))
       }
 
       setTimeout(() => {
@@ -79,6 +79,11 @@ export default function RollDice() {
 
   }
 
+  const color = ['bg-red-600', 'bg-blue-600', 'bg-green-500', 'bg-yellow-300']
+  const borderColor = ['border-red-600', 'border-blue-600', 'border-green-500', 'border-yellow-300']
+  const bgColor = ['bg-red-200/70', 'bg-blue-200/70', 'bg-green-200/70', 'bg-100-200/70']
+
+
 
   return (
     showDiceRoll &&
@@ -86,14 +91,14 @@ export default function RollDice() {
 
       <div className='flex flex-col flex-nowrap justify-center items-center'>
 
-        <div className={`transition-all ease-in-out ${rollValue ? 'opacity-100' : 'opacity-0'} h-14 w-14 border-4 border-red-600 rounded-2xl bg-red-200/75 flex items-center justify-center text-3xl font-semibold shadow-lg ${rolling && 'Die-shaking'}`}>
+        <div className={`transition-all ease-in-out ${rollValue ? 'opacity-100' : 'opacity-0'} h-14 w-14 border-4 ${borderColor[currentPlayer]} rounded-2xl ${bgColor[currentPlayer]} flex items-center justify-center text-3xl font-semibold shadow-lg ${rolling && 'Die-shaking'}`}>
           {rollValue}
         </div>
         <div className='flex justify-center content-center'>
-          <Dice face={dice1} rolling={rolling} />
-          <Dice face={dice2} rolling={rolling} />
+          <Dice face={dice1} rolling={rolling} color={color} currentPlayer={currentPlayer} />
+          <Dice face={dice2} rolling={rolling} color={color} currentPlayer={currentPlayer} />
         </div>
-        <div className={`flex items-center justify-center ${rollValue ? 'cursor-not-allowed bg-gray-400' : 'cursor-pointer bg-red-600'} p-2 w-24 h-fit rounded-2xl shadow-lg transition-all ease-in-out`} onClick={roll}>
+        <div className={`flex items-center justify-center ${rollValue ? 'cursor-not-allowed bg-gray-400' : `cursor-pointer ${color[currentPlayer]}`} p-2 w-24 h-fit rounded-2xl shadow-lg transition-all ease-in-out`} onClick={roll}>
           <img src={RollDiceImage} alt="Roll" className='w-8' />
         </div>
       </div>

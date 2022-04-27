@@ -7,16 +7,16 @@ import { Progress } from '@mantine/core'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { autoSellSelectedFields, nextPlayer, setDiceRollValue, setShowSell, resetCountdown as resetCountdownFunc, payTax, setShowTax, QuarantineRoundsDowner } from '../../Store/slices/gameStateSlice'
+import { autoSellSelectedFields, nextPlayer, setDiceRollValue, setShowSell, resetCountdown as resetCountdownFunc, payTax, setShowTax, QuarantineRoundsDowner, doPunishment } from '../../Store/slices/gameStateSlice'
 
 
 export default function PlayerInfo(props) {
-  const { players, currentPlayer, resetCountdown, showSell, showTax, showQuarantineTab } = props
+  const { players, currentPlayer, resetCountdown, showSell, showTax, showQuarantineTab, lastDiceRoll, gameOver } = props
   return (
     <>
       {
         players.map(player => (
-          <PlayerInfoPiece {...player} key={player.colorCode} currentPlayer={currentPlayer} showTax={showTax} showQuarantineTab={showQuarantineTab} resetCountdown={resetCountdown} showSell={showSell} />
+          <PlayerInfoPiece {...player} key={player.colorCode} currentPlayer={currentPlayer} gameOver={gameOver} lastDiceRoll={lastDiceRoll} showTax={showTax} showQuarantineTab={showQuarantineTab} resetCountdown={resetCountdown} showSell={showSell} />
         ))
       }
 
@@ -27,7 +27,7 @@ export default function PlayerInfo(props) {
 
 
 function PlayerInfoPiece(props) {
-  const { colorCode, username, money, currentPlayer, playerCountdown, resetCountdown, isBankrupt, showSell, showTax, showQuarantineTab } = props
+  const { colorCode, username, money, currentPlayer, playerCountdown, resetCountdown, isBankrupt, showSell, showTax, showQuarantineTab, gameOver } = props
   const dispatch = useDispatch()
 
   const [remain, setRemain] = useState(0)
@@ -88,25 +88,30 @@ function PlayerInfoPiece(props) {
   }, [colorCode, currentPlayer, playerCountdown, resetCountdown])
 
   useEffect(() => {
-    if (remain < 0) {
+    if (remain < 0 && gameOver === false) {
       console.log('lejart');
       // dispatch(setDiceRollValue(0))
       if (showSell) {
         dispatch(resetCountdownFunc())
         dispatch(autoSellSelectedFields())
+        dispatch(doPunishment())
 
         setTimeout(() => {
           dispatch(setShowSell({ value: false, from: '' }))
         }, 400);
       } else if (showTax) {
+        dispatch(resetCountdownFunc())
         dispatch(payTax())
         dispatch(setShowTax(false))
+        dispatch(doPunishment())
 
       } else if (showQuarantineTab) {
         dispatch(QuarantineRoundsDowner())
         dispatch(nextPlayer())
 
       } else {
+        dispatch(resetCountdownFunc())
+        dispatch(doPunishment())
         dispatch(nextPlayer())
       }
     }

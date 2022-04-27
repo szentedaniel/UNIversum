@@ -9,6 +9,7 @@ export default function Sell() {
   const dispatch = useDispatch()
   const [showLabel, setShowLabel] = useState(showSell)
   const [selectedValue, setSelectedValue] = useState(0)
+  const [sellable, setSellable] = useState(selectedValue >= sellValue)
 
   const formater = new Intl.NumberFormat('en-GB', { notation: 'compact' })
 
@@ -17,7 +18,6 @@ export default function Sell() {
       setShowLabel(true)
     } else {
       setShowLabel(false)
-      //dispatch(nextPlayer())
     }
     dispatch(resetCountdown())
   }, [showSell])
@@ -26,8 +26,10 @@ export default function Sell() {
 
     const fieldsValue = _.sum(selectedFields.map(x => calcPrice(x, fields[x].level, fields).sellToBank))
     setSelectedValue(fieldsValue)
+    setSellable(selectedValue >= sellValue)
     return () => {
       setSelectedValue(0)
+      setSellable(false)
     }
   }, [selectedFields])
 
@@ -36,7 +38,7 @@ export default function Sell() {
     setShowLabel(false)
     dispatch(resetCountdown())
     dispatch(sellSelectedFields())
-    
+
     setTimeout(() => {
       dispatch(setShowSell({ value: false, from: '' }))
     }, 400);
@@ -61,11 +63,11 @@ export default function Sell() {
           <span className='text-3xl font-sigmar-one'>
             {'Válaszd ki a mezőket'}
           </span>
-          <div className={`flex items-center justify-center h-12 w-44 bg-red-500 border-red-100 border-4 rounded-lg mt-4 mb-2 shadow-md`}>
+          <div className={`flex items-center justify-center h-12 w-44 ${sellable ? 'bg-green-400 border-green-100' : 'bg-red-500 border-red-100'} border-4 rounded-lg mt-4 mb-2 shadow-md`}>
             <span className={`text-center text-red-50`}>{formater.format(selectedValue) + ' / ' + formater.format(sellValue)}</span>
           </div>
           <div className='flex flex-row space-x-5 items-center justify-center'>
-            <div onClick={onSellHandler} className={`flex items-center w-fit h-12 py-2 px-4 bg-green-400 hover:bg-green-500 border-green-100 cursor-pointer rounded-full border-4 shadow-md text-lg `}>{'Eladás'.toUpperCase()}</div>
+            <div onClick={onSellHandler} className={`flex items-center w-fit h-12 py-2 px-4 ${sellable ? 'bg-green-400 hover:bg-green-500 border-green-100 cursor-pointer' : 'bg-gray-400 border-gray-100 cursor-not-allowed'} rounded-full border-4 shadow-md text-lg `}>{'Eladás'.toUpperCase()}</div>
             <div onClick={onAutoSellHandler} className={`flex items-center w-fit h-12 py-2 px-4 bg-orange-400 hover:bg-orange-500 border-orange-100 cursor-pointer rounded-full border-4 shadow-md text-md `}>{'Automatikus'.toUpperCase()}</div>
 
           </div>

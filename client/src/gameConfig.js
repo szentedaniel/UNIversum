@@ -556,6 +556,32 @@ export const GAME_CONFIG = {
       zIndex: -4
     },
 
+  ],
+  cards: [
+    {
+      id: 0,
+      PCR: true,
+      money: false,
+      moneyValue: 0,
+      title: 'Negatív PCR teszt',
+      desc: 'Nyertél egy negatív PCR tesztet amit legközelebb felhasználhatsz, ha karanténba jutsz.'
+    },
+    {
+      id: 1,
+      PCR: false,
+      money: true,
+      moneyValue: 200_000,
+      title: 'Nyeremény',
+      desc: 'Olyan jó átlagod lett, hogy 200 000 ft ösztöndíjban részesülsz.'
+    },
+    {
+      id: 2,
+      PCR: false,
+      money: true,
+      moneyValue: -200_000,
+      title: 'Minden tárgyól megbuktál',
+      desc: 'Sajnos minden tárgyadból megbuktál így 200 000 ft-ot kell fizetned, hogy újra felvehesd őket.'
+    },
   ]
 
 

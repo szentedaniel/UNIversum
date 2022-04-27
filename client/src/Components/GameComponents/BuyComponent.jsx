@@ -3,7 +3,7 @@ import { useUncontrolled } from '@mantine/hooks';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { GAME_CONFIG } from '../../gameConfig';
-import { buyLand, buyMuseum, nextPlayer, payTax, setShowTax, resetCountdown, setShowDoubler, startQuarantine, setShowErasmus, setShowBuyPanel, setShowSell, setSellValue } from '../../Store/slices/gameStateSlice';
+import { buyLand, buyMuseum, nextPlayer, payTax, setShowTax, resetCountdown, setShowDoubler, startQuarantine, setShowErasmus, setShowBuyPanel, setShowSell, setSellValue, setShowCard } from '../../Store/slices/gameStateSlice';
 import calcPrice from '../../Utils/calcPrice';
 import checkmark from '../../Images/game/gameicons/PNG/White/1x/checkmark.png'
 import unavailable from '../../Images/game/gameicons/PNG/White/1x/locked.png'
@@ -104,15 +104,20 @@ export default function BuyComponent(props) {
             dispatch(nextPlayer())
           }
         } else if (GAME_CONFIG.map[playerField].isDoubler) {
-          const hasFields = fields.map(x => x.ownerColor === currentPlayer)
+          let hasFields = fields.filter(x => x.ownerColor !== null)
+          hasFields = hasFields.map(x => x.ownerColor === parseInt(currentPlayer))
+          console.log('ennyi földede van: ', hasFields.length)
           if (hasFields.length > 0) {
             dispatch(setShowDoubler(true))
-          }
+          } else { dispatch(nextPlayer()) }
         } else if (GAME_CONFIG.map[playerField].isErasmus) {
-          const hasFields = fields.map(x => x.ownerColor === currentPlayer)
+          let hasFields = fields.filter(x => x.ownerColor !== null)
+          hasFields = hasFields.map(x => x.ownerColor === parseInt(currentPlayer))
           const emptyFields = fields.map(x => x.ownerColor === null)
           if (hasFields.length > 0 || emptyFields.length > 0) {
             dispatch(setShowErasmus(true))
+          } else {
+            dispatch(nextPlayer())
           }
         } else {  // START
           dispatch(nextPlayer())
@@ -130,6 +135,8 @@ export default function BuyComponent(props) {
         setTax(true)
         setModalTitle(GAME_CONFIG.map[playerField].label.toUpperCase())
         setOpened(true)
+      } else if (GAME_CONFIG.map[playerField].isChance) {
+        dispatch(setShowCard(true))
       } else {
         dispatch(nextPlayer())
         setSelectedLevel(null)
@@ -208,12 +215,12 @@ function TaxBody(props) {
 
   useEffect(() => {
     dispatch(setShowTax(true))
-  
+
     return () => {
       dispatch(setShowTax(false))
     }
   }, [])
-  
+
 
 
   const sajatTulajdon = fields.filter(x => x.ownerColor === currentPlayer)

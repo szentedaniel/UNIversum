@@ -10,7 +10,7 @@ import _ from 'lodash';
 import { Spring } from 'react-spring'
 
 export default function MuseumComponent(props) {
-  const { id, fields, dispatch, players, currentPlayer, showDisabledFields, disabledFilter, selectedFilter, singleSelecting, multipleSelecting, selectedFields, onlyOwnField, selectDoubler, selectErasmus } = props
+  const { id, fields, dispatch, players, currentPlayer, showDisabledFields, disabledFilter, selectedFilter, singleSelecting, multipleSelecting, selectedFields, onlyOwnField, selectDoubler, selectErasmus, showSell } = props
   const [ownerColor, setOwnerColor] = useState(fields[id].ownerColor)
   const [filters, setFilters] = useState([])
   const [selectable, setSelectable] = useState(false)
