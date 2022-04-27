@@ -468,7 +468,8 @@ export const gameStateSlice = createSlice({
           // console.log('ido: ', new Date().getTime() >= new Date(state.endDate).getTime());
           // return logika
           if (validPlayers.length <= 1) {
-            state.winnerColor = validPlayers[0].colorCode
+            const winner = _.orderBy(validPlayers, ['money'], ['desc'])
+            state.winnerColor = winner[0].colorCode
             // console.log('nincs tobb player');
             return true
           } else if (new Date().getTime() >= new Date(state.endDate).getTime()) {
