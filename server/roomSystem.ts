@@ -26,7 +26,8 @@ export const createRoom = (socket_: Socket, rooms_: Map<string, RoomData>, roomD
       lobbyName: (roomData.lobbyName === null) ? ('Lobby ' + roomId) : roomData.lobbyName,
       maxPlayerNumber: roomData.maxPlayerNumber,
       hasPassword: roomData.hasPassword,
-      password: pwd
+      password: pwd,
+      minute: roomData.minute
     })
 
     rooms_.set(roomId, {
@@ -35,7 +36,8 @@ export const createRoom = (socket_: Socket, rooms_: Map<string, RoomData>, roomD
       lobbyName: (roomData.lobbyName === null) ? ('Lobby ' + roomId) : roomData.lobbyName,
       maxPlayerNumber: roomData.maxPlayerNumber,
       hasPassword: roomData.hasPassword,
-      password: pwd
+      password: pwd,
+      minute: roomData.minute
     })
     sendRoomsToClient(rooms_)
   } catch (error) {
@@ -211,10 +213,10 @@ export const sendRoomsToClient = (rooms_: Map<string, RoomData>) => {
 
 
 export const getRoomById = (socket: Socket, id: string, rooms: Map<string, RoomData>) => {
-  setTimeout(() => {
-    if (rooms.has(id)) socket.emit('get_room_by_id_res', { status: 200, room: rooms.get(id), message: MESSAGES[200] })
-    else socket.emit('get_room_by_id_res', { status: 404, room: null, message: MESSAGES[404] })
 
-  }, 3000)
+  if (rooms.has(id)) socket.emit('get_room_by_id_res', { status: 200, room: rooms.get(id), message: MESSAGES[200] })
+  else socket.emit('get_room_by_id_res', { status: 404, room: null, message: MESSAGES[404] })
+
+
 }
 

@@ -5,31 +5,37 @@ import { useSelector } from 'react-redux';
 
 export default function CountdownBoard(props) {
     const { endDate } = props
-const [remainMin, setRemainMin] = useState(0)
-const [remainSec, setRemainSec] = useState(0)
+    const [remainMin, setRemainMin] = useState(0)
+    const [remainSec, setRemainSec] = useState(0)
 
     const ehh = Texture.from('../Images/game/caracters/board.png');
 
 
     useEffect(() => {
-        
+
 
         const target = new Date(endDate).getTime()
-            const interval = setInterval(() => {
+        const interval = setInterval(() => {
 
-                const now = new Date().getTime()
-                const distance = (target - now)
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                setRemainMin(minutes)
-                setRemainSec(seconds)
+            const now = new Date().getTime()
+            const distance = (target - now)
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            setRemainMin(minutes)
+            setRemainSec(seconds)
 
-            }, 1000)
-            return () => {
-                clearInterval(interval)
-            }
-        
+        }, 1000)
+        return () => {
+            clearInterval(interval)
+        }
+
     }, [])
+    function convert(n) {
+        n = String(n)
+        if (n.length == 1)
+            n = '0' + n
+        return n
+    }
 
     return (
         <Container
@@ -48,7 +54,7 @@ const [remainSec, setRemainSec] = useState(0)
 
                 <Text
                     zIndex={1}
-                    text={`${remainMin} : ${remainSec}`.toUpperCase()} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
+                    text={`${convert(remainMin)} : ${convert(remainSec)}`.toUpperCase()} //  new Intl.NumberFormat('en-GB', { notation: 'compact' }).format(1190000)
                     anchor={0.5}
                     scale={{ x: 1, y: 1 }}
                     // skew={[0.6, -0.3]}

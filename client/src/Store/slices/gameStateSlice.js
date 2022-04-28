@@ -832,7 +832,7 @@ export const gameStateSlice = createSlice({
           }
         }
       } else {
-        state.players[state.currentPlayer].money -= state.players[state.currentPlayer].money * 0.1
+        state.players[state.currentPlayer].money -= Math.round(state.players[state.currentPlayer].money * 0.1)
       }
     },
     setShowCard: (state, action) => {
@@ -916,6 +916,12 @@ export const gameStateSlice = createSlice({
           }
         }
       }
+    },
+    setGameState: (state, action) => {
+      console.log(action.payload.roomCode)
+      state.roomCode = action.payload.roomCode
+      state.players = action.payload.players
+      state.endDate = action.payload.endDate
     }
 
 
@@ -957,7 +963,8 @@ export const {
   setShowTax,
   doPunishment,
   setShowCard,
-  applyCardEffect
+  applyCardEffect,
+  setGameState
 
 } = gameStateSlice.actions
 

@@ -1,6 +1,7 @@
 import express from 'express';
 import http from "http";
 import { Server } from "socket.io";
+import { sendGameStateByCode, setGameIo } from './GameSystem/GameSystem';
 const cors = require('cors')
 const dotenv = require('dotenv')
 import { createRoom, joinRoom, leaveRoom, sendRoomsToClient, setIo, getRoomById } from './roomSystem'
@@ -36,6 +37,7 @@ let allClients = new Map<string, ClientData>()
 let rooms = new Map<string, RoomData>()
 
 setIo(io)
+setGameIo(io)
 // Websocket events
 io.on('connection', socket => {
   console.log('Client connected', socket.id)
@@ -70,6 +72,18 @@ io.on('connection', socket => {
   socket.on('get_room_by_id_req', (id: string) => {
     getRoomById(socket, id, rooms)
   })
+
+  socket.on('start_game_req', (id: string) => {
+    socket.to(id).emit('start_game_res')
+  })
+
+  socket.on('get_game_data_by_code_req', (id: string) => {
+    sendGameStateByCode(socket, id, rooms)
+  })
+
+
+
+
 
   socket.on('disconnecting', () => {
     leaveRoom(socket, rooms, allClients, true)

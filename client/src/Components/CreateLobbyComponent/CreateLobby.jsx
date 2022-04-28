@@ -33,6 +33,7 @@ export function CreateLobby() {
   const [maxPlayerNumber, setMaxPlayerNumber] = useState(4)
   const [hasPassword, setHasPassword] = useState(false)
   const [password, setPassword] = useState(null)
+  const [minute, setMinute] = useState(50)
 
 
   const createRoom = (roomData) => {
@@ -50,7 +51,8 @@ export function CreateLobby() {
         lobbyName: (lobbyName === '') ? null : lobbyName,
         maxPlayerNumber: maxPlayerNumber,
         hasPassword: (password === '' || password === null) ? false : hasPassword,
-        password: (password === '') ? null : password
+        password: (password === '') ? null : password,
+        minute: minute
       }
       console.log(roomData)
       createRoom(roomData)
@@ -139,10 +141,10 @@ export function CreateLobby() {
 
               </label>
               <div className="relative">
-                <select onChange={e => setMaxPlayerNumber(e.target.value)} className="appearance-none ease-in-out focus:text-sajat-100 focus:bg-sajat-400 focus:border-sajat-600 focus:outline-none
+                <select onChange={e => setMinute(e.target.value)} className="appearance-none ease-in-out focus:text-sajat-100 focus:bg-sajat-400 focus:border-sajat-600 focus:outline-none
               hover:bg-sajat-700 focus:ring-4 focus:ring-sajat-300
               font-bold block appearance-none w-full bg-sajat-600 border border-gray-200 text-sajat-100 py-3 px-4 pr-8 rounded leading-tight " id="grid-state">
-                  <option value="60">60 {t('MIN')}</option>
+                  <option value="50">50 {t('MIN')}</option>
                   <option value="30">30 {t('MIN')}</option>
                   <option value="15">15 {t('MIN')}</option>
                 </select>

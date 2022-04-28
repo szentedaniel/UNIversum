@@ -29,10 +29,15 @@ export function InLobby({ room, setRoom, code }) {
     socket.on('user_left', data => {
       setRoom(data.team)
     })
+    socket.on('start_game_res', () => {
+      console.log('Megkaptam a start game cuccot, átirényitas');
+      navigate(`/game/${code}`)
+    })
     return () => {
       socket.off('leaved_room')
       socket.off('user_joined')
       socket.off('user_left')
+      socket.off('start_game_res')
     }
   }, [])
 
@@ -55,6 +60,12 @@ export function InLobby({ room, setRoom, code }) {
   const leaveRoom = () => {
     socket.emit('leave_room')
     navigate('/')
+  }
+  const startGame = () => {
+    console.log('most emitelem');
+    socket.emit('start_game_req', code)
+    navigate(`/game/${code}`)
+
   }
 
   return (
@@ -79,7 +90,8 @@ export function InLobby({ room, setRoom, code }) {
             </span>{' '}
           </div>
         </div>
-        <div className="w-36 h-12 text-lg flex flex-row items-center justify-center">
+        <div className="w-36 h-12 text-lg flex flex-row items-center justify-center"
+          onClick={startGame}>
           START GAME
         </div>
       </div>

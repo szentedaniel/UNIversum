@@ -6,6 +6,7 @@ import { useSocket } from '../Contexts/SocketContext'
 import { useLocation, useParams } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import PasswordPopup from '../Components/PasswordPopup'
+import Logo from '../Components/Logo'
 
 
 
@@ -120,24 +121,42 @@ function Room(props) {
   }
 
   return (
-    <div className='h-full overflow-hidden'>
 
-      {room ?
-        <>
-          {(status === 200) &&
-            <>
-              <InLobby room={room} setRoom={setRoom} code={code} />
-            </>
-          }
-        </>
-        :
-        <>
-          <h1>{message}</h1>
-          <button className="pushable" onClick={() => backToHome()}>
-            <span className="front">Back to home</span>
-          </button>
-        </>}
-      <PasswordPopup showPasswordPopup={showPasswordPopup} setShowPasswordPopup={setShowPasswordPopup} setPw={setPw} />
+    <div className="App bg-sajat-900 text-sajat-100 overflow-hidden">
+      <div className='
+        flex
+        flex-1
+        relative
+        justify-center
+        items-center
+        overflow-auto'>
+        <div className='border-4 border-solid border-sajat-100/20 sm:border-none xs:border-none rounded-xl flex flex-column w-[90%] h-[90%] m-auto'>
+          {/* //transform-none xl:scale-[.8] lg:scale-[.65] md:scale-[0.5] */}
+          <div className='flex flex-1 items-center relative flex-col self-stretch'>
+            <div className='h-full overflow-hidden'>
+              <Logo />
+
+              {room ?
+                <>
+                  {(status === 200) &&
+                    <>
+                      <InLobby room={room} setRoom={setRoom} code={code} />
+                    </>
+                  }
+                </>
+                :
+                <>
+                  <h1>{message}</h1>
+                  <button className="pushable" onClick={() => backToHome()}>
+                    <span className="front">Back to home</span>
+                  </button>
+                </>}
+              <PasswordPopup showPasswordPopup={showPasswordPopup} setShowPasswordPopup={setShowPasswordPopup} setPw={setPw} />
+            </div>
+
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

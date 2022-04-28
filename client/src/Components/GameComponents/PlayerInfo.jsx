@@ -8,14 +8,25 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { autoSellSelectedFields, nextPlayer, setDiceRollValue, setShowSell, resetCountdown as resetCountdownFunc, payTax, setShowTax, QuarantineRoundsDowner, doPunishment } from '../../Store/slices/gameStateSlice'
+import { set } from 'lodash'
 
 
 export default function PlayerInfo(props) {
   const { players, currentPlayer, resetCountdown, showSell, showTax, showQuarantineTab, lastDiceRoll, gameOver } = props
+
+  const [Players, setPlayers] = useState(players)
+  useEffect(() => {
+    setPlayers(players)
+
+    return () => {
+      setPlayers(players)
+    }
+  }, [players])
+
   return (
     <>
       {
-        players.map(player => (
+        Players.map(player => (
           <PlayerInfoPiece {...player} key={player.colorCode} currentPlayer={currentPlayer} gameOver={gameOver} lastDiceRoll={lastDiceRoll} showTax={showTax} showQuarantineTab={showQuarantineTab} resetCountdown={resetCountdown} showSell={showSell} />
         ))
       }
@@ -29,6 +40,7 @@ export default function PlayerInfo(props) {
 function PlayerInfoPiece(props) {
   const { colorCode, username, money, currentPlayer, playerCountdown, resetCountdown, isBankrupt, showSell, showTax, showQuarantineTab, gameOver } = props
   const dispatch = useDispatch()
+  const [Username, setUsername] = useState(username)
 
   const [remain, setRemain] = useState(0)
   let img = pinkAvatar
@@ -68,6 +80,15 @@ function PlayerInfoPiece(props) {
     bgColor = 'bg-gray-300'
     borderColor = 'border-gray-300'
   }
+
+  useEffect(() => {
+    setUsername(username)
+
+    return () => {
+      setUsername('')
+    }
+  }, [username])
+
 
   useEffect(() => {
     if (currentPlayer === colorCode) {
