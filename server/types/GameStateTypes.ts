@@ -1,5 +1,6 @@
 export interface gameStateData {
   status: number
+  isLoaded: boolean
   roomCode: number
   currentPlayer: number
   showDiceRoll: boolean

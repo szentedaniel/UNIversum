@@ -5,12 +5,15 @@ import useSound from 'use-sound'
 import diceSfx from '../../Sounds/dice-sound.mp3';
 import { useSelector, useDispatch } from 'react-redux'
 import { setShowDiceRoll, setDiceRollValue, resetCountdown, setRollingDiceFromQuarantine, QuarantineRoundsDowner, nextPlayer } from '../../Store/slices/gameStateSlice';
+import { useSocket } from '../../Contexts/SocketContext';
 
 
 
-export default function RollDice() {
+export default function RollDice(props) {
   const { showDiceRoll, rollingDiceFromQuarantine, lastDiceRoll, currentPlayer } = useSelector((state) => state.gameState)
   const dispatch = useDispatch()
+  const socket = useSocket()
+  const { RoundOnMe } = props
 
   const sides = [1, 2, 3, 4, 5, 6]
   const [rolling, setRolling] = useState(false)
@@ -28,11 +31,31 @@ export default function RollDice() {
     if (showDiceRoll) setRollValue(null)
   }, [showDiceRoll])
 
+  useEffect(() => {
+    socket.on('roll_res', (data) => roll(data.roll1, data.roll2))
 
-  const roll = () => {
+    return () => {
+      socket.off('roll_res')
+    }
+  }, [])
+
+
+
+  const roll = (roll_1 = null, roll_2 = null) => {
     if (!rollValue) {
-      const roll1 = sides[Math.floor(Math.random() * sides.length)]
-      const roll2 = sides[Math.floor(Math.random() * sides.length)]
+      let roll1 = sides[Math.floor(Math.random() * sides.length)]
+      let roll2 = sides[Math.floor(Math.random() * sides.length)]
+
+      if (RoundOnMe) {
+        emitRoll(roll1, roll2)
+      }
+
+      if (roll_1 && roll_2) {
+        roll1 = roll_1
+        roll2 = roll_2
+
+      }
+
       setDice1(roll1)
       setDice2(roll2)
 
@@ -76,7 +99,10 @@ export default function RollDice() {
         }, 300);
       }, 3500);
     }
+  }
 
+  const emitRoll = (roll_1, roll_2) => {
+    socket.emit('roll_req', { roll1: roll_1, roll2: roll_2 })
   }
 
   const color = ['bg-red-600', 'bg-blue-600', 'bg-green-500', 'bg-yellow-300']
@@ -98,9 +124,10 @@ export default function RollDice() {
           <Dice face={dice1} rolling={rolling} color={color} currentPlayer={currentPlayer} />
           <Dice face={dice2} rolling={rolling} color={color} currentPlayer={currentPlayer} />
         </div>
-        <div className={`flex items-center justify-center ${rollValue ? 'cursor-not-allowed bg-gray-400' : `cursor-pointer ${color[currentPlayer]}`} p-2 w-24 h-fit rounded-2xl shadow-lg transition-all ease-in-out`} onClick={roll}>
-          <img src={RollDiceImage} alt="Roll" className='w-8' />
-        </div>
+        {RoundOnMe &&
+          <div className={`flex items-center justify-center ${rollValue ? 'cursor-not-allowed bg-gray-400' : `cursor-pointer ${color[currentPlayer]}`} p-2 w-24 h-fit rounded-2xl shadow-lg transition-all ease-in-out`} onClick={roll}>
+            <img src={RollDiceImage} alt="Roll" className='w-8' />
+          </div>}
       </div>
     </div>
 

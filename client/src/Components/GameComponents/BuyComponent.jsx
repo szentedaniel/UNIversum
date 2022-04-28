@@ -11,6 +11,7 @@ import museumPic from '../../Images/game/caracters/museum.png'
 import adoPic from '../../Images/game/caracters/ado2.png'
 import formatter from '../../Utils/formatter';
 import _ from 'lodash';
+import { useSocket } from '../../Contexts/SocketContext';
 
 export default function BuyComponent(props) {
   const [opened, setOpened] = useState(true)
@@ -26,12 +27,12 @@ export default function BuyComponent(props) {
     sellToBank: null,
     sellToPlayer: null
   })
-  const { players, currentPlayer, museumPrice, showBuyPanel, fields } = props
+  const { players, currentPlayer, museumPrice, showBuyPanel, fields, RoundOnMe } = props
 
 
   const colorCode = players[currentPlayer].colorCode
 
-
+  const socket = useSocket()
   const dispatch = useDispatch()
 
   let playerField = players[currentPlayer].field % 32
@@ -156,6 +157,9 @@ export default function BuyComponent(props) {
 
 
   const onColseHandler = () => {
+    if (RoundOnMe) {
+      emitBuyComponentClose()
+    }
     setOpened(false)
     setTimeout(() => {
       dispatch(nextPlayer())
@@ -163,20 +167,35 @@ export default function BuyComponent(props) {
     }, 500)
   }
 
+  useEffect(() => {
+    socket.on('step_on_field_controller_res', () => {
+      onColseHandler()
+    })
+
+    return () => {
+      socket.off('step_on_field_controller_res')
+    }
+  })
+
+
+  const emitBuyComponentClose = () => {
+    socket.emit('step_on_field_controller_req')
+  }
+
   let popupBody = <></>
 
   if (sajat) {
-    popupBody = <BuyComponentSajat price={price} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} players={players} currentPlayer={currentPlayer} onColseHandler={onColseHandler} />
+    popupBody = <BuyComponentSajat RoundOnMe={RoundOnMe} price={price} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} players={players} currentPlayer={currentPlayer} onColseHandler={onColseHandler} />
   } else if (nemSajat) {
-    popupBody = <BuyComponentNemSajat price={price} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} players={players} currentPlayer={currentPlayer} onColseHandler={onColseHandler} />
+    popupBody = <BuyComponentNemSajat RoundOnMe={RoundOnMe} price={price} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} players={players} currentPlayer={currentPlayer} onColseHandler={onColseHandler} />
   } else if (museum) {
-    popupBody = <MuseumBuy playerField={playerField} onColseHandler={onColseHandler} />
+    popupBody = <MuseumBuy RoundOnMe={RoundOnMe} playerField={playerField} onColseHandler={onColseHandler} />
   } else if (tax) {
-    popupBody = <TaxBody currentPlayer={currentPlayer} fields={fields} onColseHandler={onColseHandler} />
+    popupBody = <TaxBody RoundOnMe={RoundOnMe} currentPlayer={currentPlayer} fields={fields} onColseHandler={onColseHandler} />
   }
 
   return (
-    <>
+    <>{RoundOnMe &&
       <Modal
         size="lg"
         // size="calc(100vw - 20vw)"
@@ -202,6 +221,7 @@ export default function BuyComponent(props) {
 
 
       </Modal>
+    }
     </>
   )
 }
@@ -210,16 +230,20 @@ export default function BuyComponent(props) {
 
 
 function TaxBody(props) {
-  const { onColseHandler, fields, currentPlayer } = props
+  const { onColseHandler, fields, currentPlayer, RoundOnMe } = props
   const dispatch = useDispatch()
+  const socket = useSocket()
 
   useEffect(() => {
     dispatch(setShowTax(true))
+    if (!RoundOnMe) socket.on('tax_res', () => closeHandler())
+
 
     return () => {
       dispatch(setShowTax(false))
+      socket.off('tax_res')
     }
-  }, [])
+  })
 
 
 
@@ -229,9 +253,13 @@ function TaxBody(props) {
 
 
   const closeHandler = () => {
+    if (RoundOnMe) emitTax()
     dispatch(payTax())
     dispatch(setShowTax(false))
     onColseHandler()
+  }
+  const emitTax = () => {
+    socket.emit('tax_req')
   }
 
   return (
@@ -255,15 +283,35 @@ function TaxBody(props) {
 
 
 function MuseumBuy(props) {
-  const { onColseHandler, playerField } = props
+  const { onColseHandler, playerField, RoundOnMe } = props
   const { museumPrice } = useSelector((state) => state.gameState)
   const dispatch = useDispatch()
+  const socket = useSocket()
 
-  const buy = () => {
+  useEffect(() => {
+    if (!RoundOnMe) socket.on('museum_buy_res', data => buy(data))
+
+    return () => {
+      socket.off('museum_buy_res')
+    }
+  })
+
+
+  const buy = (field_ = null) => {
+    let field = field_
+    if (!field) {
+      field = {
+        fieldId: playerField
+      }
+    }
+    if (RoundOnMe) emitBuy(field)
     onColseHandler()
-    dispatch(buyMuseum({
-      fieldId: playerField
-    }))
+    dispatch(buyMuseum(field))
+  }
+
+  const emitBuy = (field) => {
+    const data = field
+    socket.emit('museum_buy_req', data)
   }
 
   return (
@@ -286,15 +334,36 @@ function MuseumBuy(props) {
 }
 
 function BuyComponentNemSajat(props) {
-  const { playerField, fields, setSelectedLevel, selectedLevel, price, onColseHandler } = props
+  const { playerField, fields, setSelectedLevel, selectedLevel, price, onColseHandler, RoundOnMe } = props
   const dispatch = useDispatch()
-  const buy = () => {
+  const socket = useSocket()
+
+  useEffect(() => {
+    if (!RoundOnMe) socket.on('buy_nem_sajat_res', land => buy(land))
+
+    return () => {
+      socket.off('buy_nem_sajat_res')
+    }
+  })
+
+
+  const buy = (land_ = null) => {
+    let land = land_
+    if (!land) {
+      land = {
+        ar: price.sellToPlayer,
+        fieldId: playerField,
+        level: selectedLevel
+      }
+    }
+    if (RoundOnMe) emitBuy(land)
     onColseHandler()
-    dispatch(buyLand({
-      ar: price.sellToPlayer,
-      fieldId: playerField,
-      level: selectedLevel
-    }))
+    dispatch(buyLand(land))
+  }
+
+  const emitBuy = (land) => {
+    const data = land
+    socket.emit('buy_nem_sajat_req', data)
   }
   return (
     <>
@@ -317,21 +386,44 @@ function BuyComponentNemSajat(props) {
 
 
 function BuyComponentSajat(props) {
-  const { players, currentPlayer, playerField, fields, setSelectedLevel, selectedLevel, price, onColseHandler } = props
+  const { players, currentPlayer, playerField, fields, setSelectedLevel, selectedLevel, price, onColseHandler, RoundOnMe } = props
   const dispatch = useDispatch()
-  const buy = () => {
-    onColseHandler()
-    setTimeout(() => {
-      dispatch(buyLand({
+  const socket = useSocket()
+
+  const buy = (land_ = null) => {
+    let land = land_
+    if (!land) {
+      land = {
         ar: price.toBuy,
         fieldId: playerField,
         level: selectedLevel
-      }))
+      }
+    }
+
+    if (RoundOnMe) {
+      emitBuy(land)
+    }
+    onColseHandler()
+    setTimeout(() => {
+      dispatch(buyLand(land))
     }, 400);
+  }
+  useEffect(() => {
+    if (!RoundOnMe) socket.on('buy_sajat_req', land => buy(land))
+
+    return () => {
+      socket.off('buy_sajat_req')
+    }
+  })
+
+
+  const emitBuy = (land) => {
+    const data = land
+    socket.emit('buy_sajat_req', data)
   }
 
   return (
-    <>
+    <>{RoundOnMe && <>
       <div className="flex justify-center space-x-6 w-auto bg-[#F5ECE3]">
         <LevelSelector id={1} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} players={players} currentPlayer={currentPlayer} />
         <LevelSelector id={2} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} players={players} currentPlayer={currentPlayer} />
@@ -344,7 +436,7 @@ function BuyComponentSajat(props) {
           onClick={buy}
           className=' cursor-pointer rounded-full w-max p-4 bg-green-300 hover:bg-green-400 shadow-md border-green-100 border-4 m-4 text-2xl'> Vásárlás {'( '} {formatter(price.toBuy)} {' )'}</div>
         <div>Más játkosok ennyiért vehetik meg tőled: {formatter(price.sellToPlayer)}</div>
-      </div>
+      </div> </>}
     </>
   )
 }

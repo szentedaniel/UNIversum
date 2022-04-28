@@ -2,6 +2,7 @@ import { gameStateData } from "../types/GameStateTypes"
 
 let initialState: gameStateData = {
   status: 200,
+  isLoaded: false,
   roomCode: 0,
   currentPlayer: 0,
   showDiceRoll: true,

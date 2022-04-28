@@ -63,11 +63,11 @@ export default function Sell() {
           <span className='text-3xl font-sigmar-one'>
             {'Válaszd ki a mezőket'}
           </span>
-          <div className={`flex items-center justify-center h-12 w-44 ${sellable ? 'bg-green-400 border-green-100' : 'bg-red-500 border-red-100'} border-4 rounded-lg mt-4 mb-2 shadow-md`}>
+          <div className={`flex items-center justify-center h-12 w-44 ${!sellable ? 'bg-green-400 border-green-100' : 'bg-red-500 border-red-100'} border-4 rounded-lg mt-4 mb-2 shadow-md`}>
             <span className={`text-center text-red-50`}>{formater.format(selectedValue) + ' / ' + formater.format(sellValue)}</span>
           </div>
           <div className='flex flex-row space-x-5 items-center justify-center'>
-            <div onClick={onSellHandler} className={`flex items-center w-fit h-12 py-2 px-4 ${sellable ? 'bg-green-400 hover:bg-green-500 border-green-100 cursor-pointer' : 'bg-gray-400 border-gray-100 cursor-not-allowed'} rounded-full border-4 shadow-md text-lg `}>{'Eladás'.toUpperCase()}</div>
+            <div onClick={onSellHandler} className={`flex items-center w-fit h-12 py-2 px-4 ${!sellable ? 'bg-green-400 hover:bg-green-500 border-green-100 cursor-pointer' : 'bg-gray-400 border-gray-100 cursor-not-allowed'} rounded-full border-4 shadow-md text-lg `}>{'Eladás'.toUpperCase()}</div>
             <div onClick={onAutoSellHandler} className={`flex items-center w-fit h-12 py-2 px-4 bg-orange-400 hover:bg-orange-500 border-orange-100 cursor-pointer rounded-full border-4 shadow-md text-md `}>{'Automatikus'.toUpperCase()}</div>
 
           </div>

@@ -6,7 +6,7 @@ import { formatter } from '../../Utils/formatter'
 import _ from 'lodash';
 
 export default function Balance(props) {
-  const { currentPlayer, fields, players, showBalance } = props
+  const { currentPlayer, fields, players, showBalance, RoundOnMe } = props
   const [mine, setMine] = useState(false)
   const [show, setShow] = useState(false)
   const [tandij, setTandij] = useState(0)

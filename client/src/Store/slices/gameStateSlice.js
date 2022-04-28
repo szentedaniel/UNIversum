@@ -9,6 +9,7 @@ export const gameStateSlice = createSlice({
   name: 'gameState',
   initialState: {
     roomCode: null,
+    isLoaded: false,
     currentPlayer: 0,
     showDiceRoll: true,
     showBalance: false,
@@ -922,6 +923,7 @@ export const gameStateSlice = createSlice({
       state.roomCode = action.payload.roomCode
       state.players = action.payload.players
       state.endDate = action.payload.endDate
+      state.isLoaded = action.payload.isLoaded
     }
 
 

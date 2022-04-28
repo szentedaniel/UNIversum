@@ -44,7 +44,8 @@ export const sendGameStateByCode = (socket: Socket, code: string, rooms: Map<str
       ...initialState,
       players: players,
       endDate: new Date(new Date().getTime() + minute * 60000).toISOString(),
-      roomCode: Number(code)
+      roomCode: Number(code),
+      isLoaded: true
     }
 
     console.dir(gameState, { depth: 0 })

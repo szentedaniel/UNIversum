@@ -5,16 +5,20 @@ import { useSelector } from 'react-redux';
 
 export default function CountdownBoard(props) {
     const { endDate } = props
+    const [end, setEnd] = useState(endDate)
     const [remainMin, setRemainMin] = useState(0)
     const [remainSec, setRemainSec] = useState(0)
 
     const ehh = Texture.from('../Images/game/caracters/board.png');
+    useEffect(() => {
+        setEnd(endDate)
+    }, [endDate])
 
 
     useEffect(() => {
 
 
-        const target = new Date(endDate).getTime()
+        const target = new Date(end).getTime()
         const interval = setInterval(() => {
 
             const now = new Date().getTime()

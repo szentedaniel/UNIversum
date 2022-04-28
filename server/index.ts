@@ -81,6 +81,53 @@ io.on('connection', socket => {
     sendGameStateByCode(socket, id, rooms)
   })
 
+  socket.on('roll_req', (rolls: { [key: string]: number }) => {
+    const { roll1, roll2 } = rolls
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('roll_res', { roll1: roll1, roll2: roll2 })
+    }
+  })
+
+  socket.on('step_on_field_controller_req', () => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('step_on_field_controller_res')
+    }
+  })
+
+  socket.on('buy_sajat_req', (data) => {
+    console.log(data);
+
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('buy_sajat_res', data)
+    }
+  })
+
+  socket.on('buy_nem_sajat_req', (data) => {
+    console.log(data);
+
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('buy_nem_sajat_res', data)
+    }
+  })
+
+  socket.on('tax_req', () => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('tax_res')
+    }
+  })
+
+  socket.on('museum_buy_req', (data) => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('museum_buy_res', data)
+    }
+  })
+
 
 
 

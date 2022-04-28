@@ -27,7 +27,9 @@ import CountdownBoard from './GameComponents/CountdownBoard'
 export default function GameComponentNew(props) {
   const [width, setWidth] = useState(GAME_CONFIG.width)
   const [height, setHeight] = useState(GAME_CONFIG.height)
-  const { players, currentPlayer, showDiceRoll, showTax, showBuyPanel, map: fields, showBalance, lastDiceRoll, resetCountdown, museumPrice, showDisabledFields, singleSelecting, multipleSelecting, selectedFields, showQuarantineTab, onlyOwnField, showDoubler, selectDoubler, showErasmus, selectErasmus, showSell, gameOver, endDate } = useSelector((state) => state.gameState)
+  const { players, currentPlayer, showDiceRoll, showTax, showBuyPanel, map: fields, showBalance, lastDiceRoll, resetCountdown, museumPrice, showDisabledFields, singleSelecting, multipleSelecting, selectedFields, showQuarantineTab, onlyOwnField, showDoubler, selectDoubler, showErasmus, selectErasmus, showSell, gameOver, endDate, isLoaded } = useSelector((state) => state.gameState)
+  const { username } = props
+  const [RoundOnMe, setRoundOnMe] = useState(username === players[currentPlayer].username)
   const dispatch = useDispatch()
 
   let shadowFilter = new DropShadowFilter({ rotation: 45, distance: 6 })
@@ -63,7 +65,7 @@ export default function GameComponentNew(props) {
   })), [players])
 
   useEffect(() => {
-    console.log('valtozott a users');
+    setRoundOnMe(username === players[currentPlayer].username)
   }, [users])
 
 
@@ -86,53 +88,58 @@ export default function GameComponentNew(props) {
 
   return (
     <>
-      <Stage {...stageProps}>
-        <Container
-          interactive={true}
-          interactiveChildren={true}
-          anchor={0.5}
-          position={[width / 2, height / 2]}
-          sortableChildren
-          filters={[shadowFilter]}
-          scale={[1, 1.1]}
-        >
-          {characters}
-          {map}
-          <CountdownBoard endDate={endDate} />
+      {isLoaded &&
+        <>
+          <Stage {...stageProps}>
+            <Container
+              interactive={true}
+              interactiveChildren={true}
+              anchor={0.5}
+              position={[width / 2, height / 2]}
+              sortableChildren
+              filters={[shadowFilter]}
+              scale={[1, 1.1]}
+            >
+              {characters}
+              {map}
+              <CountdownBoard endDate={endDate} />
 
-        </Container>
-      </Stage>
-      <PlayerInfo
-        players={players}
-        currentPlayer={currentPlayer}
-        resetCountdown={resetCountdown}
-        showSell={showSell}
-        showTax={showTax}
-        showQuarantineTab={showQuarantineTab}
-        lastDiceRoll={lastDiceRoll}
-        gameOver={gameOver} />
-      <RollDice />
-      <Balance
-        showBalance={showBalance}
-        players={players}
-        currentPlayer={currentPlayer}
-        fields={fields}
-      />
-      <BuyComponent
-        players={players}
-        currentPlayer={currentPlayer}
-        showDiceRoll={showDiceRoll}
-        showBuyPanel={showBuyPanel}
-        fields={fields}
-        museumPrice={museumPrice}
-      />
-      <Quarantine />
-      <InQuarantine />
-      <OnDoubler />
-      <OnErasmus />
-      <Sell />
-      <Winner />
-      <ChanceCard />
+            </Container>
+          </Stage>
+          <PlayerInfo
+            players={players}
+            currentPlayer={currentPlayer}
+            resetCountdown={resetCountdown}
+            showSell={showSell}
+            showTax={showTax}
+            showQuarantineTab={showQuarantineTab}
+            lastDiceRoll={lastDiceRoll}
+            gameOver={gameOver} />
+          <RollDice RoundOnMe={RoundOnMe} />
+          <Balance
+            RoundOnMe={RoundOnMe}
+            showBalance={showBalance}
+            players={players}
+            currentPlayer={currentPlayer}
+            fields={fields}
+          />
+          <BuyComponent
+            RoundOnMe={RoundOnMe}
+            players={players}
+            currentPlayer={currentPlayer}
+            showDiceRoll={showDiceRoll}
+            showBuyPanel={showBuyPanel}
+            fields={fields}
+            museumPrice={museumPrice}
+          />
+          <Quarantine />
+          <InQuarantine />
+          <OnDoubler />
+          <OnErasmus />
+          <Sell />
+          <Winner />
+          <ChanceCard />
+        </>}
     </>
   )
 }
