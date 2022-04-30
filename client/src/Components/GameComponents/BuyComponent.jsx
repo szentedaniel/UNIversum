@@ -28,7 +28,7 @@ export default function BuyComponent(props) {
     sellToBank: null,
     sellToPlayer: null
   })
-  const { players, currentPlayer, museumPrice, showBuyPanel, fields, RoundOnMe, selectedCard } = props
+  const { players, currentPlayer, museumPrice, showBuyPanel, fields, RoundOnMe, selectedCard, lastDiceRoll } = props
 
 
   const colorCode = players[currentPlayer].colorCode
@@ -112,11 +112,14 @@ export default function BuyComponent(props) {
           if (!players[currentPlayer].isInQuarantine) {
             dispatch(startQuarantine())
           } else {
+            console.log('NEXT step on BÓL', players[currentPlayer].isInQuarantine);
+
             dispatch(nextPlayer())
           }
         } else if (GAME_CONFIG.map[playerField].isDoubler) {
           let hasFields = fields.filter(x => x.ownerColor !== null)
-          hasFields = hasFields.map(x => x.ownerColor === parseInt(currentPlayer))
+          hasFields = hasFields.filter(x => x.ownerColor === parseInt(currentPlayer))
+          console.log(hasFields);
           console.log('ennyi földede van: ', hasFields.length)
           if (hasFields.length > 0) {
             dispatch(setShowDoubler(true))

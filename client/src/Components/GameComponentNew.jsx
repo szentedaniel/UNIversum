@@ -125,6 +125,7 @@ export default function GameComponentNew(props) {
             fields={fields}
           />
           <BuyComponent
+            lastDiceRoll={lastDiceRoll}
             selectedCard={selectedCard}
             RoundOnMe={RoundOnMe}
             players={players}

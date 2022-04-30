@@ -21,10 +21,19 @@ export default function RollDice(props) {
   const [dice2, setDice2] = useState(sides[Math.floor(Math.random() * sides.length)])
   const [isComplete, setIsComplete] = useState(false)
   const [rollValue, setRollValue] = useState(null)
+  const [lastLastDiceRoll, setLastLastDiceRoll] = useState(null)
+  const [lastDiceRollTemp, setLastDiceRollTemp] = useState(null)
+  let rollCounter = 0
   const [play] = useSound(
     diceSfx,
     { volume: 1 }
   )
+
+  useEffect(() => {
+    setLastLastDiceRoll(lastDiceRollTemp)
+    setLastDiceRollTemp(lastDiceRoll)
+  }, [lastDiceRoll, lastDiceRollTemp])
+
 
   useEffect(() => {
     setIsComplete(!showDiceRoll)
@@ -37,7 +46,7 @@ export default function RollDice(props) {
     return () => {
       // socket.off('roll_res')
     }
-  }, [])
+  })
 
 
 
@@ -72,16 +81,20 @@ export default function RollDice(props) {
       // dispatch
       if (rollingDiceFromQuarantine) {
         if (roll1 + roll2 === 12) {
-          dispatch(setRollingDiceFromQuarantine(false))
           dispatch(QuarantineRoundsDowner(roll1 + roll2))
           dispatch(setDiceRollValue(roll1 + roll2))
+          dispatch(setRollingDiceFromQuarantine(false))
         } else {
 
-          dispatch(setRollingDiceFromQuarantine(false))
           dispatch(QuarantineRoundsDowner(roll1 + roll2))
+          dispatch(setRollingDiceFromQuarantine(false))
           if (lastDiceRoll === 0) {
+            //setLastDiceRollTemp(0)
             setTimeout(() => {
+              //if (lastLastDiceRoll !== 0) {
+              console.log('NEXT rollingból', 'last:', lastDiceRoll, 'lastlast:', lastLastDiceRoll);
               dispatch(nextPlayer())
+              //}
             }, 4000);
           } else {
             dispatch(setDiceRollValue(0))

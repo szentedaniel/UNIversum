@@ -7,8 +7,7 @@ import { Progress } from '@mantine/core'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { autoSellSelectedFields, nextPlayer, setDiceRollValue, setShowSell, resetCountdown as resetCountdownFunc, payTax, setShowTax, QuarantineRoundsDowner, doPunishment } from '../../Store/slices/gameStateSlice'
-import { set } from 'lodash'
+import { autoSellSelectedFields, nextPlayer, setShowSell, resetCountdown as resetCountdownFunc, payTax, setShowTax, QuarantineRoundsDowner, doPunishment } from '../../Store/slices/gameStateSlice'
 import { useSocket } from '../../Contexts/SocketContext'
 
 
@@ -164,7 +163,7 @@ function PlayerInfoPiece(props) {
   })
   return (
     <div className={`w-56 h-32 bg-[#F5ECE3] absolute ${position} rounded-xl border-8 ${borderColor} m-3 flex flex-1 flex-col shadow-md`}>
-      <div className={`w-52 h-10 top-0 ${bgColor} items-center justify-center flex text-xl font-extrabold `}>{username}</div>
+      <div className={`w-52 h-10 top-0 ${bgColor} items-center justify-center flex text-xl font-extrabold `}>{Username}</div>
       <div className={`flex ${(colorCode === 1 || colorCode === 2) ? 'flex-row-reverse' : 'flex-row'} items-center text-center`}>
         <img src={img} alt="Alien" className='' />
         <div className='flex flex-col h-full w-full justify-between p-6'>
