@@ -133,7 +133,7 @@ function Room(props) {
         <div className='border-4 border-solid border-sajat-100/20 sm:border-none xs:border-none rounded-xl flex flex-column w-[90%] h-[90%] m-auto'>
           {/* //transform-none xl:scale-[.8] lg:scale-[.65] md:scale-[0.5] */}
           <div className='flex flex-1 items-center relative flex-col self-stretch'>
-            <div className='h-full overflow-hidden'>
+            <div className='h-full overflow-hidden flex flex-col mb-4'>
               <Logo />
 
               {room ?

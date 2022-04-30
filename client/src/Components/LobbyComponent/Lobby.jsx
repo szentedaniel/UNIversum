@@ -63,7 +63,7 @@ function Lobby() {
         <>
 
           {<>
-            <Link to='/create' className="self-center">
+            {/* <Link to='/create' className="self-center">
               <button className="button" >
                 <Icon>play_circle</Icon>
                 <span className="front">{t('PLAY_NOW')}</span>
@@ -73,7 +73,7 @@ function Lobby() {
               <Divider>
                 <p className="self-center">{t('or')}</p>
               </Divider>
-            </div>
+            </div> */}
             <Link to='/create' className="self-center">
               <button className="button" >
                 <Icon>add_circle</Icon>

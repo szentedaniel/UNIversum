@@ -31,7 +31,7 @@ function Rooms() {
 
           <div className='flex flex-1 items-center relative flex-col self-stretch'>
 
-            <div className='h-full overflow-hidden'>
+            <div className='h-full overflow-hidden flex flex-col mb-4'>
               <Logo />
 
               <LobbiesList />
