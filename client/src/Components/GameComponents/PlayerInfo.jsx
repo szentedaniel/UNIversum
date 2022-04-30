@@ -9,10 +9,11 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { autoSellSelectedFields, nextPlayer, setDiceRollValue, setShowSell, resetCountdown as resetCountdownFunc, payTax, setShowTax, QuarantineRoundsDowner, doPunishment } from '../../Store/slices/gameStateSlice'
 import { set } from 'lodash'
+import { useSocket } from '../../Contexts/SocketContext'
 
 
 export default function PlayerInfo(props) {
-  const { players, currentPlayer, resetCountdown, showSell, showTax, showQuarantineTab, lastDiceRoll, gameOver } = props
+  const { players, currentPlayer, resetCountdown, showSell, showTax, showQuarantineTab, lastDiceRoll, gameOver, RoundOnMe } = props
 
   const [Players, setPlayers] = useState(players)
   useEffect(() => {
@@ -27,7 +28,7 @@ export default function PlayerInfo(props) {
     <>
       {
         Players.map(player => (
-          <PlayerInfoPiece {...player} key={player.colorCode} currentPlayer={currentPlayer} gameOver={gameOver} lastDiceRoll={lastDiceRoll} showTax={showTax} showQuarantineTab={showQuarantineTab} resetCountdown={resetCountdown} showSell={showSell} />
+          <PlayerInfoPiece {...player} key={player.colorCode} RoundOnMe={RoundOnMe} currentPlayer={currentPlayer} gameOver={gameOver} lastDiceRoll={lastDiceRoll} showTax={showTax} showQuarantineTab={showQuarantineTab} resetCountdown={resetCountdown} showSell={showSell} />
         ))
       }
 
@@ -38,9 +39,10 @@ export default function PlayerInfo(props) {
 
 
 function PlayerInfoPiece(props) {
-  const { colorCode, username, money, currentPlayer, playerCountdown, resetCountdown, isBankrupt, showSell, showTax, showQuarantineTab, gameOver } = props
+  const { colorCode, username, money, currentPlayer, playerCountdown, resetCountdown, isBankrupt, showSell, showTax, showQuarantineTab, gameOver, RoundOnMe } = props
   const dispatch = useDispatch()
   const [Username, setUsername] = useState(username)
+  const socket = useSocket()
 
   const [remain, setRemain] = useState(0)
   let img = pinkAvatar
@@ -89,6 +91,10 @@ function PlayerInfoPiece(props) {
     }
   }, [username])
 
+  useEffect(() => {
+    socket.off('time_over_res').on('time_over_res', (id) => { if(id !== socket.id) timeOver()})
+  })
+  
 
   useEffect(() => {
     if (currentPlayer === colorCode) {
@@ -108,8 +114,9 @@ function PlayerInfoPiece(props) {
     }
   }, [colorCode, currentPlayer, playerCountdown, resetCountdown])
 
-  useEffect(() => {
+  const timeOver = () => {
     if (remain < 0 && gameOver === false) {
+      if (RoundOnMe) emitTimeOver()
       console.log('lejart');
       // dispatch(setDiceRollValue(0))
       if (showSell) {
@@ -136,6 +143,13 @@ function PlayerInfoPiece(props) {
         dispatch(nextPlayer())
       }
     }
+  }
+  const emitTimeOver = () => {
+    socket.emit('time_over_req')
+  }
+
+  useEffect(() => {
+    timeOver()
     return () => {
     }
   }, [remain])

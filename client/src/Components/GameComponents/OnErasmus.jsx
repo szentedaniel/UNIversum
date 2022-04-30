@@ -1,14 +1,21 @@
 import { Modal } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useSocket } from '../../Contexts/SocketContext'
 import erasmus from '../../Images/game/caracters/erasmus.png'
 import { resetCountdown, setSelectErasmus } from '../../Store/slices/gameStateSlice'
 
-export default function OnErasmus() {
+export default function OnErasmus(props) {
   const { showErasmus } = useSelector((state) => state.gameState)
   const dispatch = useDispatch()
   const [opened, setOpened] = useState(showErasmus)
   const [showLabel, setShowLabel] = useState(false)
+  const { RoundOnMe } = props
+  const socket = useSocket()
+
+  useEffect(() => {
+    socket.off('erasmus_close_res').on('erasmus_close_res', (id) => { if (id !== socket.id) onColseHandler() })
+  })
 
 
   useEffect(() => {
@@ -23,6 +30,7 @@ export default function OnErasmus() {
   }, [showErasmus])
 
   const onColseHandler = () => {
+    if (RoundOnMe) emitErasmusClose()
     setOpened(false)
 
     setTimeout(() => {
@@ -30,7 +38,9 @@ export default function OnErasmus() {
       dispatch(resetCountdown())
       dispatch(setSelectErasmus(true))
     }, 400);
-
+  }
+  const emitErasmusClose = () => {
+    socket.emit('erasmus_close_req')
   }
 
   return (
@@ -62,9 +72,10 @@ export default function OnErasmus() {
             <p><span className='leading-5'>Válassz ki egy várost, ahova szeretnél menni.</span></p>
           </div>
 
-          <div
+          {RoundOnMe && <div
             onClick={onColseHandler}
             className='flex w-fit h-fit px-4 py-2 bg-orange-300 border-orange-100 border-4 cursor-pointer rounded-full items-center justify-center hover:bg-orange-400 shadow-lg text-xl'>Remek</div>
+          }
         </div>
 
       </Modal>

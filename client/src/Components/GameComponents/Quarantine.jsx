@@ -3,11 +3,19 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { nextPlayer, setShowFirstQuarantineTab } from '../../Store/slices/gameStateSlice'
 import biohazad from '../../Images/game/emojis/biohazard.png'
+import { useSocket } from '../../Contexts/SocketContext'
 
-export default function Quarantine() {
+export default function Quarantine(props) {
   const { showFirstQuarantineTab } = useSelector((state) => state.gameState)
   const dispatch = useDispatch()
   const [opened, setOpened] = useState(showFirstQuarantineTab)
+  const socket = useSocket()
+  const { RoundOnMe } = props
+
+  useEffect(() => {
+    socket.off('quarantine_close_res').on('quarantine_close_res', id => { if (id !== socket.id) onColseHandler() })
+
+  })
 
 
   useEffect(() => {
@@ -17,11 +25,15 @@ export default function Quarantine() {
   }, [showFirstQuarantineTab])
 
   const onColseHandler = () => {
+    if (RoundOnMe) emitQuarantineClose()
     setOpened(false)
     setTimeout(() => {
       dispatch(setShowFirstQuarantineTab(false))
       dispatch(nextPlayer())
     }, 400)
+  }
+  const emitQuarantineClose = () => {
+    socket.emit('quarantine_close_req')
   }
 
   return (
@@ -53,9 +65,10 @@ export default function Quarantine() {
             <p><span>3 körből kimaradsz.</span></p>
           </div>
 
-          <div
+          {RoundOnMe && <div
             onClick={onColseHandler}
             className='flex w-fit h-fit px-4 py-2 bg-orange-300 border-orange-100 border-4 cursor-pointer rounded-full items-center justify-center hover:bg-orange-400 shadow-lg'>Megértettem</div>
+          }
         </div>
 
       </Modal>

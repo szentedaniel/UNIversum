@@ -32,10 +32,10 @@ export default function RollDice(props) {
   }, [showDiceRoll])
 
   useEffect(() => {
-    socket.on('roll_res', (data) => roll(data.roll1, data.roll2))
+    socket.off('roll_res').on('roll_res', (data) => roll(data.roll1, data.roll2))
 
     return () => {
-      socket.off('roll_res')
+      // socket.off('roll_res')
     }
   }, [])
 

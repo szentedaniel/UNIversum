@@ -91,8 +91,9 @@ io.on('connection', socket => {
 
   socket.on('step_on_field_controller_req', () => {
     if (allClients.has(socket.id)) {
+      console.log('step on field')
       const room = allClients.get(socket.id)!.room!
-      socket.to(room).emit('step_on_field_controller_res')
+      socket.to(room).emit('step_on_field_controller_res', socket.id)
     }
   })
 
@@ -100,7 +101,10 @@ io.on('connection', socket => {
     console.log(data);
 
     if (allClients.has(socket.id)) {
+      console.log(data)
       const room = allClients.get(socket.id)!.room!
+      console.log(room)
+
       socket.to(room).emit('buy_sajat_res', data)
     }
   })
@@ -109,7 +113,10 @@ io.on('connection', socket => {
     console.log(data);
 
     if (allClients.has(socket.id)) {
+      console.log(data)
       const room = allClients.get(socket.id)!.room!
+      console.log(room)
+
       socket.to(room).emit('buy_nem_sajat_res', data)
     }
   })
@@ -117,18 +124,106 @@ io.on('connection', socket => {
   socket.on('tax_req', () => {
     if (allClients.has(socket.id)) {
       const room = allClients.get(socket.id)!.room!
+      console.log(room)
+
       socket.to(room).emit('tax_res')
     }
   })
 
   socket.on('museum_buy_req', (data) => {
     if (allClients.has(socket.id)) {
+      console.log(data)
+
       const room = allClients.get(socket.id)!.room!
+      console.log(room)
+
       socket.to(room).emit('museum_buy_res', data)
     }
   })
 
+  socket.on('close_chance_req', () => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('close_chance_res', socket.id)
+    }
+  })
 
+  socket.on('set_selected_card_req', (data) => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('set_selected_card_res', data)
+    }
+  })
+
+  socket.on('quarantine_roll_handler_req', () => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('quarantine_roll_handler_res', socket.id)
+    }
+  })
+
+  socket.on('quarantine_buy_handler_req', () => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('quarantine_buy_handler_res', socket.id)
+    }
+  })
+
+  socket.on('use_pcr_req', () => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('use_pcr_res', socket.id)
+    }
+  })
+
+  socket.on('quarantine_close_req', () => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('quarantine_close_res', socket.id)
+    }
+  })
+
+  socket.on('on_autoSell_handler_req', () => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('on_autoSell_handler_res', socket.id)
+    }
+  })
+
+  socket.on('on_sell_handler_req', () => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('on_sell_handler_res', socket.id)
+    }
+  })
+
+  socket.on('select_field_req', (data) => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('select_field_res', data)
+    }
+  })
+
+  socket.on('doubler_close_req', () => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('doubler_close_res', socket.id)
+    }
+  })
+
+  socket.on('erasmus_close_req', () => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('erasmus_close_res', socket.id)
+    }
+  })
+
+  socket.on('time_over_req', () => {
+    if (allClients.has(socket.id)) {
+      const room = allClients.get(socket.id)!.room!
+      socket.to(room).emit('time_over_res', socket.id)
+    }
+  })
 
 
 

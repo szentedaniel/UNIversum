@@ -414,19 +414,35 @@ export const gameStateSlice = createSlice({
                 if (CsoportbanLevoMezokIdja.includes(x.id)) {
                   return x.ownerColor
                 }
+                return null
               })
 
-              csoportTulajainakSzine = csoportTulajainakSzine.filter(x => x !== undefined)
-              csoportTulajainakSzine = csoportTulajainakSzine.filter(x => x !== null)
+              csoportTulajainakSzine = csoportTulajainakSzine.filter(x => { return x !== null })
 
+              const occurrences = csoportTulajainakSzine.reduce(function (acc, curr) {
+                return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
+              }, {})
+
+              let monopolE = false
+              let tulajSzine = null
+
+              for (let i = 0; i < csoportTulajainakSzine.length; i++) {
+                const element = csoportTulajainakSzine[i];
+
+                if (occurrences[element] === CsoportbanLevoMezokIdja.length) {
+                  monopolE = true
+                  tulajSzine = element
+                }
+              }
               // csoportTulajainakSzine.forEach(element => {
               //   console.log('groupId: ', groupId, 'tulajszin: ', element);
               // });
-              const monopolE = csoportTulajainakSzine.every((val, ind, arr) => val === arr[0])
+              // // // // const monopolE = csoportTulajainakSzine.every((val, ind, arr) => val === arr[0])
               // console.log(monopolE);
 
-              if (monopolE) return csoportTulajainakSzine[0]
+              if (monopolE) return tulajSzine // csoportTulajainakSzine[0]
 
+              return null
 
             });
             // console.log('ehhh:');
@@ -471,18 +487,18 @@ export const gameStateSlice = createSlice({
           if (validPlayers.length <= 1) {
             const winner = _.orderBy(validPlayers, ['money'], ['desc'])
             state.winnerColor = winner[0].colorCode
-            // console.log('nincs tobb player');
+            console.log('nincs tobb player');
             return true
           } else if (new Date().getTime() >= new Date(state.endDate).getTime()) {
             const winner = _.orderBy(state.players, ['money'], ['desc'])
             state.winnerColor = winner[0]
-            // console.log('lejart az ido');
+            console.log('lejart az ido');
             return true
           } else if (supermonopol) {
-            // console.log('supermonopol');
+            console.log('supermonopol');
             return true
           } else if (hasThreeMonopol) {
-            // console.log('3 monopol');
+            console.log('3 monopol');
             return true
           } else return false
         }
@@ -837,15 +853,15 @@ export const gameStateSlice = createSlice({
       }
     },
     setShowCard: (state, action) => {
-      const getCardId = () => {
-        const random = Math.floor(Math.random() * GAME_CONFIG.cards.length)
-        if (random === state.selectedCard) return getCardId()
-        return random
-      }
+      // const getCardId = () => {
+      //   const random = Math.floor(Math.random() * GAME_CONFIG.cards.length)
+      //   if (random === state.selectedCard) return getCardId()
+      //   return random
+      // }
 
-      if (action.payload) {
-        state.selectedCard = getCardId()
-      }
+      // if (action.payload) {
+      //   state.selectedCard = getCardId()
+      // }
 
       state.showCard = action.payload
     },
@@ -924,6 +940,9 @@ export const gameStateSlice = createSlice({
       state.players = action.payload.players
       state.endDate = action.payload.endDate
       state.isLoaded = action.payload.isLoaded
+    },
+    setSelectedCard: (state, action) => {
+      state.selectedCard = action.payload
     }
 
 
@@ -966,7 +985,8 @@ export const {
   doPunishment,
   setShowCard,
   applyCardEffect,
-  setGameState
+  setGameState,
+  setSelectedCard
 
 } = gameStateSlice.actions
 

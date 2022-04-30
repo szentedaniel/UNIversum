@@ -3,7 +3,7 @@ import { useUncontrolled } from '@mantine/hooks';
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { GAME_CONFIG } from '../../gameConfig';
-import { buyLand, buyMuseum, nextPlayer, payTax, setShowTax, resetCountdown, setShowDoubler, startQuarantine, setShowErasmus, setShowBuyPanel, setShowSell, setSellValue, setShowCard } from '../../Store/slices/gameStateSlice';
+import { buyLand, buyMuseum, nextPlayer, payTax, setShowTax, resetCountdown, setShowDoubler, startQuarantine, setShowErasmus, setShowBuyPanel, setShowSell, setSellValue, setShowCard, setSelectedCard } from '../../Store/slices/gameStateSlice';
 import calcPrice from '../../Utils/calcPrice';
 import checkmark from '../../Images/game/gameicons/PNG/White/1x/checkmark.png'
 import unavailable from '../../Images/game/gameicons/PNG/White/1x/locked.png'
@@ -21,13 +21,14 @@ export default function BuyComponent(props) {
   const [nemSajat, setNemSajat] = useState(false)
   const [museum, setMuseum] = useState(false)
   const [tax, setTax] = useState(false)
+  const [alreadyNext, setAlreadyNext] = useState(false)
   const [price, setPrice] = useState({
     toBuy: null,
     tandij: null,
     sellToBank: null,
     sellToPlayer: null
   })
-  const { players, currentPlayer, museumPrice, showBuyPanel, fields, RoundOnMe } = props
+  const { players, currentPlayer, museumPrice, showBuyPanel, fields, RoundOnMe, selectedCard } = props
 
 
   const colorCode = players[currentPlayer].colorCode
@@ -57,7 +58,16 @@ export default function BuyComponent(props) {
     }
   }, [selectedLevel])
 
+  useEffect(() => {
+    socket.off('set_selected_card_res').on('set_selected_card_res', data => { dispatch(setSelectedCard(data)) })
+  })
 
+
+  const getCardId = () => {
+    const random = Math.floor(Math.random() * GAME_CONFIG.cards.length)
+    if (random === selectedCard) return getCardId()
+    return random
+  }
 
   useEffect(() => {
     if (showBuyPanel) {
@@ -137,7 +147,14 @@ export default function BuyComponent(props) {
         setModalTitle(GAME_CONFIG.map[playerField].label.toUpperCase())
         setOpened(true)
       } else if (GAME_CONFIG.map[playerField].isChance) {
-        dispatch(setShowCard(true))
+        if (RoundOnMe) {
+          const random = getCardId()
+          dispatch(setSelectedCard(random))
+          dispatch(setShowCard(true))
+          socket.emit('set_selected_card_req', random)
+        } else {
+          dispatch(setShowCard(true))
+        }
       } else {
         dispatch(nextPlayer())
         setSelectedLevel(null)
@@ -152,28 +169,37 @@ export default function BuyComponent(props) {
       setNemSajat(false)
       setMuseum(false)
       setTax(false)
+      setAlreadyNext(false)
+
     }
   }, [showBuyPanel])
 
 
-  const onColseHandler = () => {
+  const onColseHandler = (e, fromSocket) => {
     if (RoundOnMe) {
       emitBuyComponentClose()
     }
     setOpened(false)
-    setTimeout(() => {
-      dispatch(nextPlayer())
-      setSelectedLevel(null)
-    }, 500)
+    console.log(socket.id);
+    //if (!fromSocket) 
+
+    dispatch(nextPlayer())
+    setAlreadyNext(true)
+    setSelectedLevel(null)
+
+    // setTimeout(() => {
+    // }, 500)
   }
 
   useEffect(() => {
-    socket.on('step_on_field_controller_res', () => {
-      onColseHandler()
+    socket.off('step_on_field_controller_res').on('step_on_field_controller_res', (id) => {
+      console.log(id);
+      console.log(socket.id)
+      if (id !== socket.id) onColseHandler(null, true)
     })
 
     return () => {
-      socket.off('step_on_field_controller_res')
+      // socket.off('step_on_field_controller_res')
     }
   })
 
@@ -195,7 +221,7 @@ export default function BuyComponent(props) {
   }
 
   return (
-    <>{RoundOnMe &&
+    <>{true &&
       <Modal
         size="lg"
         // size="calc(100vw - 20vw)"
@@ -207,19 +233,15 @@ export default function BuyComponent(props) {
         transitionDuration={300}
         transitiontimingfunction='ease'
         closeOnClickOutside={false}
+        closeOnEscape={false}
+        withCloseButton={(RoundOnMe ? true : false)}
         radius={'lg'}
         classNames={{ modal: 'bg-[#F5ECE3]' }}
       //overlayColor={'#F5ECE3'}
       >
-
         <>
           {popupBody}
         </>
-
-
-
-
-
       </Modal>
     }
     </>
@@ -236,12 +258,12 @@ function TaxBody(props) {
 
   useEffect(() => {
     dispatch(setShowTax(true))
-    if (!RoundOnMe) socket.on('tax_res', () => closeHandler())
+    socket.off('tax_res').on('tax_res', () => { closeHandler(null, true) })
 
 
     return () => {
       dispatch(setShowTax(false))
-      socket.off('tax_res')
+      // socket.off('tax_res')
     }
   })
 
@@ -252,31 +274,35 @@ function TaxBody(props) {
   const tax = _.sum(sajatTulajdonErtekei) * 0.1
 
 
-  const closeHandler = () => {
+  const closeHandler = (e, fromSocket) => {
     if (RoundOnMe) emitTax()
     dispatch(payTax())
     dispatch(setShowTax(false))
-    onColseHandler()
+    if (!fromSocket) onColseHandler()
   }
   const emitTax = () => {
     socket.emit('tax_req')
   }
 
   return (
-    <div className='flex flex-col justify-center items-center w-auto'>
-      <div className='flex flex-col items-center content-center w-32 h-32 rounded m-3 drop-shadow-md'>
-        <img src={adoPic} alt="adó" />
-      </div>
+    <>
 
-      <div className='flex flex-col w-4/5 h-32 rounded-lg bg-[#eedac6] self-center items-center justify-evenly mb-3 p-3 leading-5'>
-        <span>Ráléptél az ADÓ mezőre </span>
-        <p><span>Fizetned kell {formatter(tax)} összeget</span></p>
-      </div>
+      <div className='flex flex-col justify-center items-center w-auto'>
+        <div className='flex flex-col items-center content-center w-32 h-32 rounded m-3 drop-shadow-md'>
+          <img src={adoPic} alt="adó" />
+        </div>
 
-      <div
-        onClick={closeHandler}
-        className='flex w-32 h-10 bg-orange-300 border-orange-100 border-4 cursor-pointer rounded-full items-center justify-center hover:bg-orange-400 shadow-lg'>Megértettem</div>
-    </div>
+        <div className='flex flex-col w-4/5 h-32 rounded-lg bg-[#eedac6] self-center items-center justify-evenly mb-3 p-3 leading-5'>
+          <span>Ráléptél az ADÓ mezőre </span>
+          <p><span>Fizetned kell {formatter(tax)} összeget</span></p>
+        </div>
+        {RoundOnMe &&
+          <div
+            onClick={closeHandler}
+            className='flex w-32 h-10 bg-orange-300 border-orange-100 border-4 cursor-pointer rounded-full items-center justify-center hover:bg-orange-400 shadow-lg'>Megértettem</div>
+        }
+      </div>
+    </>
   )
 }
 
@@ -289,46 +315,63 @@ function MuseumBuy(props) {
   const socket = useSocket()
 
   useEffect(() => {
-    if (!RoundOnMe) socket.on('museum_buy_res', data => buy(data))
+    socket.off('museum_buy_res').on('museum_buy_res', data => {
+      console.log('kapott: ', data);
+      buy(null, data, true)
+    })
 
     return () => {
-      socket.off('museum_buy_res')
+      // socket.off('museum_buy_res')
     }
   })
 
 
-  const buy = (field_ = null) => {
+  const buy = (e, field_ = null, fromSocket) => {
     let field = field_
+    // console.log(field_);
     if (!field) {
       field = {
         fieldId: playerField
       }
     }
-    if (RoundOnMe) emitBuy(field)
-    onColseHandler()
+    // console.log(field);
+    if (RoundOnMe) emitBuy(e, field)
     dispatch(buyMuseum(field))
+    if (!fromSocket) onColseHandler()
   }
 
-  const emitBuy = (field) => {
+  const emitBuy = (e, field) => {
     const data = field
+    // console.log(data);
     socket.emit('museum_buy_req', data)
   }
 
   return (
     <>
-      <div className="flex justify-center space-x-6 w-auto bg-[#F5ECE3]">
-        <div
-          className={`flex flex-col items-center content-center justify-evenly w-32 h-32 bg-gradient-to-t from-green-300 to-green-100 hover:border-green-300 border-green-300 border-2 rounded m-3 drop-shadow-md`}>
-          <img src={museumPic} alt="museumPic" />
-          <span className='text-2xl -mt-5'>{'Museum'}</span>
-        </div>
-      </div>
-      <div className='flex flex-col h-full content-evenly items-center'>
-        <div
-          onClick={buy}
-          className=' cursor-pointer rounded-full w-max p-4 bg-green-300 hover:bg-green-400 shadow-md border-green-100 border-4 m-4 text-2xl'> Vásárlás {'( '} {formatter(museumPrice)} {' )'}</div>
-        <div>Minden birtokolt múzeum ennyi összeggel növeli a belépési díjat: <span className='font-extrabold'>{formatter(75000)}</span></div>
-      </div>
+      {RoundOnMe &&
+        <>
+          <div className="flex justify-center space-x-6 w-auto bg-[#F5ECE3]">
+            <div
+              className={`flex flex-col items-center content-center justify-evenly w-32 h-32 bg-gradient-to-t from-green-300 to-green-100 hover:border-green-300 border-green-300 border-2 rounded m-3 drop-shadow-md`}>
+              <img src={museumPic} alt="museumPic" />
+              <span className='text-2xl -mt-5'>{'Museum'}</span>
+            </div>
+          </div>
+          <div className='flex flex-col h-full content-evenly items-center'>
+            <div
+              onClick={buy}
+              className=' cursor-pointer rounded-full w-max p-4 bg-green-300 hover:bg-green-400 shadow-md border-green-100 border-4 m-4 text-2xl'> Vásárlás {'( '} {formatter(museumPrice)} {' )'}</div>
+            <div>Minden birtokolt múzeum ennyi összeggel növeli a belépési díjat: <span className='font-extrabold'>{formatter(75000)}</span></div>
+          </div>
+        </>
+      }
+      {!RoundOnMe &&
+        <>
+          <div className='flex flex-col h-full content-evenly items-center'>
+            <div className='text-2xl '>Más játékos interakciót végez éppen...</div>
+          </div>
+        </>
+      }
     </>
   )
 }
@@ -339,16 +382,20 @@ function BuyComponentNemSajat(props) {
   const socket = useSocket()
 
   useEffect(() => {
-    if (!RoundOnMe) socket.on('buy_nem_sajat_res', land => buy(land))
+    socket.off('buy_nem_sajat_res').on('buy_nem_sajat_res', land => {
+      console.log('kapott: ', land);
+      buy(null, land, true)
+    })
 
     return () => {
-      socket.off('buy_nem_sajat_res')
+      // socket.off('buy_nem_sajat_res')
     }
   })
 
 
-  const buy = (land_ = null) => {
+  const buy = (e, land_ = null, fromSocket) => {
     let land = land_
+    // console.log(land_)
     if (!land) {
       land = {
         ar: price.sellToPlayer,
@@ -356,30 +403,43 @@ function BuyComponentNemSajat(props) {
         level: selectedLevel
       }
     }
-    if (RoundOnMe) emitBuy(land)
-    onColseHandler()
+    // console.log(land)
+    if (RoundOnMe) emitBuy(e, land)
     dispatch(buyLand(land))
+    if (!fromSocket) onColseHandler()
   }
 
-  const emitBuy = (land) => {
+  const emitBuy = (e, land) => {
     const data = land
+    // console.log(data);
     socket.emit('buy_nem_sajat_req', data)
   }
   return (
     <>
-      <div className="flex justify-center space-x-6 w-auto bg-[#F5ECE3]">
-        <LevelSelector id={1} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} nemSajat />
-        <LevelSelector id={2} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} nemSajat />
-        <LevelSelector id={3} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} nemSajat />
-        <LevelSelector id={4} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} nemSajat />
-      </div>
-      <div className='flex flex-col h-full content-evenly items-center'>
-        <div className='text-2xl '>Tandíj: {formatter(price.tandij)}</div>
-        <div
-          onClick={buy}
-          className=' cursor-pointer rounded-full w-max p-4 bg-green-300 hover:bg-green-400 shadow-md border-green-100 border-4 m-4 text-2xl'> Vásárlás {'( '} {formatter(price.sellToPlayer)} {' )'}</div>
-        <div>Más játkosok ennyiért vehetik meg tőled: {formatter(price.sellToPlayer)}</div>
-      </div>
+      {RoundOnMe &&
+        <>
+          <div className="flex justify-center space-x-6 w-auto bg-[#F5ECE3]">
+            <LevelSelector id={1} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} nemSajat />
+            <LevelSelector id={2} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} nemSajat />
+            <LevelSelector id={3} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} nemSajat />
+            <LevelSelector id={4} playerField={playerField} fields={fields} setSelectedLevel={setSelectedLevel} selectedLevel={selectedLevel} nemSajat />
+          </div>
+          <div className='flex flex-col h-full content-evenly items-center'>
+            <div className='text-2xl '>Tandíj: {formatter(price.tandij)}</div>
+            <div
+              onClick={buy}
+              className=' cursor-pointer rounded-full w-max p-4 bg-green-300 hover:bg-green-400 shadow-md border-green-100 border-4 m-4 text-2xl'> Vásárlás {'( '} {formatter(price.sellToPlayer)} {' )'}</div>
+            <div>Más játkosok ennyiért vehetik meg tőled: {formatter(price.sellToPlayer)}</div>
+          </div>
+        </>
+      }
+      {!RoundOnMe &&
+        <>
+          <div className='flex flex-col h-full content-evenly items-center'>
+            <div className='text-2xl '>Más játékos interakciót végez éppen...</div>
+          </div>
+        </>
+      }
     </>
   )
 }
@@ -390,8 +450,20 @@ function BuyComponentSajat(props) {
   const dispatch = useDispatch()
   const socket = useSocket()
 
-  const buy = (land_ = null) => {
+  useEffect(() => {
+    socket.off('buy_sajat_res').on('buy_sajat_res', land => {
+      console.log('kapott: ', land);
+      buy(null, land, true)
+    })
+
+    return () => {
+      // socket.off('buy_sajat_req')
+    }
+  })
+
+  const buy = (e, land_ = null, fromSocket) => {
     let land = land_
+    // console.log(land_)
     if (!land) {
       land = {
         ar: price.toBuy,
@@ -399,26 +471,19 @@ function BuyComponentSajat(props) {
         level: selectedLevel
       }
     }
+    // console.log(land)
 
-    if (RoundOnMe) {
-      emitBuy(land)
-    }
-    onColseHandler()
-    setTimeout(() => {
-      dispatch(buyLand(land))
-    }, 400);
+    if (RoundOnMe) emitBuy(e, land)
+    dispatch(buyLand(land))
+    if (!fromSocket) onColseHandler()
+    // setTimeout(() => {
+    // }, 400);
   }
-  useEffect(() => {
-    if (!RoundOnMe) socket.on('buy_sajat_req', land => buy(land))
-
-    return () => {
-      socket.off('buy_sajat_req')
-    }
-  })
 
 
-  const emitBuy = (land) => {
+  const emitBuy = (e, land) => {
     const data = land
+    // console.log(data);
     socket.emit('buy_sajat_req', data)
   }
 
@@ -436,7 +501,16 @@ function BuyComponentSajat(props) {
           onClick={buy}
           className=' cursor-pointer rounded-full w-max p-4 bg-green-300 hover:bg-green-400 shadow-md border-green-100 border-4 m-4 text-2xl'> Vásárlás {'( '} {formatter(price.toBuy)} {' )'}</div>
         <div>Más játkosok ennyiért vehetik meg tőled: {formatter(price.sellToPlayer)}</div>
-      </div> </>}
+      </div>
+    </>
+    }
+      {!RoundOnMe &&
+        <>
+          <div className='flex flex-col h-full content-evenly items-center'>
+            <div className='text-2xl '>Más játékos interakciót végez éppen...</div>
+          </div>
+        </>
+      }
     </>
   )
 }
