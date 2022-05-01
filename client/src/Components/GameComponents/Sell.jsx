@@ -35,13 +35,15 @@ export default function Sell() {
 
 
   const onSellHandler = () => {
-    setShowLabel(false)
-    dispatch(resetCountdown())
-    dispatch(sellSelectedFields())
+    if (sellable) {
+      setShowLabel(false)
+      dispatch(resetCountdown())
+      dispatch(sellSelectedFields())
 
-    setTimeout(() => {
-      dispatch(setShowSell({ value: false, from: '' }))
-    }, 400);
+      setTimeout(() => {
+        dispatch(setShowSell({ value: false, from: '' }))
+      }, 400);
+    }
 
   }
 
