@@ -43,14 +43,16 @@ export default function Sell(props) {
 
 
   const onSellHandler = () => {
-    if (RoundOnMe) emitOnSellHandler()
-    setShowLabel(false)
-    dispatch(resetCountdown())
-    dispatch(sellSelectedFields())
+    if (sellable) {
+      if (RoundOnMe) emitOnSellHandler()
+      setShowLabel(false)
+      dispatch(resetCountdown())
+      dispatch(sellSelectedFields())
 
-    setTimeout(() => {
-      dispatch(setShowSell({ value: false, from: '' }))
-    }, 400);
+      setTimeout(() => {
+        dispatch(setShowSell({ value: false, from: '' }))
+      }, 400);
+    }
   }
   const emitOnSellHandler = () => {
     socket.emit('on_sell_handler_req')
