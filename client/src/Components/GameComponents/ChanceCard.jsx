@@ -2,7 +2,7 @@ import { Modal } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { applyCardEffect, nextPlayer, resetCountdown, setShowCard } from '../../Store/slices/gameStateSlice'
-import biohazad from '../../Images/game/emojis/biohazard.png'
+import trophy from '../../Images/game/emojis/trophy.png'
 import { GAME_CONFIG } from '../../gameConfig'
 import { useSocket } from '../../Contexts/SocketContext'
 
@@ -66,7 +66,7 @@ export default function ChanceCard(props) {
       >
         <div className='flex flex-col justify-center items-center w-auto'>
           <div className='flex flex-col items-center content-center w-32 h-32 rounded m-3 drop-shadow-md'>
-            <img src={biohazad} alt="biohazad" />
+            <img src={trophy} alt="biohazad" />
           </div>
 
           <div className='flex flex-col w-4/5 h-32 rounded-lg bg-[#eedac6] self-center items-center justify-evenly mb-3 p-3 leading-5'>
