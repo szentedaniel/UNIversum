@@ -31,14 +31,9 @@ export default function Sell(props) {
   }, [showSell])
 
   useEffect(() => {
-
     const fieldsValue = _.sum(selectedFields.map(x => calcPrice(x, fields[x].level, fields).sellToBank))
     setSelectedValue(fieldsValue)
-    setSellable(selectedValue >= sellValue)
-    return () => {
-      setSelectedValue(0)
-      setSellable(false)
-    }
+    setSellable(parseInt(selectedValue) >= parseInt(sellValue))
   }, [selectedFields])
 
 
