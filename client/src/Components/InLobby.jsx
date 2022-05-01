@@ -69,7 +69,7 @@ export function InLobby({ room, setRoom, code }) {
     navigate('/')
   }
   const startGame = () => {
-    if (startable) {
+    if (true) {
       socket.emit('start_game_req', code)
       navigate(`/game/${code}`)
     }
@@ -98,7 +98,7 @@ export function InLobby({ room, setRoom, code }) {
             </span>{' '}
           </div>
         </div>
-        <div className={`w-36 h-12 text-lg flex flex-row items-center justify-center ${startable ? 'bg-sajat-600 rounded-lg cursor-pointer' : 'bg-gray-600 rounded-lg text-gray-300 cursor-not-allowed'} `}
+        <div className={`w-36 h-12 text-lg flex flex-row items-center justify-center ${true ? 'bg-sajat-600 rounded-lg cursor-pointer' : 'bg-gray-600 rounded-lg text-gray-300 cursor-not-allowed'} `}
           onClick={startGame}>
           START GAME
         </div>

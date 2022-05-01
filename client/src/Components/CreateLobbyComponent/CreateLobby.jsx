@@ -71,7 +71,7 @@ export function CreateLobby() {
         state: {
           created: true,
           hasPassword: hasPassword,
-          secret: password
+          secoret: password
         }
       })
     })
