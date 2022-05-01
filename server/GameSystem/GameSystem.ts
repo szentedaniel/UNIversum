@@ -12,8 +12,8 @@ export const setGameIo = (io_: Server) => {
 
 export const sendGameStateByCode = (socket: Socket, code: string, rooms: Map<string, RoomData>) => {
   if (rooms.has(code)) {
-    const users = rooms.get(code)!.users
-    _.shuffle(users)
+    let users = rooms.get(code)!.users
+    // _.shuffle(users)
 
     const minute = rooms.get(code)!.minute
 
@@ -45,10 +45,11 @@ export const sendGameStateByCode = (socket: Socket, code: string, rooms: Map<str
       players: players,
       endDate: new Date(new Date().getTime() + minute * 60000).toISOString(),
       roomCode: Number(code),
-      isLoaded: true
+      isLoaded: true,
+      map: initialState.map
     }
 
-    console.dir(gameState, { depth: 0 })
+    // console.dir(gameState, { depth: null })
 
     socket.emit('get_game_data_by_code_res', gameState)
   } else socket.emit('get_game_data_by_code_res', { status: 404 })

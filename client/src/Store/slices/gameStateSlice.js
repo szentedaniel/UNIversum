@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import calcPrice from '../../Utils/calcPrice'
 import * as _ from 'lodash'
 import { GAME_CONFIG } from '../../gameConfig'
+import { join } from 'lodash'
 
 const end = new Date(new Date().getTime() + 50 * 60000).toISOString()
 
@@ -363,7 +364,7 @@ export const gameStateSlice = createSlice({
         const findValidNextPlayer = () => {
           const validPlayers = state.players.filter(x => x.isBankrupt === false)
           // validPlayers.forEach(element => {
-          //   console.log('lehetID: ', element.colorCode);
+          //   // console.log('lehetID: ', element.colorCode);
           // });
           if (validPlayers.length > 1) {
 
@@ -419,9 +420,18 @@ export const gameStateSlice = createSlice({
 
               csoportTulajainakSzine = csoportTulajainakSzine.filter(x => { return x !== null })
 
-              const occurrences = csoportTulajainakSzine.reduce(function (acc, curr) {
-                return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
-              }, {})
+              // const occurrences = csoportTulajainakSzine.reduce(function (acc, curr) {
+              //   return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
+              // }, {})
+
+              let ugyanaz = false
+              if (csoportTulajainakSzine.length === GAME_CONFIG.map.filter(x => x.groupId === groupId).length) {
+                ugyanaz = csoportTulajainakSzine.every((val, ind, arr) => val === arr[0])
+              }
+
+              // console.log('csoport tulajainak szinei: ', join(csoportTulajainakSzine), ugyanaz)
+              // console.log('csoport tulajainak szineienk előfurdulása: ', join(occurrences))
+              if (ugyanaz) return csoportTulajainakSzine[0]
 
               let monopolE = false
               let tulajSzine = null
@@ -429,13 +439,13 @@ export const gameStateSlice = createSlice({
               for (let i = 0; i < csoportTulajainakSzine.length; i++) {
                 const element = csoportTulajainakSzine[i];
 
-                if (occurrences[element] === CsoportbanLevoMezokIdja.length) {
-                  monopolE = true
-                  tulajSzine = element
-                }
+                // if (occurrences[element] === CsoportbanLevoMezokIdja.length) {
+                //   monopolE = true
+                //   tulajSzine = element
+                // }
               }
               // csoportTulajainakSzine.forEach(element => {
-              //   console.log('groupId: ', groupId, 'tulajszin: ', element);
+              //   // console.log('groupId: ', groupId, 'tulajszin: ', element);
               // });
               // // // // const monopolE = csoportTulajainakSzine.every((val, ind, arr) => val === arr[0])
               // console.log(monopolE);
@@ -447,8 +457,9 @@ export const gameStateSlice = createSlice({
             });
             // console.log('ehhh:');
             monopolTulajokColorja = monopolTulajokColorja.map(x => x)
+            monopolTulajokColorja = monopolTulajokColorja.filter(x => x !== null)
             // monopolTulajokColorja.forEach(element => {
-            //   console.log(element);
+            //   // console.log(element);
             // });
             // const monopolGroupsTulajdonosok = groupIds.map(x => {
             //   const groupId = x
@@ -459,6 +470,7 @@ export const gameStateSlice = createSlice({
             //   const monopolE = csoportTulajainakId.every((val, ind, arr) => val === arr[0])
             //   if (monopolE) return csoportTulajainakId[0]
             // })
+            // console.log(join(monopolTulajokColorja))
 
             const validPlayers = state.players.filter(x => x.isBankrupt === false)
             const validPlayersIds = validPlayers.map(x => x.colorCode)
@@ -472,7 +484,7 @@ export const gameStateSlice = createSlice({
 
             }
           } catch (error) {
-            console.log(error)
+            // console.log(error)
           }
 
 
@@ -487,18 +499,26 @@ export const gameStateSlice = createSlice({
           if (validPlayers.length <= 1) {
             const winner = _.orderBy(validPlayers, ['money'], ['desc'])
             state.winnerColor = winner[0].colorCode
-            console.log('nincs tobb player');
+            // console.log('nincs tobb player');
             return true
           } else if (new Date().getTime() >= new Date(state.endDate).getTime()) {
-            const winner = _.orderBy(state.players, ['money'], ['desc'])
-            state.winnerColor = winner[0]
-            console.log('lejart az ido');
+            const vagyon = state.players.map(x => {
+              const fieldValue = _.sum(state.map.filter(field => field.ownerColor === x.colorCode))
+              const tulajdon = fieldValue + x.money
+              return {
+                colorCode: x.colorCode,
+                vagyon: tulajdon
+              }
+            })
+            const winner = _.orderBy(vagyon, ['vagyon'], ['desc'])
+            state.winnerColor = winner[0].colorCode
+            // console.log('lejart az ido');
             return true
           } else if (supermonopol) {
-            console.log('supermonopol');
+            // console.log('supermonopol');
             return true
           } else if (hasThreeMonopol) {
-            console.log('3 monopol');
+            // console.log('3 monopol');
             return true
           } else return false
         }
@@ -533,7 +553,7 @@ export const gameStateSlice = createSlice({
           state.players[state.currentPlayer].playerCountdown = true
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     setShowBuyPanel: (state, action) => {
@@ -639,7 +659,7 @@ export const gameStateSlice = createSlice({
 
         let same = false
         if (fieldWithDoublerOnIt.length > 0) {
-          same = ((fieldWithDoublerOnIt[0].ownerColor === state.currentPlayer) && fieldWithDoublerOnIt[0].doublerCount === action.payload)
+          same = ((fieldWithDoublerOnIt[0].ownerColor === state.currentPlayer) && fieldWithDoublerOnIt[0].id === action.payload)
           if (same) {
             fieldWithDoublerOnIt[0].doublerCount += 1
           } else {
@@ -660,7 +680,7 @@ export const gameStateSlice = createSlice({
         state.onlyOwnField = false
 
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     setShowDoubler: (state, action) => {
@@ -741,13 +761,13 @@ export const gameStateSlice = createSlice({
     autoSellSelectedFields: (state, action) => {
       const show = (playerFields, ehh = false) => {
         for (let i = 0; i < playerFields.length; i++) {
-          console.log('id: ', playerFields[i].id)
-          console.log('level: ', playerFields[i].level)
-          console.log('ownerColor: ', playerFields[i].ownerColor)
-          console.log('hasDoubler: ', playerFields[i].hasDoubler)
-          console.log('doublerCount: ', playerFields[i].doublerCount)
-          if (ehh) console.log('value: ', playerFields[i].value)
-          console.log('\n')
+          // console.log('id: ', playerFields[i].id)
+          // console.log('level: ', playerFields[i].level)
+          // console.log('ownerColor: ', playerFields[i].ownerColor)
+          // console.log('hasDoubler: ', playerFields[i].hasDoubler)
+          // console.log('doublerCount: ', playerFields[i].doublerCount)
+          // if (ehh) // console.log('value: ', playerFields[i].value)
+          // console.log('\n')
 
         }
       }
@@ -935,11 +955,12 @@ export const gameStateSlice = createSlice({
       }
     },
     setGameState: (state, action) => {
-      console.log(action.payload.roomCode)
+      // console.log(action.payload.roomCode)
       state.roomCode = action.payload.roomCode
       state.players = action.payload.players
       state.endDate = action.payload.endDate
       state.isLoaded = action.payload.isLoaded
+      state.map = action.payload.map
     },
     setSelectedCard: (state, action) => {
       state.selectedCard = action.payload

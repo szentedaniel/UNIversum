@@ -25,7 +25,7 @@ export default function Game(props) {
   const getGameDataByCode = (code) => {
     socket.emit('get_game_data_by_code_req', code.toString())
   }
-  console.log(username);
+  // console.log(username);
 
 
   useEffect(() => {
@@ -34,10 +34,10 @@ export default function Game(props) {
     }
 
     socket.on('get_game_data_by_code_res', gameState => {
-      console.log(gameState);
+      // console.log(gameState);
       if (gameState.status === 200) {
         const usernames = gameState.players.map(x => x.username)
-        console.log(usernames.includes(username));
+        // console.log(usernames.includes(username));
         if (usernames.includes(username)) {
           dispatch(setGameState(gameState))
         } else {
