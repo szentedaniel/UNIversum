@@ -6,10 +6,12 @@ import blueAvatar from '../../Images/game/moreenemiesanimations/Alien sprites/al
 import yellowAvatar from '../../Images/game/moreenemiesanimations/Alien sprites/alienYellow.png'
 import greenAvatar from '../../Images/game/moreenemiesanimations/Alien sprites/alienGreen.png'
 import { useNavigate } from 'react-router-dom'
+import { useSocket } from '../../Contexts/SocketContext'
 
 export default function Winner() {
     const { gameOver, winnerColor } = useSelector((state) => state.gameState)
     const navigate = useNavigate()
+    const socket = useSocket()
 
     const [opened, setOpened] = useState(false)
 
@@ -31,7 +33,7 @@ export default function Winner() {
     const onColseHandler = () => {
         setOpened(false)
         navigate('/')
-
+        socket.emit('leave_room')
     }
 
     return (
