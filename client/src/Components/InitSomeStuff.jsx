@@ -18,17 +18,17 @@ export default function InitSomeStuff() {
   const User = useSelector((state) => state.user)
 
   const getIpInfo = () => {
-    axios.get('https://ipinfo.io/json', 
-      {headers: {Authorization: `Bearer ${process.env.REACT_APP_IPINFO_API_TOKEN}`}})
+    axios.get('https://ipinfo.io/json',
+      { headers: { Authorization: `Bearer ${process.env.REACT_APP_IPINFO_API_TOKEN}` } })
       .then(res => {
         dispatch(getIpInform(res.data))
-        
+
         const lang = res.data.country.toString().toLowerCase()
 
         if (!cookies.get('i18next')) {
           let tenYearFromNow = new Date();
           tenYearFromNow.setFullYear(tenYearFromNow.getFullYear() + 10);
-          cookies.set('i18next', lang, { path: '/', expires: tenYearFromNow});
+          cookies.set('i18next', lang, { path: '/', expires: tenYearFromNow });
           i18n.changeLanguage(lang)
         }
       })
@@ -39,15 +39,18 @@ export default function InitSomeStuff() {
 
   const sendUsernameToServer = () => {
     console.log('betöltöttem,', firstLoad)
-    if (firstLoad) socket.emit('set_username', {username: User.username})
+    if (firstLoad) socket.emit('set_username', { username: User.username })
     firstLoad = false
   }
 
   useEffect(() => {
     sendUsernameToServer()
     getIpInfo()
-  },);
-  
+    let tenYearFromNow = new Date();
+    tenYearFromNow.setFullYear(tenYearFromNow.getFullYear() + 10);
+    cookies.set('i18next', 'hu', { path: '/', expires: tenYearFromNow });
+  });
+
 
 
 
