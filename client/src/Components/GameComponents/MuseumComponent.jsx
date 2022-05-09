@@ -31,8 +31,8 @@ export default function MuseumComponent(props) {
   }, [fields])
 
   const label_bg = Texture.from('../Images/game/isometriccity/PNG/cityTiles_072.png');
-  const museum = Texture.from('../Images/game/caracters/museum.png');
-  const doubler = Texture.from('../Images/game/caracters/doubler.png');
+  const museum = Texture.from('../Images/game/characters/museum.png');
+  const doubler = Texture.from('../Images/game/characters/doubler.png');
 
   const formatter = new Intl.NumberFormat('en-GB', { notation: 'compact' })
 

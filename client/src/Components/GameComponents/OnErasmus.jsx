@@ -2,7 +2,7 @@ import { Modal } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSocket } from '../../Contexts/SocketContext'
-import erasmus from '../../Images/game/caracters/erasmus.png'
+import erasmus from '../../Images/game/characters/erasmus.png'
 import { resetCountdown, setSelectErasmus } from '../../Store/slices/gameStateSlice'
 
 export default function OnErasmus(props) {

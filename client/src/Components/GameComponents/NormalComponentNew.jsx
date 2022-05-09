@@ -84,7 +84,7 @@ export default function NormalComponentNew(props) {
 
   const label_bg = PIXI.Texture.from('../Images/game/isometriccity/PNG/cityTiles_072.png');
   const ehh = PIXI.Texture.from('../Images/game/isometriclandscape/PNG/landscapeTiles_067.png');
-  const doubler = PIXI.Texture.from('../Images/game/caracters/doubler.png');
+  const doubler = PIXI.Texture.from('../Images/game/characters/doubler.png');
 
   const groupFilter = new ColorReplaceFilter()
   groupFilter.originalColor = 0xC2BEAC

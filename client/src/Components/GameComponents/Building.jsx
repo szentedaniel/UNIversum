@@ -9,9 +9,9 @@ import { Spring } from 'react-spring'
 export default function Building(props) {
   const { ownerColor } = props
 
-  const haz_alap = Texture.from('../Images/game/caracters/haz_alap.png');
-  const haz_resz = Texture.from('../Images/game/caracters/haz_resz.png');
-  const haz_teto = Texture.from('../Images/game/caracters/haz_teto.png');
+  const haz_alap = Texture.from('../Images/game/characters/haz_alap.png');
+  const haz_resz = Texture.from('../Images/game/characters/haz_resz.png');
+  const haz_teto = Texture.from('../Images/game/characters/haz_teto.png');
 
   const colorFilter = new ColorReplaceFilter()
   colorFilter.originalColor = 0xD8D2BE

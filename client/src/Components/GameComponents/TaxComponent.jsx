@@ -11,7 +11,7 @@ export default function TaxComponent(props) {
 
   const label_bg = Texture.from('../Images/game/isometriccity/PNG/cityTiles_072.png');
   const ehh = Texture.from('../Images/game/isometriclandscape/PNG/landscapeTiles_067.png');
-  const ado = Texture.from('../Images/game/caracters/ado2.png');
+  const ado = Texture.from('../Images/game/characters/ado2.png');
 
   const groupFilter = new ColorReplaceFilter()
   groupFilter.originalColor = 0xC2BEAC

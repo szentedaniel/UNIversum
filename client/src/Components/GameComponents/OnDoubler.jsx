@@ -2,7 +2,7 @@ import { Modal } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSocket } from '../../Contexts/SocketContext'
-import diploma from '../../Images/game/caracters/diploma.png'
+import diploma from '../../Images/game/characters/diploma.png'
 import { resetCountdown, setSelectDoubler } from '../../Store/slices/gameStateSlice'
 
 export default function OnDoubler(props) {

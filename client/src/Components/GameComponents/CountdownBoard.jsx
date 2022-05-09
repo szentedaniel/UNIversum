@@ -9,7 +9,7 @@ export default function CountdownBoard(props) {
     const [remainMin, setRemainMin] = useState(0)
     const [remainSec, setRemainSec] = useState(0)
 
-    const ehh = Texture.from('../Images/game/caracters/board.png');
+    const ehh = Texture.from('../Images/game/characters/board.png');
     useEffect(() => {
         setEnd(endDate)
     }, [endDate])

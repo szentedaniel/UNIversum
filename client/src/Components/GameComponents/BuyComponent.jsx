@@ -7,8 +7,8 @@ import { buyLand, buyMuseum, nextPlayer, payTax, setShowTax, resetCountdown, set
 import calcPrice from '../../Utils/calcPrice';
 import checkmark from '../../Images/game/gameicons/PNG/White/1x/checkmark.png'
 import unavailable from '../../Images/game/gameicons/PNG/White/1x/locked.png'
-import museumPic from '../../Images/game/caracters/museum.png'
-import adoPic from '../../Images/game/caracters/ado2.png'
+import museumPic from '../../Images/game/characters/museum.png'
+import adoPic from '../../Images/game/characters/ado2.png'
 import formatter from '../../Utils/formatter';
 import _ from 'lodash';
 import { useSocket } from '../../Contexts/SocketContext';
