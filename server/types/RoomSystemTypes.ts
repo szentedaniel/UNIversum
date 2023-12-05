@@ -10,6 +10,7 @@ export interface RoomData {
     maxPlayerNumber: number
     hasPassword: boolean
     password: string
+    minute: number
 }
 
 interface UserData {

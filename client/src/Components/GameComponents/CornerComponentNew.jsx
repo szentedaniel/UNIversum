@@ -15,10 +15,10 @@ export default function CornerComponentNew(props) {
   const left_road_bg = PIXI.Texture.from('../images/game/isometriclandscape/PNG/landscapeTiles_087.png');
   const right_road_bg = PIXI.Texture.from('../images/game/isometriclandscape/PNG/landscapeTiles_080.png');
   const top_road_bg = PIXI.Texture.from('../images/game/isometriclandscape/PNG/landscapeTiles_114.png');
-  const karibacsik = PIXI.Texture.from('../Images/game/caracters/karibacsik.png');
-  const repulo = PIXI.Texture.from('../Images/game/caracters/erasmus.png');
-  const doubler = PIXI.Texture.from('../Images/game/caracters/diploma.png');
-  const tabla = PIXI.Texture.from('../Images/game/caracters/tabla.png');
+  const karibacsik = PIXI.Texture.from('../Images/game/characters/karibacsik.png');
+  const repulo = PIXI.Texture.from('../Images/game/characters/erasmus.png');
+  const doubler = PIXI.Texture.from('../Images/game/characters/diploma.png');
+  const tabla = PIXI.Texture.from('../Images/game/characters/tabla.png');
 
   let HEIGHT = 96 / 2
   const BOTTOM_HEIGHT = 32

@@ -14,6 +14,13 @@ export function InLobby({ room, setRoom, code }) {
   const navigate = useNavigate()
 
   const [selected, setSelected] = useState(null)
+  const [startable, setStartable] = useState(false)
+
+  useEffect(() => {
+    console.log(room);
+    console.log(room.users.length === room.maxPlayerNumber, room.users.length, room.maxPlayerNumber);
+    setStartable(room.users.length === parseInt(room.maxPlayerNumber))
+  }, [room])
 
 
   useEffect(() => {
@@ -23,18 +30,23 @@ export function InLobby({ room, setRoom, code }) {
     })
 
     socket.on('user_joined', data => {
+      console.log(data);
       setRoom(data.team)
     })
 
     socket.on('user_left', data => {
       setRoom(data.team)
     })
+    socket.on('start_game_res', () => {
+      navigate(`/game/${code}`)
+    })
     return () => {
       socket.off('leaved_room')
       socket.off('user_joined')
       socket.off('user_left')
+      socket.off('start_game_res')
     }
-  }, [])
+  })
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text)
@@ -56,6 +68,13 @@ export function InLobby({ room, setRoom, code }) {
     socket.emit('leave_room')
     navigate('/')
   }
+  const startGame = () => {
+    if (startable) {
+      socket.emit('start_game_req', code)
+      navigate(`/game/${code}`)
+    }
+
+  }
 
   return (
     <>
@@ -67,7 +86,7 @@ export function InLobby({ room, setRoom, code }) {
             </button>
           </Link>
         </div>
-        <div className="w-36 h-12 text-2xl flex flex-row items-center justify-center">code: <span className="code" onClick={() => { copyToClipboard(code) }}> {code} </span></div>
+        <div className="w-36 h-12 text-2xl flex flex-row items-center justify-center">code: <span className="code bg-sajat-600 p-2 rounded-lg ml-2 cursor-pointer" onClick={() => { copyToClipboard(code) }}> {code} </span></div>
         <div className="w-36 h-12 text-2xl flex flex-row items-center justify-center">{room.lobbyName}</div>
         <div className="w-36 h-12 text-lg flex flex-row items-center justify-center">
           <div className='flex flex-col gap-1'>
@@ -79,7 +98,8 @@ export function InLobby({ room, setRoom, code }) {
             </span>{' '}
           </div>
         </div>
-        <div className="w-36 h-12 text-lg flex flex-row items-center justify-center">
+        <div className={`w-36 h-12 text-lg flex flex-row items-center justify-center ${startable ? 'bg-sajat-600 rounded-lg cursor-pointer' : 'bg-gray-600 rounded-lg text-gray-300 cursor-not-allowed'} `}
+          onClick={startGame}>
           START GAME
         </div>
       </div>
@@ -96,7 +116,7 @@ export function InLobby({ room, setRoom, code }) {
 
         <div className="w-7/12 flex-grow overflow-y-scroll simple">
           <div className="w-full px-4 py-4">
-            <RadioGroup value={selected} onChange={setSelected}> {/*onChange={setSelected}*/}
+            <RadioGroup value={selected} > {/*onChange={setSelected}*/}
               <div className="space-y-2">
                 {(room !== null) &&
                   room.users.map((user, index) => (
@@ -145,12 +165,12 @@ export function InLobby({ room, setRoom, code }) {
                                 </span>{' '}
                               </div>
                               <div className='flex flex-col gap-1'>
-                                <Icon>
+                                {/* <Icon>
                                   groups
                                 </Icon>
                                 <span>
                                   {1}/{2}
-                                </span>{' '}
+                                </span>{' '} */}
                               </div>
                               {/* <button disabled={(Rooms['rooms'][roomCode].users.length === Rooms['rooms'][roomCode].maxPlayerNumber)} className={` border-2 
                               border-sajat-200 rounded-lg p-2 

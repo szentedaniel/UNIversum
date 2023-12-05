@@ -1,4 +1,4 @@
-export const SOCKET_URL = process.env.SOCKET || 'localhost:3001' // '192.168.0.10:3001'
+export const SOCKET_URL = process.env.SOCKET || 'szente.ddns.net:3001' //'http://szente.ddns.net:3001/' //'localhost:3001' // '192.168.0.10:3001'
 
 export const LANGUAGES = [
   {

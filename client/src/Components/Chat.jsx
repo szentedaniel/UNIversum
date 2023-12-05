@@ -9,8 +9,8 @@ export default function Chat() {
 
                 <div className="flex justify-center items-center mt-4 mb-2 text-xl">Chat</div>
                 <Divider />
-                <div>
-
+                <div className='flex center-items justify-center mt-10'>
+                    HAMAROSAN...
                 </div>
 
             </div>

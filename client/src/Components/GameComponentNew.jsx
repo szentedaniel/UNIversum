@@ -22,11 +22,14 @@ import OnErasmus from './GameComponents/OnErasmus'
 import Sell from './GameComponents/Sell'
 import Winner from './GameComponents/Winner'
 import ChanceCard from './GameComponents/ChanceCard'
+import CountdownBoard from './GameComponents/CountdownBoard'
 
 export default function GameComponentNew(props) {
   const [width, setWidth] = useState(GAME_CONFIG.width)
   const [height, setHeight] = useState(GAME_CONFIG.height)
-  const { players, currentPlayer, showDiceRoll, showTax, showBuyPanel, map: fields, showBalance, lastDiceRoll, resetCountdown, museumPrice, showDisabledFields, singleSelecting, multipleSelecting, selectedFields, showQuarantineTab, onlyOwnField, showDoubler, selectDoubler, showErasmus, selectErasmus, showSell, gameOver } = useSelector((state) => state.gameState)
+  const { players, currentPlayer, showDiceRoll, showTax, showBuyPanel, map: fields, showBalance, lastDiceRoll, resetCountdown, museumPrice, showDisabledFields, singleSelecting, multipleSelecting, selectedFields, showQuarantineTab, onlyOwnField, showDoubler, selectDoubler, showErasmus, selectErasmus, showSell, gameOver, endDate, isLoaded, selectedCard } = useSelector((state) => state.gameState)
+  const { username } = props
+  const [RoundOnMe, setRoundOnMe] = useState(username === players[currentPlayer].username)
   const dispatch = useDispatch()
 
   let shadowFilter = new DropShadowFilter({ rotation: 45, distance: 6 })
@@ -47,11 +50,11 @@ export default function GameComponentNew(props) {
   const map = GAME_CONFIG.map.map(mezo => {
     const coords = calcCoords(mezo.id)
 
-    if (mezo.isCorner) return (<CornerComponentNew  {...mezo} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} showSell={showSell} />)
-    if (mezo.isNormal) return (<NormalComponentNew  {...mezo} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} showSell={showSell} />)
-    if (mezo.isMuseum) return (<MuseumComponent     {...mezo} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} showSell={showSell} />)
-    if (mezo.isChance) return (<LuckComponent       {...mezo} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} showSell={showSell} />)
-    if (mezo.isTax) return (<TaxComponent           {...mezo} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} showSell={showSell} />)
+    if (mezo.isCorner) return (<CornerComponentNew  {...mezo} RoundOnMe={RoundOnMe} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} showSell={showSell} />)
+    if (mezo.isNormal) return (<NormalComponentNew  {...mezo} RoundOnMe={RoundOnMe} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} showSell={showSell} />)
+    if (mezo.isMuseum) return (<MuseumComponent     {...mezo} RoundOnMe={RoundOnMe} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} showSell={showSell} />)
+    if (mezo.isChance) return (<LuckComponent       {...mezo} RoundOnMe={RoundOnMe} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} showSell={showSell} />)
+    if (mezo.isTax) return (<TaxComponent           {...mezo} RoundOnMe={RoundOnMe} x={coords.x} y={coords.y} key={mezo.id} dispatch={dispatch} fields={fields} currentPlayer={currentPlayer} players={players} singleSelecting={singleSelecting} multipleSelecting={multipleSelecting} selectedFields={selectedFields} onlyOwnField={onlyOwnField} disabledFilter={disabledFilter} selectedFilter={selectedFilter} showDisabledFields={showDisabledFields} showDoubler={showDoubler} selectDoubler={selectDoubler} showErasmus={showErasmus} selectErasmus={selectErasmus} showSell={showSell} />)
   })
 
 
@@ -62,7 +65,7 @@ export default function GameComponentNew(props) {
   })), [players])
 
   useEffect(() => {
-    console.log('valtozott a users');
+    setRoundOnMe(username === players[currentPlayer].username)
   }, [users])
 
 
@@ -85,52 +88,73 @@ export default function GameComponentNew(props) {
 
   return (
     <>
-      <Stage {...stageProps}>
-        <Container
-          interactive={true}
-          interactiveChildren={true}
-          anchor={0.5}
-          position={[width / 2, height / 2]}
-          sortableChildren
-          filters={[shadowFilter]}
-          scale={[1, 1.1]}
-        >
-          {characters}
-          {map}
+      {isLoaded &&
+        <>
+          <Stage {...stageProps}>
+            <Container
+              interactive={true}
+              interactiveChildren={true}
+              anchor={0.5}
+              position={[width / 2, height / 2]}
+              sortableChildren
+              filters={[shadowFilter]}
+              scale={[1, 1.1]}
+            >
+              {characters}
+              {map}
+              <CountdownBoard endDate={endDate} />
 
-        </Container>
-      </Stage>
-      <PlayerInfo
-        players={players}
-        currentPlayer={currentPlayer}
-        resetCountdown={resetCountdown}
-        showSell={showSell}
-        showTax={showTax}
-        showQuarantineTab={showQuarantineTab}
-        lastDiceRoll={lastDiceRoll}
-        gameOver={gameOver} />
-      <RollDice />
-      <Balance
-        showBalance={showBalance}
-        players={players}
-        currentPlayer={currentPlayer}
-        fields={fields}
-      />
-      <BuyComponent
-        players={players}
-        currentPlayer={currentPlayer}
-        showDiceRoll={showDiceRoll}
-        showBuyPanel={showBuyPanel}
-        fields={fields}
-        museumPrice={museumPrice}
-      />
-      <Quarantine />
-      <InQuarantine />
-      <OnDoubler />
-      <OnErasmus />
-      <Sell />
-      <Winner />
-      <ChanceCard />
+            </Container>
+          </Stage>
+          <PlayerInfo
+            players={players}
+            RoundOnMe={RoundOnMe}
+            currentPlayer={currentPlayer}
+            resetCountdown={resetCountdown}
+            showSell={showSell}
+            showTax={showTax}
+            showQuarantineTab={showQuarantineTab}
+            lastDiceRoll={lastDiceRoll}
+            gameOver={gameOver} />
+          <RollDice RoundOnMe={RoundOnMe} />
+          <Balance
+            RoundOnMe={RoundOnMe}
+            showBalance={showBalance}
+            players={players}
+            currentPlayer={currentPlayer}
+            fields={fields}
+          />
+          <BuyComponent
+            lastDiceRoll={lastDiceRoll}
+            selectedCard={selectedCard}
+            RoundOnMe={RoundOnMe}
+            players={players}
+            currentPlayer={currentPlayer}
+            showDiceRoll={showDiceRoll}
+            showBuyPanel={showBuyPanel}
+            fields={fields}
+            museumPrice={museumPrice}
+          />
+          <Quarantine
+            RoundOnMe={RoundOnMe}
+          />
+          <InQuarantine
+            RoundOnMe={RoundOnMe}
+          />
+          <OnDoubler
+            RoundOnMe={RoundOnMe}
+          />
+          <OnErasmus
+            RoundOnMe={RoundOnMe}
+          />
+          <Sell
+            RoundOnMe={RoundOnMe}
+          />
+          <Winner />
+          <ChanceCard
+            RoundOnMe={RoundOnMe}
+          />
+        </>}
     </>
   )
 }

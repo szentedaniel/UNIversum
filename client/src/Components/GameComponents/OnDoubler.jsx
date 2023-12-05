@@ -1,14 +1,21 @@
 import { Modal } from '@mantine/core'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import diploma from '../../Images/game/caracters/diploma.png'
+import { useSocket } from '../../Contexts/SocketContext'
+import diploma from '../../Images/game/characters/diploma.png'
 import { resetCountdown, setSelectDoubler } from '../../Store/slices/gameStateSlice'
 
-export default function OnDoubler() {
+export default function OnDoubler(props) {
   const { showDoubler } = useSelector((state) => state.gameState)
   const dispatch = useDispatch()
   const [opened, setOpened] = useState(showDoubler)
   const [showLabel, setShowLabel] = useState(false)
+  const { RoundOnMe } = props
+  const socket = useSocket()
+
+  useEffect(() => {
+    socket.off('doubler_close_res').on('doubler_close_res', (id) => { if (id !== socket.id) onColseHandler() })
+  })
 
 
   useEffect(() => {
@@ -23,6 +30,7 @@ export default function OnDoubler() {
   }, [showDoubler])
 
   const onColseHandler = () => {
+    if (RoundOnMe) emitDoublerClose()
     setOpened(false)
 
     setTimeout(() => {
@@ -30,7 +38,9 @@ export default function OnDoubler() {
       dispatch(resetCountdown())
       dispatch(setSelectDoubler(true))
     }, 400);
-
+  }
+  const emitDoublerClose = () => {
+    socket.emit('doubler_close_req')
   }
 
   return (
@@ -62,9 +72,10 @@ export default function OnDoubler() {
             <p><span className='leading-5'>Jutalmul válassz ki egy várost, ahol ezentúl a tandíj {'megduplázódik'.toUpperCase()}.</span></p>
           </div>
 
-          <div
+          {RoundOnMe && <div
             onClick={onColseHandler}
             className='flex w-fit h-fit px-4 py-2 bg-orange-300 border-orange-100 border-4 cursor-pointer rounded-full items-center justify-center hover:bg-orange-400 shadow-lg text-xl'>Remek</div>
+          }
         </div>
 
       </Modal>

@@ -3,7 +3,7 @@ import { Texture } from 'pixi.js'
 import React, { useEffect, useState } from 'react'
 import { Spring } from 'react-spring'
 import { calcCoords } from '../../Utils/calcCoords'
-import { giveRoundBonus, nextPlayer, setShowBalance, setShowBuyPanel } from '../../Store/slices/gameStateSlice'
+import { giveRoundBonus, setShowBalance } from '../../Store/slices/gameStateSlice'
 
 export default function Character(props) {
 

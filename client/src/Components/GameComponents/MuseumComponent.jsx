@@ -8,15 +8,21 @@ import calcPrice from '../../Utils/calcPrice';
 import { addSelection, putDoublerTo, nextPlayer, setDiceRollValue, setSelectErasmus, setShowErasmus, setShowBuyPanel } from '../../Store/slices/gameStateSlice';
 import _ from 'lodash';
 import { Spring } from 'react-spring'
+import { useSocket } from '../../Contexts/SocketContext';
 
 export default function MuseumComponent(props) {
-  const { id, fields, dispatch, players, currentPlayer, showDisabledFields, disabledFilter, selectedFilter, singleSelecting, multipleSelecting, selectedFields, onlyOwnField, selectDoubler, selectErasmus, showSell } = props
+  const { id, fields, dispatch, players, currentPlayer, showDisabledFields, disabledFilter, selectedFilter, singleSelecting, multipleSelecting, selectedFields, onlyOwnField, selectDoubler, selectErasmus, showSell, RoundOnMe } = props
   const [ownerColor, setOwnerColor] = useState(fields[id].ownerColor)
   const [filters, setFilters] = useState([])
   const [selectable, setSelectable] = useState(false)
   const [isPointerDown, setIsPointerDown] = useState(false)
   const [price, setPrice] = useState(calcPrice(id, fields[id].level, fields))
   const [hasDoubler, setHasDoubler] = useState(fields[id].hasDoubler)
+  const socket = useSocket()
+
+  useEffect(() => {
+    socket.off('select_field_res').on('select_field_res', (data) => { if (true) select(data) })
+  })
 
   useEffect(() => {
     setOwnerColor(fields[id].ownerColor)
@@ -25,8 +31,8 @@ export default function MuseumComponent(props) {
   }, [fields])
 
   const label_bg = Texture.from('../Images/game/isometriccity/PNG/cityTiles_072.png');
-  const museum = Texture.from('../Images/game/caracters/museum.png');
-  const doubler = Texture.from('../Images/game/caracters/doubler.png');
+  const museum = Texture.from('../Images/game/characters/museum.png');
+  const doubler = Texture.from('../Images/game/characters/doubler.png');
 
   const formatter = new Intl.NumberFormat('en-GB', { notation: 'compact' })
 
@@ -81,44 +87,52 @@ export default function MuseumComponent(props) {
   }, [selectedFields])
 
 
+  const select = (id) => {
+    if (RoundOnMe) emitSelect(id)
+    if (multipleSelecting) {
+      dispatch(addSelection(id))
+    } else if (singleSelecting) {
+      if (selectDoubler) {
+        console.log('submit');
+        dispatch(putDoublerTo(id))
+
+        setTimeout(() => {
+          dispatch(nextPlayer())
+        }, 1000);
+      } else if (selectErasmus) {
+
+        let diff = id - players[currentPlayer].field % 32
+        if (diff < 0) diff += 32
+        dispatch(setDiceRollValue(diff))
+        dispatch(setShowErasmus(false))
+        dispatch(setSelectErasmus(false))
+        dispatch(setShowBuyPanel(false))
+      }
+
+    }
+  }
+  const emitSelect = (id) => {
+    socket.emit('select_field_req', id)
+  }
+
   const pointerDown = (e) => {
-    if (selectable) setIsPointerDown(true)
+    if (selectable && RoundOnMe) setIsPointerDown(true)
   }
 
   const pointerUp = (e) => {
 
     if (isPointerDown) {
-      if (multipleSelecting) {
-        dispatch(addSelection(id))
-      } else if (singleSelecting) {
-        if (selectDoubler) {
-          console.log('submit');
-          dispatch(putDoublerTo(id))
-
-          setTimeout(() => {
-            dispatch(nextPlayer())
-          }, 1000);
-        } else if (selectErasmus) {
-
-          let diff = id - players[currentPlayer].field % 32
-          if (diff < 0) diff += 32
-          dispatch(setDiceRollValue(diff))
-          dispatch(setShowErasmus(false))
-          dispatch(setSelectErasmus(false))
-          dispatch(setShowBuyPanel(false))
-        }
-
-      }
+      select(id)
     }
   }
 
   const pointerUpOutside = (e) => {
-    setIsPointerDown(false)
+    if (RoundOnMe) setIsPointerDown(false)
 
   }
 
   const pointerCancel = (e) => {
-    setIsPointerDown(false)
+    if (RoundOnMe) setIsPointerDown(false)
   }
 
   return (

@@ -7,16 +7,27 @@ import { Progress } from '@mantine/core'
 import { useEffect } from 'react'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { autoSellSelectedFields, nextPlayer, setDiceRollValue, setShowSell, resetCountdown as resetCountdownFunc, payTax, setShowTax, QuarantineRoundsDowner, doPunishment } from '../../Store/slices/gameStateSlice'
+import { autoSellSelectedFields, nextPlayer, setShowSell, resetCountdown as resetCountdownFunc, payTax, setShowTax, QuarantineRoundsDowner, doPunishment } from '../../Store/slices/gameStateSlice'
+import { useSocket } from '../../Contexts/SocketContext'
 
 
 export default function PlayerInfo(props) {
-  const { players, currentPlayer, resetCountdown, showSell, showTax, showQuarantineTab, lastDiceRoll, gameOver } = props
+  const { players, currentPlayer, resetCountdown, showSell, showTax, showQuarantineTab, lastDiceRoll, gameOver, RoundOnMe } = props
+
+  const [Players, setPlayers] = useState(players)
+  useEffect(() => {
+    setPlayers(players)
+
+    return () => {
+      setPlayers(players)
+    }
+  }, [players])
+
   return (
     <>
       {
-        players.map(player => (
-          <PlayerInfoPiece {...player} key={player.colorCode} currentPlayer={currentPlayer} gameOver={gameOver} lastDiceRoll={lastDiceRoll} showTax={showTax} showQuarantineTab={showQuarantineTab} resetCountdown={resetCountdown} showSell={showSell} />
+        Players.map(player => (
+          <PlayerInfoPiece {...player} key={player.colorCode} RoundOnMe={RoundOnMe} currentPlayer={currentPlayer} gameOver={gameOver} lastDiceRoll={lastDiceRoll} showTax={showTax} showQuarantineTab={showQuarantineTab} resetCountdown={resetCountdown} showSell={showSell} />
         ))
       }
 
@@ -27,8 +38,10 @@ export default function PlayerInfo(props) {
 
 
 function PlayerInfoPiece(props) {
-  const { colorCode, username, money, currentPlayer, playerCountdown, resetCountdown, isBankrupt, showSell, showTax, showQuarantineTab, gameOver } = props
+  const { colorCode, username, money, currentPlayer, playerCountdown, resetCountdown, isBankrupt, showSell, showTax, showQuarantineTab, gameOver, RoundOnMe } = props
   const dispatch = useDispatch()
+  const [Username, setUsername] = useState(username)
+  const socket = useSocket()
 
   const [remain, setRemain] = useState(0)
   let img = pinkAvatar
@@ -70,6 +83,19 @@ function PlayerInfoPiece(props) {
   }
 
   useEffect(() => {
+    setUsername(username)
+
+    return () => {
+      setUsername('')
+    }
+  }, [username])
+
+  useEffect(() => {
+    socket.off('time_over_res').on('time_over_res', (id) => { if(id !== socket.id) timeOver()})
+  })
+  
+
+  useEffect(() => {
     if (currentPlayer === colorCode) {
 
       const target = new Date(Date.now() + 22000).getTime()
@@ -87,8 +113,9 @@ function PlayerInfoPiece(props) {
     }
   }, [colorCode, currentPlayer, playerCountdown, resetCountdown])
 
-  useEffect(() => {
+  const timeOver = () => {
     if (remain < 0 && gameOver === false) {
+      if (RoundOnMe) emitTimeOver()
       console.log('lejart');
       // dispatch(setDiceRollValue(0))
       if (showSell) {
@@ -115,6 +142,13 @@ function PlayerInfoPiece(props) {
         dispatch(nextPlayer())
       }
     }
+  }
+  const emitTimeOver = () => {
+    socket.emit('time_over_req')
+  }
+
+  useEffect(() => {
+    timeOver()
     return () => {
     }
   }, [remain])
@@ -129,7 +163,7 @@ function PlayerInfoPiece(props) {
   })
   return (
     <div className={`w-56 h-32 bg-[#F5ECE3] absolute ${position} rounded-xl border-8 ${borderColor} m-3 flex flex-1 flex-col shadow-md`}>
-      <div className={`w-52 h-10 top-0 ${bgColor} items-center justify-center flex text-xl font-extrabold `}>{username}</div>
+      <div className={`w-52 h-10 top-0 ${bgColor} items-center justify-center flex text-xl font-extrabold `}>{Username}</div>
       <div className={`flex ${(colorCode === 1 || colorCode === 2) ? 'flex-row-reverse' : 'flex-row'} items-center text-center`}>
         <img src={img} alt="Alien" className='' />
         <div className='flex flex-col h-full w-full justify-between p-6'>

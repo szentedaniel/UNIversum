@@ -11,8 +11,8 @@ export default function LuckComponent(props) {
 
   const label_bg = Texture.from('../Images/game/isometriccity/PNG/cityTiles_072.png');
   const ehh = Texture.from('../Images/game/isometriclandscape/PNG/landscapeTiles_067.png');
-  const chest_balra = Texture.from('../Images/game/caracters/chest_E.png');
-  const chest_jobbra = Texture.from('../Images/game/caracters/chest_N.png');
+  const chest_balra = Texture.from('../Images/game/characters/chest_E.png');
+  const chest_jobbra = Texture.from('../Images/game/characters/chest_N.png');
 
   const groupFilter = new ColorReplaceFilter()
   groupFilter.originalColor = 0xC2BEAC

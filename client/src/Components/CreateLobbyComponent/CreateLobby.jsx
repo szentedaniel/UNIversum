@@ -33,6 +33,7 @@ export function CreateLobby() {
   const [maxPlayerNumber, setMaxPlayerNumber] = useState(4)
   const [hasPassword, setHasPassword] = useState(false)
   const [password, setPassword] = useState(null)
+  const [minute, setMinute] = useState(50)
 
 
   const createRoom = (roomData) => {
@@ -50,7 +51,8 @@ export function CreateLobby() {
         lobbyName: (lobbyName === '') ? null : lobbyName,
         maxPlayerNumber: maxPlayerNumber,
         hasPassword: (password === '' || password === null) ? false : hasPassword,
-        password: (password === '') ? null : password
+        password: (password === '') ? null : password,
+        minute: minute
       }
       console.log(roomData)
       createRoom(roomData)
@@ -69,7 +71,7 @@ export function CreateLobby() {
         state: {
           created: true,
           hasPassword: hasPassword,
-          secret: password
+          secoret: password
         }
       })
     })
@@ -80,12 +82,12 @@ export function CreateLobby() {
   return (
     <>
       <Link to='/'><button className="back_button mt-5 sm:m-0 xs:m-0"> <Icon>arrow_back_ios</Icon></button></Link>
-      <div className='flex flex-1 flex-col sm:flex-col xs:flex-col self-stretch justify-center w-full min-w-[300px] xs:min-w-[200px]'>
+      <div className='flex flex-1 flex-col sm:flex-col xs:flex-col self-stretch justify-center w-full min-w-[300px] xs:min-w-[200px] p-5'>
 
         <form autoComplete="off" className="w-full max-w-2xl items-center content-center justify-center m-auto">
           <div className="flex flex-wrap -mx-3 mb-2">
             <div className="w-full px-3 ">
-              <label className="block uppercase tracking-wide text-sajat-100 text-xs font-bold mb-2" htmlFor="grid-first-name">
+              <label className="block uppercase tracking-wide text-sajat-100 text-xs font-bold mb-2">
                 {t('ROOM_NAME')}
               </label>
               <input onChange={e => setLobbyName(e.target.value)} className='
@@ -104,7 +106,7 @@ export function CreateLobby() {
               m-0
               focus:text-sajat-100 focus:bg-sajat-600 focus:border-sajat-600 focus:outline-none
               bg-sajat-700 hover:bg-sajat-700 focus:ring-4 focus:ring-sajat-300
-              font-bold' id="grid-first-name" type="text" placeholder={t('PLACEHOLDER_ROOM')} />
+              font-bold' type="text" placeholder={t('PLACEHOLDER_ROOM')} />
               {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
             </div>
           </div>
@@ -139,10 +141,10 @@ export function CreateLobby() {
 
               </label>
               <div className="relative">
-                <select onChange={e => setMaxPlayerNumber(e.target.value)} className="appearance-none ease-in-out focus:text-sajat-100 focus:bg-sajat-400 focus:border-sajat-600 focus:outline-none
+                <select onChange={e => setMinute(e.target.value)} className="appearance-none ease-in-out focus:text-sajat-100 focus:bg-sajat-600 focus:border-sajat-600 focus:outline-none
               hover:bg-sajat-700 focus:ring-4 focus:ring-sajat-300
               font-bold block appearance-none w-full bg-sajat-600 border border-gray-200 text-sajat-100 py-3 px-4 pr-8 rounded leading-tight " id="grid-state">
-                  <option value="60">60 {t('MIN')}</option>
+                  <option value="50">50 {t('MIN')}</option>
                   <option value="30">30 {t('MIN')}</option>
                   <option value="15">15 {t('MIN')}</option>
                 </select>

@@ -2,13 +2,336 @@ import { createSlice } from '@reduxjs/toolkit'
 import calcPrice from '../../Utils/calcPrice'
 import * as _ from 'lodash'
 import { GAME_CONFIG } from '../../gameConfig'
+import { join } from 'lodash'
 
 const end = new Date(new Date().getTime() + 50 * 60000).toISOString()
+
+const initState = {
+  roomCode: null,
+  isLoaded: false,
+  currentPlayer: 0,
+  showDiceRoll: true,
+  showBalance: false,
+  showBuyPanel: false,
+  showFirstQuarantineTab: false,
+  showQuarantineTab: false,
+  rollingDiceFromQuarantine: false,
+  showDoubler: false,
+  selectDoubler: false,
+  showErasmus: false,
+  selectErasmus: false,
+  showDisabledFields: false,
+  singleSelecting: false,
+  multipleSelecting: false,
+  onlyOwnField: false,
+  selectedFields: [],
+  showSell: false,
+  showTax: false,
+  sellValue: 0,
+  sellIsFrom: '',
+  lastDiceRoll: 0,
+  museumPrice: 400_000,
+  roundBonus: 250_000,
+  resetCountdown: 1,
+  currentPlayerIndex: 0,
+  gameOver: false,
+  winnerColor: null,
+  endDate: end,
+  selectedCard: 0,
+  showCard: false,
+  players: [
+    {
+      username: 'user' + Math.floor(Math.random() * 999999),
+      userId: null,
+      colorCode: 0,
+      money: 2_500_000,
+      hasPCR: false,
+      coutPCR: 0,
+      isInQuarantine: false,
+      QuarantineRounds: 0,
+      field: 0,
+      timeRemain: 0,
+      playerCountdown: true,
+      isBankrupt: false
+
+    },
+    {
+      username: 'user' + Math.floor(Math.random() * 999999),
+      userId: null,
+      colorCode: 1,
+      money: 2_500_000,
+      hasPCR: false,
+      coutPCR: 0,
+      isInQuarantine: false,
+      QuarantineRounds: 0,
+      field: 0,
+      timeRemain: 0,
+      playerCountdown: false,
+      isBankrupt: false
+    },
+    {
+      username: 'user' + Math.floor(Math.random() * 999999),
+      userId: null,
+      colorCode: 2,
+      money: 2_500_000,
+      hasPCR: false,
+      coutPCR: 0,
+      isInQuarantine: false,
+      QuarantineRounds: 0,
+      field: 0,
+      timeRemain: 0,
+      playerCountdown: false,
+      isBankrupt: false
+    },
+    {
+      username: 'user' + Math.floor(Math.random() * 999999),
+      userId: null,
+      colorCode: 3,
+      money: 2_500_000,
+      hasPCR: false,
+      coutPCR: 0,
+      isInQuarantine: false,
+      QuarantineRounds: 0,
+      field: 0,
+      timeRemain: 0,
+      playerCountdown: false,
+      isBankrupt: false
+    },
+
+  ],
+  map: [
+    {
+      id: 0,
+      level: null,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 1,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 2,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 3,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 4,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 5,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 6,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 7,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 8,
+      level: null,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 9,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 10,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 11,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 12,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 13,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 14,
+      level: null,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 15,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 16,
+      level: null,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 17,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 18,
+      level: null,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 19,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 20,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 21,
+      level: null,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 22,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 23,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 24,
+      level: null,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 25,
+      level: null,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 26,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 27,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 28,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 29,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 30,
+      level: null,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+    {
+      id: 31,
+      level: 0,
+      ownerColor: null,
+      hasDoubler: false,
+      doublerCount: 0
+    },
+  ],
+}
 
 export const gameStateSlice = createSlice({
   name: 'gameState',
   initialState: {
     roomCode: null,
+    isLoaded: false,
     currentPlayer: 0,
     showDiceRoll: true,
     showBalance: false,
@@ -362,7 +685,7 @@ export const gameStateSlice = createSlice({
         const findValidNextPlayer = () => {
           const validPlayers = state.players.filter(x => x.isBankrupt === false)
           // validPlayers.forEach(element => {
-          //   console.log('lehetID: ', element.colorCode);
+          //   // console.log('lehetID: ', element.colorCode);
           // });
           if (validPlayers.length > 1) {
 
@@ -413,25 +736,51 @@ export const gameStateSlice = createSlice({
                 if (CsoportbanLevoMezokIdja.includes(x.id)) {
                   return x.ownerColor
                 }
+                return null
               })
 
-              csoportTulajainakSzine = csoportTulajainakSzine.filter(x => x !== undefined)
-              csoportTulajainakSzine = csoportTulajainakSzine.filter(x => x !== null)
+              csoportTulajainakSzine = csoportTulajainakSzine.filter(x => { return x !== null })
 
+              // const occurrences = csoportTulajainakSzine.reduce(function (acc, curr) {
+              //   return acc[curr] ? ++acc[curr] : acc[curr] = 1, acc
+              // }, {})
+
+              let ugyanaz = false
+              if (csoportTulajainakSzine.length === GAME_CONFIG.map.filter(x => x.groupId === groupId).length) {
+                ugyanaz = csoportTulajainakSzine.every((val, ind, arr) => val === arr[0])
+              }
+
+              // console.log('csoport tulajainak szinei: ', join(csoportTulajainakSzine), ugyanaz)
+              // console.log('csoport tulajainak szineienk előfurdulása: ', join(occurrences))
+              if (ugyanaz) return csoportTulajainakSzine[0]
+
+              let monopolE = false
+              let tulajSzine = null
+
+              for (let i = 0; i < csoportTulajainakSzine.length; i++) {
+                const element = csoportTulajainakSzine[i];
+
+                // if (occurrences[element] === CsoportbanLevoMezokIdja.length) {
+                //   monopolE = true
+                //   tulajSzine = element
+                // }
+              }
               // csoportTulajainakSzine.forEach(element => {
-              //   console.log('groupId: ', groupId, 'tulajszin: ', element);
+              //   // console.log('groupId: ', groupId, 'tulajszin: ', element);
               // });
-              const monopolE = csoportTulajainakSzine.every((val, ind, arr) => val === arr[0])
+              // // // // const monopolE = csoportTulajainakSzine.every((val, ind, arr) => val === arr[0])
               // console.log(monopolE);
 
-              if (monopolE) return csoportTulajainakSzine[0]
+              if (monopolE) return tulajSzine // csoportTulajainakSzine[0]
 
+              return null
 
             });
             // console.log('ehhh:');
             monopolTulajokColorja = monopolTulajokColorja.map(x => x)
+            monopolTulajokColorja = monopolTulajokColorja.filter(x => x !== null)
             // monopolTulajokColorja.forEach(element => {
-            //   console.log(element);
+            //   // console.log(element);
             // });
             // const monopolGroupsTulajdonosok = groupIds.map(x => {
             //   const groupId = x
@@ -442,6 +791,7 @@ export const gameStateSlice = createSlice({
             //   const monopolE = csoportTulajainakId.every((val, ind, arr) => val === arr[0])
             //   if (monopolE) return csoportTulajainakId[0]
             // })
+            // console.log(join(monopolTulajokColorja))
 
             const validPlayers = state.players.filter(x => x.isBankrupt === false)
             const validPlayersIds = validPlayers.map(x => x.colorCode)
@@ -455,7 +805,7 @@ export const gameStateSlice = createSlice({
 
             }
           } catch (error) {
-            console.log(error)
+            // console.log(error)
           }
 
 
@@ -473,8 +823,16 @@ export const gameStateSlice = createSlice({
             // console.log('nincs tobb player');
             return true
           } else if (new Date().getTime() >= new Date(state.endDate).getTime()) {
-            const winner = _.orderBy(state.players, ['money'], ['desc'])
-            state.winnerColor = winner[0]
+            const vagyon = state.players.map(x => {
+              const fieldValue = _.sum(state.map.filter(field => field.ownerColor === x.colorCode))
+              const tulajdon = fieldValue + x.money
+              return {
+                colorCode: x.colorCode,
+                vagyon: tulajdon
+              }
+            })
+            const winner = _.orderBy(vagyon, ['vagyon'], ['desc'])
+            state.winnerColor = winner[0].colorCode
             // console.log('lejart az ido');
             return true
           } else if (supermonopol) {
@@ -516,7 +874,7 @@ export const gameStateSlice = createSlice({
           state.players[state.currentPlayer].playerCountdown = true
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     setShowBuyPanel: (state, action) => {
@@ -622,7 +980,7 @@ export const gameStateSlice = createSlice({
 
         let same = false
         if (fieldWithDoublerOnIt.length > 0) {
-          same = ((fieldWithDoublerOnIt[0].ownerColor === state.currentPlayer) && fieldWithDoublerOnIt[0].doublerCount === action.payload)
+          same = ((fieldWithDoublerOnIt[0].ownerColor === state.currentPlayer) && fieldWithDoublerOnIt[0].id === action.payload)
           if (same) {
             fieldWithDoublerOnIt[0].doublerCount += 1
           } else {
@@ -643,7 +1001,7 @@ export const gameStateSlice = createSlice({
         state.onlyOwnField = false
 
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     },
     setShowDoubler: (state, action) => {
@@ -724,13 +1082,13 @@ export const gameStateSlice = createSlice({
     autoSellSelectedFields: (state, action) => {
       const show = (playerFields, ehh = false) => {
         for (let i = 0; i < playerFields.length; i++) {
-          console.log('id: ', playerFields[i].id)
-          console.log('level: ', playerFields[i].level)
-          console.log('ownerColor: ', playerFields[i].ownerColor)
-          console.log('hasDoubler: ', playerFields[i].hasDoubler)
-          console.log('doublerCount: ', playerFields[i].doublerCount)
-          if (ehh) console.log('value: ', playerFields[i].value)
-          console.log('\n')
+          // console.log('id: ', playerFields[i].id)
+          // console.log('level: ', playerFields[i].level)
+          // console.log('ownerColor: ', playerFields[i].ownerColor)
+          // console.log('hasDoubler: ', playerFields[i].hasDoubler)
+          // console.log('doublerCount: ', playerFields[i].doublerCount)
+          // if (ehh) // console.log('value: ', playerFields[i].value)
+          // console.log('\n')
 
         }
       }
@@ -832,19 +1190,19 @@ export const gameStateSlice = createSlice({
           }
         }
       } else {
-        state.players[state.currentPlayer].money -= state.players[state.currentPlayer].money * 0.1
+        state.players[state.currentPlayer].money -= Math.round(state.players[state.currentPlayer].money * 0.1)
       }
     },
     setShowCard: (state, action) => {
-      const getCardId = () => {
-        const random = Math.floor(Math.random() * GAME_CONFIG.cards.length)
-        if (random === state.selectedCard) return getCardId()
-        return random
-      }
+      // const getCardId = () => {
+      //   const random = Math.floor(Math.random() * GAME_CONFIG.cards.length)
+      //   if (random === state.selectedCard) return getCardId()
+      //   return random
+      // }
 
-      if (action.payload) {
-        state.selectedCard = getCardId()
-      }
+      // if (action.payload) {
+      //   state.selectedCard = getCardId()
+      // }
 
       state.showCard = action.payload
     },
@@ -916,6 +1274,20 @@ export const gameStateSlice = createSlice({
           }
         }
       }
+    },
+    setGameState: (state, action) => {
+      // console.log(action.payload.roomCode)
+      state.roomCode = action.payload.roomCode
+      state.players = action.payload.players
+      state.endDate = action.payload.endDate
+      state.isLoaded = action.payload.isLoaded
+      state.map = action.payload.map
+    },
+    setSelectedCard: (state, action) => {
+      state.selectedCard = action.payload
+    },
+    resetState: (state, action) => {
+      state = initState
     }
 
 
@@ -957,7 +1329,10 @@ export const {
   setShowTax,
   doPunishment,
   setShowCard,
-  applyCardEffect
+  applyCardEffect,
+  setGameState,
+  setSelectedCard,
+  resetState
 
 } = gameStateSlice.actions
 
